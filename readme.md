@@ -4,10 +4,7 @@ Tabla de Contenido:
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
-- Indice de Rutas
-    - [Clientes](./ventas/clientes/readme.md)
-        - [Crear](./ventas/clientes/readme.md#crear-cliente)
-    - [Artiuclos](./inventarios/articulos/readme.md)
+- [Recursos]((#recursos)
 
 
 ## Introducción
@@ -35,27 +32,6 @@ En SAIT, los recursos los agrupamos según el módulo de operación del sistema.
 - Bancos
 - Contabilidad
 
-### Recursos del Sistema
-
-Algunos recursos con los que cuenta el programador en SAIT son:
-- Ventas
-    - Vendedores
-    - Clientes
-    - Clientes Eventuales
-    - Sucursales de Clientes
-- Inventario
-    - Articulos
-    - Precios
-    - Existencias
-    - Lineas
-    - Familias
-    - Categorias
-    - Unidades de Wmpaque
-- Otros
-    - Usuarios
-    - Grupos de Usuario
-    - Sucursales de la Empresa
-    - Series de Documentos
 
 
 ## Encabezados
@@ -165,4 +141,29 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 
 
+## Recursos
+
+- [Clientes](./ventas/clientes/readme.md)
+    - [Crear](./ventas/clientes/readme.md#crear-cliente)
+- [Artiuclos](./inventarios/articulos/readme.md)
+
+Algunos recursos con los que cuenta el programador en SAIT son:
+- Ventas
+    - Vendedores
+    - Clientes
+    - Clientes Eventuales
+    - Sucursales de Clientes
+- Inventario
+    - Articulos
+    - Precios
+    - Existencias
+    - Lineas
+    - Familias
+    - Categorias
+    - Unidades de Wmpaque
+- Otros
+    - Usuarios
+    - Grupos de Usuario
+    - Sucursales de la Empresa
+    - Series de Documentos
 
