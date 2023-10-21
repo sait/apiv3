@@ -4,7 +4,7 @@ Tabla de Contenido:
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
-- [Recursos]((#recursos)
+- [Recursos](#recursos)
 
 
 ## Introducción
