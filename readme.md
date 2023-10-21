@@ -6,7 +6,7 @@ Tabla de Contenido:
 - [Respuestas](#respuestas)
 - Indice de Rutas
     - [Clientes](./ventas/clientes/readme.md)
-        - [Crear](.ventas/clientes#crear-cliente)
+        - [Crear](.ventas/clientes/readme.md#crear-cliente)
     - [Artiuclos](./inventarios/articulos/readme.md)
 
 
