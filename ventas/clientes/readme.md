@@ -52,7 +52,7 @@ Campos de los Clientes
 | idregimen  | clave del regimen fiscal del cliente                       |
 | emailtw    | email de acceso para tienda web                            |
 
-
+---
 ### Crear Cliente
 
 POST /api/v3/clientes
@@ -88,6 +88,7 @@ response:
 }
 ```
 
+---
 ### Actualizar Cliente
 
 PUT /api/v3/clientes/:id
@@ -106,6 +107,7 @@ response:
 "UPDATED"
 ```
 
+---
 ### Leer Cliente por Id
 
 GET /api/v3/clientes/:id
@@ -127,6 +129,7 @@ response:
 }
 ```
 
+---
 ### Leer Cliente por Clave
 
 GET /api/v3/clientes/clave/:clave
@@ -148,6 +151,7 @@ response:
 }
 ```
 
+---
 ### Buscar Clientes
 
 GET /api/v3/clientes?variables
