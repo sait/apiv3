@@ -143,11 +143,11 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 ## Recursos
 
-- [Clientes](./ventas/clientes/readme.md)
-    - [Crear](./ventas/clientes/readme.md#crear-cliente)
+- [Clientes](./ventas/clientes/)
+    - [Crear](./ventas/clientes/#crear-cliente)
     - [Actualizar](./ventas/clientes/#actualizar-cliente)
-    - [Leer por Id](./ventas/clientes#leer-cliente-por-id)
-    - [Leer por Clave](./ventas/clientes/readme.md#leer-cliente-por-clave)
+    - [Leer por Id](./ventas/clientes/#leer-cliente-por-id)
+    - [Leer por Clave](./ventas/clientes/#leer-cliente-por-clave)
 
 - [Artiuclos](./inventarios/articulos/readme.md)
 
