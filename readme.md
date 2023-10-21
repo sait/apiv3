@@ -145,6 +145,10 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 - [Clientes](./ventas/clientes/readme.md)
     - [Crear](./ventas/clientes/readme.md#crear-cliente)
+    - [Actualizar](./ventas/clientes/readme.md#actualizar-cliente)
+    - [Leer por Id](./ventas/clientes/readme.md#leer-cliente-por-id)
+    - [Leer por Clave](./ventas/clientes/readme.md#leer-cliente-por-clave)
+
 - [Artiuclos](./inventarios/articulos/readme.md)
 
 Algunos recursos con los que cuenta el programador en SAIT son:
