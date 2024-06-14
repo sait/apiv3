@@ -1,6 +1,6 @@
 # SAIT API 3.0
 
-Tabla de Contenido:
+## Tabla de Contenido:
 - [Recursos](#recursos)
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)

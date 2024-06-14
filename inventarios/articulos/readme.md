@@ -1,14 +1,14 @@
-# Articulos
+## Articulos
 
 Rutas de Artículos
 
-| Acción                                  | Ruta                                  |
-| --------------------------------------- | ------------------------------------- |
-| [Crear](#crear-artículo)                | POST /api/v3/articulos                |
-| [Actualizar](#actualizar-artículo)      | PUT  /api/v3/articulos/:id            |
-| [Leer](#leer-artículo)                  | GET  /api/v3/articulos/:id            |
-| [Leer por clave](#leer-artículo-por-id) | GET  /api/v3/articulos/clave/:key     |
-| [Buscar](#buscar-artículos)             | GET  /api/v3/articulos?condiciones... |
+| Acción                                     | Ruta                                |
+| ------------------------------------------ | ----------------------------------- |
+| [Crear](#crear-artículo)                   | POST /api/v3/articulos              |
+| [Actualizar](#actualizar-artículo)         | PUT  /api/v3/articulos/:id          |
+| [Leer](#leer-artículo)                     | GET  /api/v3/articulos/:id          |
+| [Leer por clave](#leer-artículo-por-clave) | GET  /api/v3/articulos/clave/:clave |
+| [Buscar](#buscar-artículos)                | GET  /api/v3/articulos?condiciones  |
 
 
 Campos de Artículo
@@ -137,14 +137,17 @@ response:
 ---
 ### Leer Artículo
 
-GET /api/v3/articulos/clave/:clave
+GET /api/v3/articulos/:id
 
 
 
 ---
-### Leer Artículo por Id
+### Leer Artículo por clave
 
-GET /api/v3/articulos/:id
+GET /api/v3/articulos/clave/:clave
+
+
+
 
 
 ### Buscar Artículos
