@@ -48,11 +48,11 @@
 
 ---
 ### Crear Artículo
-`POST /api/v3/articulos`
+> **POST /api/v3/articulos**
 
 Crea un articulo nuevo con los datos recibidos.
 
-> request:
+<sub>request:
 ```json
 {
     "numart": "GRC-55657",
@@ -82,7 +82,7 @@ Crea un articulo nuevo con los datos recibidos.
     "unidad": "PZA  "
  ```
 
-> response:
+<sub>response:
 ```json
 {
     "id": 1,
