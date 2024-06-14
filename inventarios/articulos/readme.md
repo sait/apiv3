@@ -1,4 +1,4 @@
-## Articulos
+## Artículos
 
 ### Rutas de Artículos
 

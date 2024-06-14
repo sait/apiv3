@@ -57,7 +57,7 @@
 ---
 ### Crear Cliente
 
-```POST /api/v3/clientes```
+POST /api/v3/clientes
 
 request:
 ```json
@@ -90,7 +90,7 @@ response:
 }
 ```
 
-===
+
 ### Actualizar Cliente
 
 PUT /api/v3/clientes/:id
