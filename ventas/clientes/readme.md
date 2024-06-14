@@ -2,13 +2,13 @@
 
 Rutas de Clientes
 
-| Acción                            | Ruta                                 |
-| --------------------------------- | ------------------------------------ |
-| [Crear](#crear-cliente)           | POST /api/v3/clientes                |
-| [Actualizar](#actualizar-cliente) | PUT  /api/v3/clientes/:id            |
-| [Leer](#leer-cliente)             | GET  /api/v3/clientes/:id            |
-| [Leer](#leer-cliente)             | GET  /api/v3/clientes/clave/:key     |
-| [Buscar](#buscar-clientes)        | GET  /api/v3/clientes?condiciones... |
+| Acción                                    | Ruta                                 |
+| ----------------------------------------- | ------------------------------------ |
+| [Crear](#crear-cliente)                   | POST /api/v3/clientes                |
+| [Actualizar](#actualizar-cliente)         | PUT  /api/v3/clientes/:id            |
+| [Leer](#leer-cliente)                     | GET  /api/v3/clientes/:id            |
+| [Leer por clave](#leer-cliente-por-clave) | GET  /api/v3/clientes/clave/:key     |
+| [Buscar](#buscar-clientes)                | GET  /api/v3/clientes?condiciones... |
 
 
 Campos de los Clientes
