@@ -2,13 +2,13 @@
 
 Rutas de Clientes
 
-| Accion         | Ruta                                  |
-| -------------- | ------------------------------------- |
-| Crear          | POST /api/v3/clientes                 |
-| Actualizar     | PUT  /api/v3/clientes/:id             |
-| Leer por id    | GET  /api/v3/clientes/:id             |
-| Leer por clave | GET  /api/v3/clientes/clave/:key      |
-| Buscar         | GET  /api/v3/clientes?condiciones...  |
+| Accion                              | Ruta                                 |
+| ----------------------------------- | ------------------------------------ |
+| [Crear](#crear-cliente)             | POST /api/v3/clientes                |
+| [Actualizar](#actualizar-cliente)   | PUT  /api/v3/clientes/:id            |
+| [Leer](#leer-cliente)               | GET  /api/v3/clientes/clave/:key     |
+| [Leer por id](#leer-cliente-por-id) | GET  /api/v3/clientes/:id            |
+| [Buscar](#buscar-clientes)          | GET  /api/v3/clientes?condiciones... |
 
 
 Campos de los Clientes
@@ -107,6 +107,30 @@ response:
 "UPDATED"
 ```
 
+
+---
+### Leer Cliente
+
+GET /api/v3/clientes/clave/:clave
+
+response:
+```json
+{
+    "id":1,
+    "created":"2023-02-07 21:37:46",
+    "updated":"2023-02-07 21:40:08",
+    "numcli":"10",
+    "nomcli":"Bimbo de Mexico",
+    "calle":"Mimosas",
+    "numext":"117",
+    "colonia":"Santa María Insurgente",
+    "ciudad":"México",
+    "estado":"CDMX",
+    "cp":"06430"
+}
+```
+
+
 ---
 ### Leer Cliente por Id
 
@@ -129,27 +153,6 @@ response:
 }
 ```
 
----
-### Leer Cliente por Clave
-
-GET /api/v3/clientes/clave/:clave
-
-response:
-```json
-{
-    "id":1,
-    "created":"2023-02-07 21:37:46",
-    "updated":"2023-02-07 21:40:08",
-    "numcli":"10",
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-    "colonia":"Santa María Insurgente",
-    "ciudad":"México",
-    "estado":"CDMX",
-    "cp":"06430"
-}
-```
 
 ---
 ### Buscar Clientes

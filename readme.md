@@ -143,7 +143,6 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 ## Recursos
 
-- [Clientes](./ventas/clientes/)
     - [Crear](./ventas/clientes/#crear-cliente)
     - [Actualizar](./ventas/clientes/#actualizar-cliente)
     - [Leer por Id](./ventas/clientes/#leer-cliente-por-id)
@@ -151,8 +150,10 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 - [Artiuclos](./inventarios/articulos/readme.md)
 
-Algunos recursos con los que cuenta el programador en SAIT son:
+Los recursos disponibles en la API son:
 - Ventas
+    - [Clientes](./ventas/clientes/)
+    - [ClientesEventuales](./ventas/clienteseventuales/)
     - Vendedores
     - Clientes
     - Clientes Eventuales
