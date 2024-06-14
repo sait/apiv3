@@ -16,7 +16,6 @@
 
 | Campo      | Significado                                            |
 | ---------- | ------------------------------------------------------ |
-| id         | id incremental disponible solo através de SAIT API     |
 | created    | timestamp del momento de creación                      |
 | updated    | timestamp ultima actualizacion                         |
 | numart     | clave del articulo                                     |
@@ -46,17 +45,20 @@
 | existencia | Existencia TOTAL sumando TODAS las sucursales          |
 
 
+
+---
 ### Crear Artículo
+> POST /api/v3/articulos
 
-POST /api/v3/articulos
+Crea un articulo nuevo con los datos recibidos.
 
-request:
+> request:
 ```json
 {
-    "numart": "           GRC-55657",
+    "numart": "GRC-55657",
     "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
     "activo": 1,
-    "categoria": "  SUS",
+    "categoria": "SUS",
     "clavesat": "25172000",
     "codigo": "55657",
     "divisa": "P",
@@ -71,17 +73,16 @@ request:
     "matpelig": "",
     "modelo": "",
     "obs": "",
-    "precio1": 689.59,
-    "precio2": 500.87,
-    "precio3": 466.19,
-    "precio4": 441.71,
-    "precio5": 355,
-    "preciopub": 799.92,
-    "ultcosto": 0,
+    "precio1": 1689.59,
+    "precio2": 1500.87,
+    "precio3": 1466.19,
+    "precio4": 1441.71,
+    "precio5": 1355,
+    "preciopub": 1799.92,
     "unidad": "PZA  "
  ```
 
-response:
+> response:
 ```json
 {
     "id": 1,
@@ -105,13 +106,12 @@ response:
     "matpelig": "",
     "modelo": "",
     "obs": "",
-    "precio1": 689.59,
-    "precio2": 500.87,
-    "precio3": 466.19,
-    "precio4": 441.71,
-    "precio5": 355,
-    "preciopub": 799.92,
-    "ultcosto": 0,
+    "precio1": 1689.59,
+    "precio2": 1500.87,
+    "precio3": 1466.19,
+    "precio4": 1441.71,
+    "precio5": 1355,
+    "preciopub": 1799.92,
     "unidad": "PZA  "
  ```
 
@@ -121,11 +121,14 @@ response:
 ### Actualizar Artículo
 PUT /api/v3/articulos/:cve
 
+Actualiza los datos del articulo recibido como parametro
+
 request:
 ```json
 {
-    "id": 1,
-    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146"
+    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
+    "impuesto1":16.00,
+    "divisa":"P"
 }
 ```
 
@@ -139,7 +142,10 @@ response:
 ### Leer Artículo
 GET /api/v3/articulos/:cve
 
-
+response:
+```
+fix
+```
 
 ---
 ### Leer Artículo por UPC 
