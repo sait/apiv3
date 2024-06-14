@@ -2,13 +2,14 @@
 
 ### Rutas de Artículos
 
-| Acción                                     | Ruta                                |
-| ------------------------------------------ | ----------------------------------- |
-| [Crear](#crear-artículo)                   | POST /api/v3/articulos              |
-| [Actualizar](#actualizar-artículo)         | PUT  /api/v3/articulos/:id          |
-| [Leer](#leer-artículo)                     | GET  /api/v3/articulos/:id          |
-| [Leer por clave](#leer-artículo-por-clave) | GET  /api/v3/articulos/clave/:clave |
-| [Buscar](#buscar-artículos)                | GET  /api/v3/articulos?condiciones  |
+| Acción                                                 | Ruta                               |
+| ------------------------------------------------------ | ---------------------------------- |
+| [Crear](#crear-artículo)                               | POST /api/v3/articulos             |
+| [Actualizar](#actualizar-artículo)                     | PUT  /api/v3/articulos/:cve        |
+| [Leer](#leer-artículo)                                 | GET  /api/v3/articulos/:cve        |
+| [Leer por UPC](#leer-artículo-por-upc)                 | GET  /api/v3/articulos/upc/:upc    |
+| [Leer por Clave o UPC](#leer-artículo-por-clave-o-upc) | GET  /api/v3/articulos/cveupc/:txt |
+| [Buscar](#buscar-artículos)                            | GET  /api/v3/articulos?condiciones |
 
 
 ### Campos del Artículo
@@ -115,9 +116,10 @@ response:
  ```
 
 
-### Actualizar Artículo
 
-PUT /api/v3/articulos/:id
+---
+### Actualizar Artículo
+PUT /api/v3/articulos/:cve
 
 request:
 ```json
@@ -133,23 +135,25 @@ response:
 ```
 
 
-
 ---
 ### Leer Artículo
-
-GET /api/v3/articulos/:id
+GET /api/v3/articulos/:cve
 
 
 
 ---
-### Leer Artículo por Clave
-
-GET /api/v3/articulos/clave/:clave
-
+### Leer Artículo por UPC 
+GET /api/v3/articulos/upc/:upc
 
 
 
+---
+### Leer Artículo por Clave o UPC
+GET /api/v3/articulos/cveupc/:txt
 
+
+
+---
 ### Buscar Artículos
 
 GET /api/v3/articulos?variables
