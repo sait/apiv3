@@ -48,7 +48,7 @@
 
 ---
 ### Crear Artículo
-> POST /api/v3/articulos
+`POST /api/v3/articulos`
 
 Crea un articulo nuevo con los datos recibidos.
 
