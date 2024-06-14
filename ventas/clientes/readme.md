@@ -1,6 +1,6 @@
 ## Clientes
 
-Rutas de Clientes
+### Rutas de Clientes
 
 | Acción                                    | Ruta                                 |
 | ----------------------------------------- | ------------------------------------ |
@@ -11,7 +11,7 @@ Rutas de Clientes
 | [Buscar](#buscar-clientes)                | GET  /api/v3/clientes?condiciones... |
 
 
-Campos de los Clientes
+### Campos del Cliente
 
 | Campo      | Significado                                                |
 | ---------- | ---------------------------------------------------------- |
@@ -52,10 +52,12 @@ Campos de los Clientes
 | idregimen  | clave del regimen fiscal del cliente                       |
 | emailtw    | email de acceso para tienda web                            |
 
+
+
 ---
 ### Crear Cliente
 
-POST /api/v3/clientes
+```POST /api/v3/clientes```
 
 request:
 ```json
@@ -88,7 +90,7 @@ response:
 }
 ```
 
----
+===
 ### Actualizar Cliente
 
 PUT /api/v3/clientes/:id
@@ -133,7 +135,7 @@ response:
 
 
 ---
-### Leer Cliente por clave
+### Leer Cliente por Clave
 
 GET /api/v3/clientes/clave/:clave
 
@@ -179,4 +181,12 @@ GET /api/v3/clientes?variables
 | Clientes de Colimna con nombre Industria | /api/v3/clientes?estado=colima&q=industria |
 | 20 ultimos clientes modificados          | /api/v3/clientes?limit=20&order=-updated   |
 
-
+response:
+```json
+[
+    {cliente1},
+    {cliente2},
+    ...
+    {clienteN}
+]
+```

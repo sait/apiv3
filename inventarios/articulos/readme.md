@@ -1,6 +1,6 @@
 ## Articulos
 
-Rutas de Artículos
+### Rutas de Artículos
 
 | Acción                                     | Ruta                                |
 | ------------------------------------------ | ----------------------------------- |
@@ -11,7 +11,7 @@ Rutas de Artículos
 | [Buscar](#buscar-artículos)                | GET  /api/v3/articulos?condiciones  |
 
 
-Campos de Artículo
+### Campos del Artículo
 
 | Campo      | Significado                                            |
 | ---------- | ------------------------------------------------------ |
@@ -142,7 +142,7 @@ GET /api/v3/articulos/:id
 
 
 ---
-### Leer Artículo por clave
+### Leer Artículo por Clave
 
 GET /api/v3/articulos/clave/:clave
 
@@ -170,3 +170,12 @@ GET /api/v3/articulos?variables
 | Leer artículo por clave      | /api/v3/articulos/clave/MOO-K6145   |
 | Leer artículo por id         | /api/v3/articulos/3929              |
 
+response:
+```json
+[
+    {articulo1},
+    {articulo2},
+    ...
+    {articuloN}
+]
+```
