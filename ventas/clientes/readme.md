@@ -2,7 +2,7 @@
 
 Rutas de Clientes
 
-| Accion                              | Ruta                                 |
+| Acción                              | Ruta                                 |
 | ----------------------------------- | ------------------------------------ |
 | [Crear](#crear-cliente)             | POST /api/v3/clientes                |
 | [Actualizar](#actualizar-cliente)   | PUT  /api/v3/clientes/:id            |

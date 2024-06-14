@@ -143,13 +143,6 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 ## Recursos
 
-    - [Crear](./ventas/clientes/#crear-cliente)
-    - [Actualizar](./ventas/clientes/#actualizar-cliente)
-    - [Leer por Id](./ventas/clientes/#leer-cliente-por-id)
-    - [Leer por Clave](./ventas/clientes/#leer-cliente-por-clave)
-
-- [Artiuclos](./inventarios/articulos/readme.md)
-
 Los recursos disponibles en la API son:
 - Ventas
     - [Clientes](./ventas/clientes/)
@@ -159,6 +152,7 @@ Los recursos disponibles en la API son:
     - Clientes Eventuales
     - Sucursales de Clientes
 - Inventario
+    - [Articulos](./inventarios/articulos)
     - Articulos
     - Precios
     - Existencias

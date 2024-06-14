@@ -2,13 +2,13 @@
 
 Rutas de Artículos
 
-| Acción         | Ruta                                  |
-| -------------- | ------------------------------------- |
-| Crear          | POST /api/v3/articulos                 |
-| Actualizar     | PUT  /api/v3/articulos/:id             |
-| Leer por id    | GET  /api/v3/articulos/:id             |
-| Leer por clave | GET  /api/v3/articulos/clave/:key      |
-| Buscar         | GET  /api/v3/articulos?condiciones...  |
+| Acción                                  | Ruta                                  |
+| --------------------------------------- | ------------------------------------- |
+| [Crear](#crear-artículo)                | POST /api/v3/articulos                |
+| [Actualizar](#actualizar-artículo)      | PUT  /api/v3/articulos/:id            |
+| [Leer](#leer-artículo)                  | GET  /api/v3/articulos/:id            |
+| [Leer por clave](#leer-artículo-por-id) | GET  /api/v3/articulos/clave/:key     |
+| [Buscar](#buscar-artículos)             | GET  /api/v3/articulos?condiciones... |
 
 
 Campos de Artículo
@@ -132,14 +132,19 @@ response:
 "UPDATED"
 ```
 
+
+
+---
+### Leer Artículo
+
+GET /api/v3/articulos/clave/:clave
+
+
+
+---
 ### Leer Artículo por Id
 
 GET /api/v3/articulos/:id
-
-
-### Leer Artículo por Clave
-
-GET /api/v3/articulos/clave/:clave
 
 
 ### Buscar Artículos
