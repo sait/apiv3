@@ -1,11 +1,36 @@
 # SAIT API 3.0
 
 Tabla de Contenido:
+- [Recursos](#recursos)
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
-- [Recursos](#recursos)
 
+
+## Recursos
+
+Los recursos disponibles en la API son:
+- Ventas
+    - [Clientes](./ventas/clientes/)
+    - [ClientesEventuales](./ventas/clienteseventuales/)
+    - Vendedores
+    - Clientes
+    - Clientes Eventuales
+    - Sucursales de Clientes
+- Inventario
+    - [Articulos](./inventarios/articulos)
+    - Articulos
+    - Precios
+    - Existencias
+    - Lineas
+    - Familias
+    - Categorias
+    - Unidades de Wmpaque
+- Otros
+    - Usuarios
+    - Grupos de Usuario
+    - Sucursales de la Empresa
+    - Series de Documentos
 
 ## Introducción
 
@@ -141,28 +166,4 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 
 
 
-## Recursos
-
-Los recursos disponibles en la API son:
-- Ventas
-    - [Clientes](./ventas/clientes/)
-    - [ClientesEventuales](./ventas/clienteseventuales/)
-    - Vendedores
-    - Clientes
-    - Clientes Eventuales
-    - Sucursales de Clientes
-- Inventario
-    - [Articulos](./inventarios/articulos)
-    - Articulos
-    - Precios
-    - Existencias
-    - Lineas
-    - Familias
-    - Categorias
-    - Unidades de Wmpaque
-- Otros
-    - Usuarios
-    - Grupos de Usuario
-    - Sucursales de la Empresa
-    - Series de Documentos
 
