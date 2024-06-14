@@ -48,9 +48,9 @@
 
 ---
 ### Crear Artículo
+Crea un articulo nuevo con los datos recibidos.
+
 POST /api/v3/articulos  
-Crea un articulo nuevo con los datos recibidos.  
-<sub>request:
 ```json
 {
     "numart": "GRC-55657",
@@ -117,11 +117,10 @@ Crea un articulo nuevo con los datos recibidos.
 
 ---
 ### Actualizar Artículo
-PUT /api/v3/articulos/:cve
 
 Actualiza los datos del articulo recibido como parametro
 
-request:
+PUT /api/v3/articulos/:cve
 ```json
 {
     "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
@@ -130,7 +129,7 @@ request:
 }
 ```
 
-response:
+<sub>response:
 ```json
 "UPDATED"
 ```
