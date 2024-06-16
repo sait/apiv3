@@ -189,16 +189,14 @@ Respuesta igual que [Leer Artículo](#leer-artículo)
 
 ---
 ### Buscar Artículos
-GET /api/v3/articulos?variables
+GET /api/v3/articulos?variable
 
-Variables para filtar resultados
-
-| Variable | Significado                                          |
-| :------- | ---------------------------------------------------- |
-| offset   | A partir de que registro iniciar búsqueda. Default 0 |
-| limit    | Cuantos registros obtener. Default 100               |
-| order    | Orden deseado. Disponibles:updated,id,numart         |
-| q        | Palabras a buscar                                    |
+| Variable | Significado                                               |
+| :------- | :-------------------------------------------------------- |
+| offset   | A partir de que registro iniciar búsqueda. Default 0      |
+| limit    | Cuantos registros obtener. Default 100                    |
+| order    | Orden deseado. Los disponibles son:updated,id,numart,desc |
+| q        | Palabras a buscar                                         |
 
 
 | Ejemplo de Búsqueda          | Ruta                                |
