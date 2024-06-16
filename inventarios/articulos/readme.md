@@ -83,9 +83,6 @@ POST /api/v3/articulos
     "unidad": "PZA  "
 }
 ```
-
-<sub>response:
-
 ```json
 {
     "id": 1,
@@ -132,9 +129,6 @@ PUT /api/v3/articulos/:cve
     "divisa": "P"
 }
 ```
-
-<sub>response:
-
 ```json
 {"UPDATED"}
 ```
@@ -183,14 +177,14 @@ GET /api/v3/articulos/:cve
 ### Leer Artículo por UPC 
 GET /api/v3/articulos/upc/:upc
 
-response: Igual a [Leer Artículo](#leer-artículo)
+Respuesta igual que [Leer Artículo](#leer-artículo)
 
 
 ---
 ### Leer Artículo por Clave o UPC
 GET /api/v3/articulos/cveupc/:txt
 
-response: Igual a [Leer Artículo](#leer-artículo)
+Respuesta igual que [Leer Artículo](#leer-artículo)
 
 
 ---
@@ -213,7 +207,6 @@ GET /api/v3/articulos?variables
 | Leer artículo por clave      | /api/v3/articulos/clave/MOO-K6145   |
 | Leer artículo por id         | /api/v3/articulos/3929              |
 
-response:
 ```json
 [
 {"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
