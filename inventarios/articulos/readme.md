@@ -1,6 +1,6 @@
 ## Artículos
 
-Los artículos es el recurso base del módulo de inventario, representan los objetos que son comprados y vendidos por la empresa. **Los servicios que presta la empresa también se incluyen en este catálogo**, marcando el campo boleano *arts.servicio* como verdadero.
+Representan a los objetos que son comprados y vendidos por la empresa. **Los servicios que presta la empresa también se incluyen en este catálogo**, marcando el campo boleano *arts.servicio* como verdadero.
 
 ### Rutas de Artículos
 
