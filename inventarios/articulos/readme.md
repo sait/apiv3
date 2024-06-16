@@ -200,12 +200,10 @@ GET /api/v3/articulos?variables
 
 
 | Ejemplo de Búsqueda          | Ruta                                |
-| ---------------------------- | ----------------------------------- |
+| :--------------------------- | :---------------------------------- |
 | Buscar los primeros 25 arts  | /api/v3/articulos?limit=25          |
 | Buscar rótulas               | /api/v3/articulos?q=rotula          |
 | Buscar rótulas para Suburban | /api/v3/articulos?q=rotula+suburban |
-| Leer artículo por clave      | /api/v3/articulos/clave/MOO-K6145   |
-| Leer artículo por id         | /api/v3/articulos/3929              |
 
 ```json
 [
