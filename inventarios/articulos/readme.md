@@ -1,5 +1,9 @@
 ## Artículos
 
+Los artículos es el recurso base del módulo de inventario, representan los objetos que son comprados y vendidos por la empresa.
+
+**Los servicios que presta la empresa también se incluyen en este catálogo**, marcando el campo boleano *arts.servicio* como verdadero.
+
 ### Rutas de Artículos
 
 | Acción                                                 | Ruta                               |
@@ -48,7 +52,6 @@
 
 ---
 ### Crear Artículo
-Crea un articulo nuevo con los datos recibidos.
 
 POST /api/v3/articulos  
 ```json
@@ -78,9 +81,11 @@ POST /api/v3/articulos
     "precio5": 1355,
     "preciopub": 1799.92,
     "unidad": "PZA  "
- ```
+}
+```
 
 <sub>response:
+
 ```json
 {
     "id": 1,
@@ -111,6 +116,7 @@ POST /api/v3/articulos
     "precio5": 1355,
     "preciopub": 1799.92,
     "unidad": "PZA  "
+}
  ```
 
 
@@ -118,47 +124,77 @@ POST /api/v3/articulos
 ---
 ### Actualizar Artículo
 
-Actualiza los datos del articulo recibido como parametro
-
 PUT /api/v3/articulos/:cve
 ```json
 {
     "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
-    "impuesto1":16.00,
-    "divisa":"P"
+    "impuesto1": 16.00,
+    "divisa": "P"
 }
 ```
 
 <sub>response:
+
 ```json
-"UPDATED"
+{"UPDATED"}
 ```
+
 
 
 ---
 ### Leer Artículo
 GET /api/v3/articulos/:cve
+```json
+{
+    "id": 1,
+    "created": "2023-02-05 21:53:21",
+    "updated": "2023-02-06 15:23:57",
+    "numart": "           GRC-55657",
+    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
+    "activo": 1,
+    "categoria": "  SUS",
+    "clavesat": "25172000",
+    "codigo": "55657",
+    "divisa": "P",
+    "esmatpelig": 0,
+    "excento": 0,
+    "existencia": 0,
+    "familia": "SUS02",
+    "impuesto1": 16,
+    "impuesto2": 0,
+    "linea": "  114",
+    "marca": "GRC",
+    "matpelig": "",
+    "modelo": "",
+    "obs": "",
+    "precio1": 1689.59,
+    "precio2": 1500.87,
+    "precio3": 1466.19,
+    "precio4": 1441.71,
+    "precio5": 1355,
+    "preciopub": 1799.92,
+    "unidad": "PZA  "
+}
+```
 
-response:
-```
-fix
-```
+
 
 ---
 ### Leer Artículo por UPC 
 GET /api/v3/articulos/upc/:upc
 
+response: Igual a [Leer Artículo](#leer-artículo)
 
 
 ---
 ### Leer Artículo por Clave o UPC
 GET /api/v3/articulos/cveupc/:txt
 
+response: Igual a [Leer Artículo](#leer-artículo)
 
 
 ---
 ### Buscar Artículos
-
 GET /api/v3/articulos?variables
 
 | Variable | Significado                                          |
@@ -180,9 +216,10 @@ GET /api/v3/articulos?variables
 response:
 ```json
 [
-    {articulo1},
-    {articulo2},
-    ...
-    {articuloN}
+{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
+{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
+{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
 ]
 ```
+
+
