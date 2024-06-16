@@ -53,7 +53,8 @@ Los artículos es el recurso base del módulo de inventario, representan los obj
 ---
 ### Crear Artículo
 
-POST /api/v3/articulos  
+POST /api/v3/articulos
+##### Request  
 ```json
 {
     "numart": "GRC-55657",
@@ -83,6 +84,7 @@ POST /api/v3/articulos
     "unidad": "PZA  "
 }
 ```
+##### Response
 ```json
 {
     "id": 1,
@@ -189,10 +191,10 @@ Respuesta igual que [Leer Artículo](#leer-artículo)
 
 ---
 ### Buscar Artículos
-GET /api/v3/articulos?variable
+GET /api/v3/articulos?condiciones
 
 | Variable | Significado                                               |
-| :------- | :-------------------------------------------------------- |
+| ------- | -------------------------------------------------------- |
 | offset   | A partir de que registro iniciar búsqueda. Default 0      |
 | limit    | Cuantos registros obtener. Default 100                    |
 | order    | Orden deseado. Los disponibles son:updated,id,numart,desc |
@@ -200,7 +202,7 @@ GET /api/v3/articulos?variable
 
 
 | Ejemplo de Búsqueda          | Ruta                                |
-| :--------------------------- | :---------------------------------- |
+| ---------------------------- | ----------------------------------- |
 | Buscar los primeros 25 arts  | /api/v3/articulos?limit=25          |
 | Buscar rótulas               | /api/v3/articulos?q=rotula          |
 | Buscar rótulas para Suburban | /api/v3/articulos?q=rotula+suburban |
