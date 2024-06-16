@@ -191,7 +191,6 @@ La respuesta igual que [Leer Artículo](#leer-artículo)
 
 ---
 ### Buscar Artículos
-GET /api/v3/articulos?condiciones
 
 Buscar los artículos que cumplan las condiciones indicadas en las variables recibidas.
 
@@ -209,13 +208,15 @@ Buscar los artículos que cumplan las condiciones indicadas en las variables rec
 | Buscar articulos que contenga la palabra: *rotula* | /api/v3/articulos?q=rotula          |
 | Buscar rótulas para Suburban                       | /api/v3/articulos?q=rotula+suburban |
 
-##### Response.result
+GET /api/v3/articulos?condiciones
+
 ```json
 [
 {"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
 {"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
 {"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
 ]
+
 ```
 
 
