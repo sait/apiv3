@@ -194,7 +194,7 @@ Respuesta igual que [Leer Artículo](#leer-artículo)
 GET /api/v3/articulos?condiciones
 
 | Variable | Significado                                               |
-| ------- | -------------------------------------------------------- |
+| -------- | --------------------------------------------------------- |
 | offset   | A partir de que registro iniciar búsqueda. Default 0      |
 | limit    | Cuantos registros obtener. Default 100                    |
 | order    | Orden deseado. Los disponibles son:updated,id,numart,desc |
