@@ -82,7 +82,7 @@ POST /api/v3/articulos
     "unidad": "PZA  "
 }
 ```
-##### Response
+##### Response.result
 ```json
 {
     "id": 1,
