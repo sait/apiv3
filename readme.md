@@ -5,6 +5,7 @@
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
+- [Test](#test)
 
 ## Recursos
 
@@ -54,6 +55,8 @@ El acceso a la API se otorga mediante una API Key única para cada **Sistema de 
 ```yaml
 GET http://miempresa.saitnube.com/api/v3/clientes/13
 X-sait-api-key: frizispe9swlhim0
+```
+
 ```
 
 ### Formato de Datos 
@@ -150,6 +153,16 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 | DELETE    | Delete    | 200    | DELETED                         | "DELETED"                                                                         |
 | GET ?cond | Read Many | 200    | Arreglo de Recursos solicitados | [ {recurso1},{recurso2},{recurso3} ]                                              |
 
+---
+## Test
 
+### Datos para acceso a API de pruebas
 
+url base:
+```
+test.saitnube.com
+```
 
+header:
+```
+X-sait-api-key: "fqkzlbklwliaeo1r"
