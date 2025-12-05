@@ -6,31 +6,18 @@
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
 
-
 ## Recursos
 
 Los recursos disponibles en la API son:
 - Ventas
-    - [Clientes](./ventas/clientes/)
-    - [ClientesEventuales](./ventas/clienteseventuales/)
-    - Vendedores
-    - Clientes
-    - Clientes Eventuales
-    - Sucursales de Clientes
+    - [Clientes](./ventas/clientes/readme.md)
+    - [Vendedores](./ventas/Vendedores/readme.md)
+    - [Calcular precios](./ventas/calcularprecios/readme.md)
+    - [pedidos](./ventas/pedidos/readme.md)
 - Inventario
-    - [Articulos](./inventarios/articulos)
-    - Articulos
-    - Precios
-    - Existencias
-    - Lineas
-    - Familias
-    - Categorias
-    - Unidades de Wmpaque
+    - [Articulos](./inventarios/articulos/readme.md)
 - Otros
-    - Usuarios
-    - Grupos de Usuario
-    - Sucursales de la Empresa
-    - Series de Documentos
+    - [Sucursales/almacenes](./otros/almacen/readme.md)
 
 ## Introducción
 
@@ -42,7 +29,6 @@ SAIT Software Administrativo cuenta con una API que es usada para conexión con 
 La conexión con **Sistemas de Terceros** se logra mediante:
 - Llamadas  **API Restful** tradicionales a los recursos de SAIT **(HTTP POST,READ,PUT,DELETE = Create,Read,Update,Delete )**
 - Generación **Webhooks** hacia el otro sistema, mediante un POST cada vez que se recibe un evento del tipo: Create, Update o Delete
-
 
 ### Módulos de Operación de SAIT
 

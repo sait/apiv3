@@ -1,192 +1,150 @@
 ## Clientes
 
-### Rutas de Clientes
+Rutas de Clientes
 
-| Acción                                    | Ruta                                 |
-| ----------------------------------------- | ------------------------------------ |
-| [Crear](#crear-cliente)                   | POST /api/v3/clientes                |
-| [Actualizar](#actualizar-cliente)         | PUT  /api/v3/clientes/:id            |
-| [Leer](#leer-cliente)                     | GET  /api/v3/clientes/:id            |
-| [Leer por clave](#leer-cliente-por-clave) | GET  /api/v3/clientes/clave/:key     |
-| [Buscar](#buscar-clientes)                | GET  /api/v3/clientes?condiciones... |
+| Accion                            | Ruta                                   |
+|-----------------------------------|----------------------------------------|
+| [Leer](#leer-cliente)             | GET    /api/v3/clientes/:numcli        |
+| [Buscar](#buscar-clientes)        | GET    /api/v3/clientes?condiciones... |
 
+Campos de los Clientes
 
-### Campos del Cliente
-
-| Campo      | Significado                                                |
-| ---------- | ---------------------------------------------------------- |
-| id         | id incremental disponible solo através de SAIT API         |
-| created    | timestamp del momento de creación                          |
-| updated    | timestamp ultima actualizacion                             |
-| numcli     | clave de cliente C(5)AD                                    |
-| numvend    | clave del vendedor que atiende al cliente C(5)AD           |
-| numzona    | clave de zona de ventas C(5)AD                             |
-| clavecli   | clave adicional ampliada del cliente C(10)                 |
-| nomcli     | nombre del cliente                                         |
-| rfc        | registro federal de causantes del cliente                  |
-| calle      | calle del domicilio                                        |
-| numext     | número exterior del domicilio                              |
-| numint     | número interior del domicilio                              |
-| colonia    |                                                            |
-| ciudad     |                                                            |
-| estado     | nombre del estado                                          |
-| cp         | código postal                                              |
-| telefono   | teléfono del cliente                                       |
-| fax        | aun existe ???                                             |
-| clasif     | clasificación del cliente                                  |
-| atvent     | nombre del contacto para asuntos de venta                  |
-| email1     | email del contacto de venta                                |
-| atcobr     | nombre del contacto para asuntos de cobranza               |
-| email2     | email del contacto de cobranza                             |
-| limcred    | límite de crédito en pesos                                 |
-| diascred   | dias de crédito antes de considerar una cuenta como adeudo |
-| saldo      | saldo actual del cliente en pesos                          |
-| pjedesc    | porcentaje de descuento autorizado al cliente              |
-| precioutil | lista de precio a usar de 1 a 5 C(1)                       |
-| obs        | observaciones a mostrar al vendedor al momento de vender   |
-| numcta     | numero de cuenta contable                                  |
-| suspendido | boleano que indica credito suspendido al cliente           |
-| permitecod | boleano que indica si se permite entrega o devuelvase      |
-| metodopago | metodo de pago para CFDI                                   |
-| usocfdi    | clave fiscal del uso de CFDI                               |
-| idregimen  | clave del regimen fiscal del cliente                       |
-| emailtw    | email de acceso para tienda web                            |
-
-
+| Campo      | Tipo     | Significado                                                |
+|------------|----------|------------------------------------------------------------|
+| id         | int      | id incremental disponible solo através de SAIT API         |
+| created    | datetime | timestamp del momento de creación                          |
+| updated    | datetime | timestamp ultima actualizacion                             |
+| numcli     | varchar  | clave de cliente C(5)AD                                    |
+| nomcli     | varchar  | nombre del cliente                                         |
+| numvend    | varchar  | clave del vendedor que atiende al cliente C(5)AD           |
+| numzona    | varchar  | clave de zona de ventas C(5)AD                             |
+| clavecli   | varchar  | clave adicional ampliada del cliente C(10)                 |
+| rfc        | varchar  | registro federal de causantes del cliente                  |
+| calle      | varchar  | calle del domicilio                                        |
+| numext     | varchar  | número exterior del domicilio                              |
+| numint     | varchar  | número interior del domicilio                              |
+| colonia    | varchar  |                                                            |
+| ciudad     | varchar  |                                                            |
+| estado     | varchar  | nombre del estado                                          |
+| cp         | varchar  | código postal                                              |
+| telefono   | varchar  | teléfono del cliente                                       |
+| fax        | varchar  | aun existe ???                                             |
+| clasif     | varchar  | clasificación del cliente                                  |
+| atvent     | varchar  | nombre del contacto para asuntos de venta                  |
+| email1     | varchar  | email del contacto de venta                                |
+| atcobr     | varchar  | nombre del contacto para asuntos de cobranza               |
+| email2     | varchar  | email del contacto de cobranza                             |
+| limcred    | decimal  | límite de crédito en pesos                                 |
+| diascred   | decimal  | dias de crédito antes de considerar una cuenta como adeudo |
+| saldo      | decimal  | saldo actual del cliente en pesos                          |
+| pjedesc    | decimal  | porcentaje de descuento autorizado al cliente              |
+| precioutil | char     | lista de precio a usar de 1 a 5 C(1)                       |
+| obs        | text     | observaciones a mostrar al vendedor al momento de vender   |
+| numcta     | varchar  | numero de cuenta contable                                  |
+| suspendido | tinyint  | boleano que indica credito suspendido al cliente           |
+| permitecod | tinyint  | boleano que indica si se permite entrega o devuelvase      |
+| metodopago | text     | metodo de pago para CFDI                                   |
+| usocfdi    | char     | clave fiscal del uso de CFDI                               |
+| idregimen  | char     | clave del regimen fiscal del cliente                       |
+| emailtw    | varchar  | email de acceso para tienda web                            |
 
 ---
-### Crear Cliente
+### Leer cliente
+GET /api/v3/clientes/:numcli
 
-POST /api/v3/clientes
-
-request:
-```json
-{
-    "numcli":"10",
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-    "colonia":"Santa María Insurgente",
-    "ciudad":"México",
-    "estado":"CDMX",
-    "cp":"06430"
-}
-```
+example: /api/v3/clientes/G2
 
 response:
 ```json
 {
-    "id":1,
-    "created":"2023-02-07 21:37:46",
-    "updated":"2023-02-07 21:40:08",
-    "numcli":"10",
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-    "colonia":"Santa María Insurgente",
-    "ciudad":"México",
-    "estado":"CDMX",
-    "cp":"06430"
+    "id": 0,
+    "created": "",
+    "updated": "",
+    "numcli": "   G2",
+    "nomcli": "MINISO MEXICO",
+    "calle": "MANUEL AVILA CAMACHO",
+    "numext": "118",
+    "colonia": "LOMAS DE CHAPULTEPEC V SECCION",
+    "ciudad": "MIGUEL HIDALGO",
+    "estado": "CIUDAD DE MEXICO",
+    "pais": "MEXICO",
+    "cp": "11000",
+    "telefono": "6646421154",
+    "telefono2": "",
+    "email": "sendero.tijuana@miniso.com.mx",
+    "rfc": "MME160812J15",
+    "idregimen": "601",
+    "nomcomer": "MINISO MEXICO",
+    "numcta": "1008-XXXX",
+    "clasif": "",
+    "numzona": "  CSF",
+    "usocfdi": "G03",
+    "formapago": "",
+    "condpago": "",
+    "uid": 77,
+    "retencion1": 0,
+    "atvent": "",
+    "email1": "sendero.tijuana@miniso.com.mx",
+    "diascred": 0,
+    "limcred": 0,
+    "precioutil": "1",
+    "pjedesc": 0,
+    "numvend": "",
+    "atcobr": "",
+    "email2": "",
+    "emailtw": "",
+    "obligareq": 0,
+    "permitecod": 0,
+    "llavecred": 0,
+    "suspendido": 0,
+    "saldo": 0,
+    "ventano": 0,
+    "ultvent": "2024-09-23",
+    "obs": "",
+    "otrosdatos": ""
 }
 ```
-
-
-### Actualizar Cliente
-
-PUT /api/v3/clientes/:id
-
-request:
-```json
-{
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-}
-```
-
-response:
-```json
-"UPDATED"
-```
-
 
 ---
-### Leer Cliente
+### Buscar clientes
 
-GET /api/v3/clientes/:id
+GET /api/v3/clientes?filtros...
 
-response:
-```json
-{
-    "id":1,
-    "created":"2023-02-07 21:37:46",
-    "updated":"2023-02-07 21:40:08",
-    "numcli":"10",
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-    "colonia":"Santa María Insurgente",
-    "ciudad":"México",
-    "estado":"CDMX",
-    "cp":"06430"
-}
-```
-
-
-
----
-### Leer Cliente por Clave
-
-GET /api/v3/clientes/clave/:clave
-
-response:
-```json
-{
-    "id":1,
-    "created":"2023-02-07 21:37:46",
-    "updated":"2023-02-07 21:40:08",
-    "numcli":"10",
-    "nomcli":"Bimbo de Mexico",
-    "calle":"Mimosas",
-    "numext":"117",
-    "colonia":"Santa María Insurgente",
-    "ciudad":"México",
-    "estado":"CDMX",
-    "cp":"06430"
-}
-```
-
-
----
-### Buscar Clientes
-
-GET /api/v3/clientes?variables
-
-| Variable | Significado                                             |
-| -------- | ------------------------------------------------------- |
-| offset   | A partir de que registro iniciar búsqueda. Default 0    |
-| limit    | Cuantos registros obtener. Default 100                  |
-| order    | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc |
-| q        | Palabras a buscar                                       |
-| estado   | filtro por estado del pais                              |
-| numvend  | filtro por vendedor que atiende a cliente               |
-| numzon   | filtro por zona de clientes                             |
-
-
-| Ejemplo de Búsqueda                      | Ruta                                       |
-| ---------------------------------------- | ------------------------------------------ |
-| Clientes con nombre ignacio              | /api/v3/clientes?q=ignacio                 |
-| Clientes con nombre ignacio gonzalez     | /api/v3/clientes?q=ignacio+gonzalez        |
-| Clientes de Colima                       | /api/v3/clientes?estado=colima             |
-| Clientes de Colimna con nombre Industria | /api/v3/clientes?estado=colima&q=industria |
-| 20 ultimos clientes modificados          | /api/v3/clientes?limit=20&order=-updated   |
+**filtros**
+| filtro  | Significado                                             |
+|---------|---------------------------------------------------------|
+| offset  | A partir de que registro iniciar búsqueda. Default 0    |
+| limit   | Cuantos registros obtener. Default 100                  |
+| order   | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc |
+| q       | Palabras a buscar                                       |
+| estado  | filtro por estado del pais                              |
+| rfc     | filtro por rfc del cliente                              |
+| numvend | filtro por vendedor que atiende a cliente               |
+| numzon  | filtro por zona de clientes                             |
 
 response:
 ```json
 [
-    {cliente1},
-    {cliente2},
-    ...
-    {clienteN}
+    {
+        "id": 1,
+        "created": "2024-06-29 12:36:46",
+        "updated": "2025-11-27 09:00:22",
+        "numcli": "    0",
+        "nomcli": "C O N T A D O",
+        "calle": "HIDALGO",
+        "numext": "183 OTE",
+        "colonia": "CENTRO",
+        "ciudad": "TECATE",
+        "estado": "BAJA CALIFORNIA",
+        "pais": "MEXICO",
+        "cp": "21400",
+        "telefono": "665-654-13-74",
+        "telefono2": "",
+        "email": "",
+        "rfc": "XAXX010101000",
+        "nomcomer": "",
+        "numzona": "  CSF",
+    },
+    {}...
 ]
 ```
