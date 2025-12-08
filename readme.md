@@ -1,25 +1,18 @@
 # SAIT API 3.0
 
-## Tabla de Contenido:
-- [Recursos](#recursos)
+Tabla de Contenido:
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
-- [Credenciales de acceso a entorno de pruebas](#credenciales-de-acceso-a-entorno-de-pruebas)
 - [Respuestas](#respuestas)
-
-
-## Recursos
-
-Los recursos disponibles en la API son:
-- Ventas
-    - [Clientes](./ventas/clientes/readme.md)
-    - [Vendedores](./ventas/Vendedores/readme.md)
-    - [Calcular precios](./ventas/calcularprecios/readme.md)
-    - [pedidos](./ventas/pedidos/readme.md)
-- Inventario
-    - [Articulos](./inventarios/articulos/readme.md)
-- Otros
-    - [Sucursales/almacenes](./otros/almacen/readme.md)
+- [Pruebas](#pruebas)
+- Indice de Rutas
+    - Ventas
+        - [Clientes](./ventas/clientes/readme.md)
+        - [Clientes Eventuales](./ventas/clienteseventuales/readme.md)
+        - [Vendedores](./ventas/vendedores/readme.md)
+        - [zonas](./ventas/zonas/readme.md)
+    - Inventario
+        - [Artículos](./inventario/articulos/readme.md)
 
 ## Introducción
 
@@ -31,6 +24,7 @@ SAIT Software Administrativo cuenta con una API que es usada para conexión con 
 La conexión con **Sistemas de Terceros** se logra mediante:
 - Llamadas  **API Restful** tradicionales a los recursos de SAIT **(HTTP POST,READ,PUT,DELETE = Create,Read,Update,Delete )**
 - Generación **Webhooks** hacia el otro sistema, mediante un POST cada vez que se recibe un evento del tipo: Create, Update o Delete
+
 
 ### Módulos de Operación de SAIT
 
@@ -45,6 +39,27 @@ En SAIT, los recursos los agrupamos según el módulo de operación del sistema.
 - Bancos
 - Contabilidad
 
+### Recursos del Sistema
+
+Algunos recursos con los que cuenta el programador en SAIT son:
+- Ventas
+    - Vendedores
+    - Clientes
+    - Clientes Eventuales
+    - Sucursales de Clientes
+- Inventario
+    - Articulos
+    - Precios
+    - Existencias
+    - Lineas
+    - Familias
+    - Categorias
+    - Unidades de Wmpaque
+- Otros
+    - Usuarios
+    - Grupos de Usuario
+    - Sucursales de la Empresa
+    - Series de Documentos
 
 
 ## Encabezados
@@ -70,25 +85,12 @@ X-sait-api-key: frizispe9swlhim0
 Content-Type: application/xml
 ```
 
----
-## Credenciales de acceso a entorno de pruebas
-
-url base:
-```
-test.saitnube.com
-```
-
-header:
-```
-X-sait-api-key: "fqkzlbklwliaeo1r"
-```
-
 ## Respuestas
 
 Los códigos HTTP de respuesta son los típicos de las API Restful, según el tipo de acción CRUD:
 
 | Request    | Acción                             | Código | Significado                              |
-| ---------- | ---------------------------------- | ------ | ---------------------------------------- |
+|------------|------------------------------------|--------|------------------------------------------|
 | **POST**   | (C) Create - Crear un recurso      | 201    | Recurso ha sido creado.                  |
 |            |                                    | 400    | Error de validación al crear recurso     |
 | **GET**    | (R) Read - Leer un recurso         | 200    | Recurso ha sido leido                    |
@@ -102,7 +104,7 @@ Los códigos HTTP de respuesta son los típicos de las API Restful, según el ti
 Además de los código errores generales:
 
 | Código | Significado                   |
-| ------ | ----------------------------- |
+|--------|-------------------------------|
 | 500    | Error interno de la API       |
 | 401    | Acceso No Autorizado a la API |
 
@@ -158,11 +160,39 @@ Ejemplo de falla de validacions 400
 En caso de éxito en la llamada, el valor de result será dependiendo del tipo de acción, ver la siguiente tabla:
 
 | Verbo     | Acción    | Código | Valor regresado en "result"     | Ejemplo                                                                           |
-| --------- | --------- | ------ | ------------------------------- | --------------------------------------------------------------------------------- |
+|-----------|-----------|--------|---------------------------------|-----------------------------------------------------------------------------------|
 | POST      | Create    | 201    | Recurso creado                  | {"id":1,"created":"2023-02-07 21:37:46","numcli":"10","nomcli":"Bimbo de Mexico"} |
 | GET       | Read      | 200    | Recurso leido                   | {"id":1,"created":"2023-02-07 21:37:46","numcli":"10","nomcli":"Bimbo de Mexico"} |
 | PUT       | Update    | 200    | UPDATED                         | "UPDATED"                                                                         |
 | DELETE    | Delete    | 200    | DELETED                         | "DELETED"                                                                         |
 | GET ?cond | Read Many | 200    | Arreglo de Recursos solicitados | [ {recurso1},{recurso2},{recurso3} ]                                              |
 
+---
+## Pruebas
 
+### Tokens para pruebas
+
+En saitnube contamos con 2 tipos de accesos:
+- apikeys
+- token de acceso otorgado por login/autenticacion
+
+#### apikey
+```
+X-sait-api-key:fqkzlbklwliaeo1r
+```
+
+#### Login Authentication
+
+POST api/v3/login
+
+```json
+{
+    "numuser":"TEST",
+    "password":"5348800"
+}
+```
+
+token acceso:
+```
+X-sait-token:{token de acceso otorgado por autenticacion}
+```

@@ -53,119 +53,143 @@ Rutas de pedidos
 | obs       | string       | Observaciones                      |
 
 ---
-### Crear pedido
 
-POST  /api/v3/pedidos
+### Crear
 
-```
-Nota: al enviar el parametro "dryrun=true" se prevalidaran los datos sin afectar los campos en la base de datos
-ejemplo: /api/v3/pedidos?dryrun=true
+POST /api/v3/pedidos
 
-response: OK
-```
+**Dryrun para validar los datos sin crear el pedido:**
 
+POST /api/v3/pedidos?dryrun=true
 
-**body** 
-| campo     | descrip                                    |
-|-----------|--------------------------------------------|
-| numcli    | Numero de identificacion del cliente       |
-| numalm    | Numero de almacen                          |
-| formapago | 1: Contado - 2: Credito                    |
-| divisa    | P:pesos - D:dolares                        |
-| fentrega  | fecha de entrega (YEARMONTHDAY-"20251220") |
-| hentrega  | Hora de entrega (HORA:MINUTOS-"18:30")     |
-| items     | Items del pedido                           |
-
-**body items**
-| campo   | descrip                               |
-|---------|---------------------------------------|
-| cant    | cantidad de unidades del articulo     |
-| numart  | numero de identificacion del articulo |
-| unidad  | unidad del articulo                   |
-| precio  | P:pesos - D:dolares                   |
-| pjedesc | porcentaje de descuento a aplicar     |
-
-request:
+request
 ```json
 {
-    "numcli": "0",
-    "numalm": "1",
-    "formapago": "1",
-    "divisa": "P", 
-    "items": [
-        {
-            "cant": 1,
-            "numart": "0164",
-            "unidad": "PZA",
-            "precio": 25,
-            "pjedesc": 0
-        }
-    ],
-    "fentrega": "20251220",
-    "hentrega": "18:30"
+	"numvend":"MSL",
+	"numcli":"0",
+	"numcliev":"",
+	"numalm":"1",
+	"formapago":"1",
+	"divisa":"P",
+  "fentrega":"20250620",
+  "hentrega":"15:30",
+	"obs":"",
+	"otrosdatos":{
+	  "metododepago":"efectivo",
+	  "nombre":"Otoniel",
+	  "telefono":"6531465216",
+	  "correo":"otonieldesarrollosait@gmail.com",
+	  "clinum":"0"
+	},
+	"items":[
+		{
+			"numart":"528790",
+			"pjedesc":0,
+			"precio":34.25925925925926,
+			"cant":6,
+			"unidad":"PZA"
+		},
+		{
+			"numart":"SM477-11",
+			"pjedesc":10,
+			"precio":458.3333,
+			"cant":1,
+			"unidad":"PZA"
+		},
+		{
+			"numart":"528790",
+			"pjedesc":0,
+			"precio":34.25925925925926,
+			"cant":4,
+			"unidad":"PZA"
+		}  
+	]
 }
 ```
 
-response:
+response
 ```json
 {
-    "id": 3478584,
-    "created": "2025-12-05 11:18:04",
-    "updated": "2025-12-05 11:18:04",
+  "result": {
+    "id": 2006145,
+    "created": "2025-06-17 00:54:02",
+    "updated": "2025-06-17 00:54:02",
     "tipodoc": " P",
-    "numdoc": "       AT3",
+    "numdoc": "       OT1",
     "numcli": "    0",
     "nomcli": "C O N T A D O",
-    "numvend": "     ",
+    "numvend": "  MSL",
     "pagos": "",
-    "fecha": "2025-12-05",
-    "fechacapt": "2025-12-05",
-    "hora": "12:18:04",
-    "fentrega": "2025-12-20",
-    "hentrega": "18:30",
+    "fecha": "2025-06-16",
+    "fechacapt": "2025-06-16",
+    "hora": "17:54:02",
+    "fentrega": "2025-06-20",
+    "hentrega": "15:30",
     "divisa": "P",
     "tc": 22,
-    "importe": 25,
-    "descuento": 0,
-    "impuesto1": 2,
+    "importe": 800.93,
+    "descuento": 45.83,
+    "impuesto1": 60.41,
     "impuesto2": 0,
     "formapago": "1",
     "numalm": " 1",
     "obs": "",
-    "total": 27,
+    "total": 815.51,
     "items": [
       {
         "tipodoc": " P",
-        "numdoc": "       AT3",
+        "numdoc": "       OT1",
         "numpar": "  1",
-        "numart": "                0164",
-        "desc": "CUADERNO ESTRELLA ITALIANO ESPIRAL DOBLE RAYA C/100 HOJAS",
-        "codigo": "        602760001640",
-        "precio": 25,
+        "numart": "              528790",
+        "desc": "CUADERNO NORMA ITALIANO PELUCHES COSIDO RAYA C/100H (D)",
+        "codigo": "       7702111287907",
+        "precio": 34.25926,
         "pjedesc": 0,
+        "impuesto1": 8,
+        "impuesto2": 0,
+        "pend": 6,
+        "cant": 6,
+        "unidad": "PZA",
+        "obs": ""
+      },
+      {
+        "tipodoc": " P",
+        "numdoc": "       OT1",
+        "numpar": "  2",
+        "numart": "            SM477-11",
+        "desc": "BLOCK STRATHMORE P/LAPIZ DE COLOR 11X14\" C/30",
+        "codigo": "        012017621116",
+        "precio": 458.3333,
+        "pjedesc": 10,
         "impuesto1": 8,
         "impuesto2": 0,
         "pend": 1,
         "cant": 1,
         "unidad": "PZA",
-        "obs": "",
-        "foto": "",
-        "fotos": "",
-        "imagenes": null,
-        "articulo": null,
-        "preciopub": 0,
-        "pjedesc1": 0
+        "obs": ""
+      },
+      {
+        "tipodoc": " P",
+        "numdoc": "       OT1",
+        "numpar": "  3",
+        "numart": "              528790",
+        "desc": "CUADERNO NORMA ITALIANO PELUCHES COSIDO RAYA C/100H (D)",
+        "codigo": "       7702111287907",
+        "precio": 34.25926,
+        "pjedesc": 0,
+        "impuesto1": 8,
+        "impuesto2": 0,
+        "pend": 4,
+        "cant": 4,
+        "unidad": "PZA",
+        "obs": ""
       }
     ],
-    "cliente": null,
-    "almacen": null,
-    "vendedor": null,
-    "direnvio": "",
-    "otrosdatos": "",
-    "clievent": null
-  }
+    "otrosdatosstring": ""
+  },
+  "error": ""
+}
 ```
-
 
 ---
 ### Leer pedido
@@ -175,60 +199,49 @@ GET /api/v3/pedidos/:numdoc
 response:
 ```json
 {
-    "id": 3478584,
-    "created": "2025-12-05 11:18:04",
-    "updated": "2025-12-05 11:18:04",
-    "tipodoc": " P",
-    "numdoc": "       AT3",
-    "numcli": "    0",
-    "nomcli": "C O N T A D O",
-    "numvend": "     ",
-    "pagos": "",
-    "fecha": "2025-12-05",
-    "fechacapt": "2025-12-05",
-    "hora": "12:18:04",
-    "fentrega": "2025-12-20",
-    "hentrega": "18:30",
-    "divisa": "P",
-    "tc": 22,
-    "importe": 25,
-    "descuento": 0,
-    "impuesto1": 2,
-    "impuesto2": 0,
-    "formapago": "1",
-    "numalm": " 1",
-    "obs": "",
-    "total": 27,
-    "items": [
-      {
-        "tipodoc": " P",
-        "numdoc": "       AT3",
-        "numpar": "  1",
-        "numart": "                0164",
-        "desc": "CUADERNO ESTRELLA ITALIANO ESPIRAL DOBLE RAYA C/100 HOJAS",
-        "codigo": "        602760001640",
-        "precio": 25,
-        "pjedesc": 0,
-        "impuesto1": 8,
-        "impuesto2": 0,
-        "pend": 1,
-        "cant": 1,
-        "unidad": "PZA",
-        "obs": "",
-        "foto": "",
-        "fotos": "",
-        "imagenes": null,
-        "articulo": null,
-        "preciopub": 0,
-        "pjedesc1": 0
-      }
-    ],
-    "cliente": null,
-    "almacen": null,
-    "vendedor": null,
-    "direnvio": "",
-    "otrosdatos": "",
-    "clievent": null
+  "id": 2006141,
+  "created": "2025-06-10 22:12:01",
+  "updated": "2025-06-10 22:12:01",
+  "tipodoc": " P",
+  "numdoc": "        A4",
+  "numcli": "    0",
+  "nomcli": "C O N T A D O",
+  "numvend": "  919",
+  "pagos": "",
+  "fecha": "2025-06-03",
+  "fechacapt": "2025-06-03",
+  "hora": "11:09:17",
+  "fentrega": "2025-06-03",
+  "hentrega": "11:07",
+  "divisa": "P",
+  "tc": 25,
+  "importe": 2314.8,
+  "descuento": 0,
+  "impuesto1": 370.37,
+  "impuesto2": 0,
+  "formapago": "1",
+  "numalm": " 1",
+  "obs": "",
+  "total": 2685.17,
+  "items": [
+    {
+      "tipodoc": " P",
+      "numdoc": "        A4",
+      "numpar": "  1",
+      "numart": "                ABRE",
+      "desc": "ABRECUBETAS",
+      "codigo": "",
+      "precio": 231.48,
+      "pjedesc": 0,
+      "impuesto1": 16,
+      "impuesto2": 0,
+      "pend": 10,
+      "cant": 10,
+      "unidad": "PIEZA",
+      "obs": ""
+    }
+  ],
+  "otrosdatosstring": ""
 }
 ```
 
@@ -255,64 +268,53 @@ GET /api/v3/pedidos
 
 response:
 ```json
-[
+{
+  [
     {
-    "id": 3478584,
-    "created": "2025-12-05 11:18:04",
-    "updated": "2025-12-05 11:18:04",
-    "tipodoc": " P",
-    "numdoc": "       AT3",
-    "numcli": "    0",
-    "nomcli": "C O N T A D O",
-    "numvend": "     ",
-    "pagos": "",
-    "fecha": "2025-12-05",
-    "fechacapt": "2025-12-05",
-    "hora": "12:18:04",
-    "fentrega": "2025-12-20",
-    "hentrega": "18:30",
-    "divisa": "P",
-    "tc": 22,
-    "importe": 25,
-    "descuento": 0,
-    "impuesto1": 2,
-    "impuesto2": 0,
-    "formapago": "1",
-    "numalm": " 1",
-    "obs": "",
-    "total": 27,
-    "items": [
-      {
-        "tipodoc": " P",
-        "numdoc": "       AT3",
-        "numpar": "  1",
-        "numart": "                0164",
-        "desc": "CUADERNO ESTRELLA ITALIANO ESPIRAL DOBLE RAYA C/100 HOJAS",
-        "codigo": "        602760001640",
-        "precio": 25,
-        "pjedesc": 0,
-        "impuesto1": 8,
-        "impuesto2": 0,
-        "pend": 1,
-        "cant": 1,
-        "unidad": "PZA",
-        "obs": "",
-        "foto": "",
-        "fotos": "",
-        "imagenes": null,
-        "articulo": null,
-        "preciopub": 0,
-        "pjedesc1": 0
-      }
-    ],
-    "cliente": null,
-    "almacen": null,
-    "vendedor": null,
-    "direnvio": "",
-    "otrosdatos": "",
-    "clievent": null
-  },
-  {}...
-]
+      "id": 2006141,
+      "tipodoc": " P",
+      "numdoc": "        A4",
+      "numcli": "    0",
+      "nomcli": "C O N T A D O",
+      "fecha": "2025-06-03",
+      "divisa": "P",
+      "tc": 25,
+      "importe": 2314.8,
+      "descuento": 0,
+      "impuesto1": 370.37,
+      "impuesto2": 0,
+      "total": 2685.17
+    },
+    {
+      "id": 2006143,
+      "tipodoc": " P",
+      "numdoc": "        A5",
+      "numcli": "    0",
+      "nomcli": "C O N T A D O",
+      "fecha": "2025-06-03",
+      "divisa": "P",
+      "tc": 25,
+      "importe": 2314.8,
+      "descuento": 0,
+      "impuesto1": 370.37,
+      "impuesto2": 0,
+      "total": 2685.17
+    },
+    {
+      "id": 2005995,
+      "tipodoc": " P",
+      "numdoc": "    WC2056",
+      "numcli": "      AF-7",
+      "nomcli": "prueba crear clievent en pedidos",
+      "fecha": "2024-11-12",
+      "divisa": "P",
+      "tc": 25,
+      "importe": 145.27,
+      "descuento": 0,
+      "impuesto1": 14.73,
+      "impuesto2": 0,
+      "total": 160,
+    },
+  ]
+}
 ```
-

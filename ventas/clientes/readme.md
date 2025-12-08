@@ -4,8 +4,12 @@ Rutas de Clientes
 
 | Accion                            | Ruta                                   |
 |-----------------------------------|----------------------------------------|
+| [Crear](#crear-cliente)           | POST   /api/v3/clientes                |
 | [Leer](#leer-cliente)             | GET    /api/v3/clientes/:numcli        |
+| [Actualizar](#actualizar-cliente) | PUT    /api/v3/clientes/:numcli        |
+| [Borrar](#borrar-cliente)         | DELETE /api/v3/clientes/:numcli        |
 | [Buscar](#buscar-clientes)        | GET    /api/v3/clientes?condiciones... |
+
 
 Campos de los Clientes
 
@@ -49,101 +53,351 @@ Campos de los Clientes
 | emailtw    | varchar  | email de acceso para tienda web                            |
 
 ---
-### Leer cliente
-GET /api/v3/clientes/:numcli
+### Crear Cliente
 
-example: /api/v3/clientes/G2
+POST /api/v3/clientes
+
+request:
+```json
+{
+  "numcli": "  AF8",
+  "nomcli": "SERVICIOS Y MAQUILADOS INTERNACIONALES",
+  "calle": "CHURUBUSCO",
+  "numext": "660",
+  "colonia": "CUAUHTEMOC ESTE",
+  "ciudad": "TECATE",
+  "estado": "BAJA CALIFORNIA",
+  "cp": "21470",
+  "telefono": "665 654 25 71",
+  "fax": "",
+  "clasif": "",
+  "atvent": "",
+  "atcobr": "",
+  "email1": "compras@smimx.net, Vazquez@smimx.net",
+  "email2": "",
+  "rfc": "SMI890804PH2",
+  "limcred": 50000,
+  "pjedesc": 0,
+  "diascred": 15,
+  "precioutil": "5",
+  "recepfac": "",
+  "pagofac": "",
+  "obs": "",
+  "numvend": "",
+  "direnvio": "",
+  "otrosdatos": "",
+  "impuesto1": 0,
+  "retencion1": 0,
+  "retencion2": 0,
+  "pais": "",
+  "clavecli": "",
+  "curp": "",
+  "nomcomer": "",
+  "numzona": "  CSF",
+  "numint": "",
+  "usocfdi": "",
+  "formapago": "",
+  "condpago": "",
+  "emailtw": "",
+  "idregimen": "601"
+}
+```
 
 response:
 ```json
 {
-    "id": 0,
-    "created": "",
-    "updated": "",
-    "numcli": "   G2",
-    "nomcli": "MINISO MEXICO",
-    "calle": "MANUEL AVILA CAMACHO",
-    "numext": "118",
-    "colonia": "LOMAS DE CHAPULTEPEC V SECCION",
-    "ciudad": "MIGUEL HIDALGO",
-    "estado": "CIUDAD DE MEXICO",
-    "pais": "MEXICO",
-    "cp": "11000",
-    "telefono": "6646421154",
-    "telefono2": "",
-    "email": "sendero.tijuana@miniso.com.mx",
-    "rfc": "MME160812J15",
-    "idregimen": "601",
-    "nomcomer": "MINISO MEXICO",
-    "numcta": "1008-XXXX",
-    "clasif": "",
-    "numzona": "  CSF",
-    "usocfdi": "G03",
-    "formapago": "",
-    "condpago": "",
-    "uid": 77,
-    "retencion1": 0,
-    "atvent": "",
-    "email1": "sendero.tijuana@miniso.com.mx",
-    "diascred": 0,
-    "limcred": 0,
-    "precioutil": "1",
-    "pjedesc": 0,
-    "numvend": "",
-    "atcobr": "",
-    "email2": "",
-    "emailtw": "",
-    "obligareq": 0,
-    "permitecod": 0,
-    "llavecred": 0,
-    "suspendido": 0,
-    "saldo": 0,
-    "ventano": 0,
-    "ultvent": "2024-09-23",
-    "obs": "",
-    "otrosdatos": ""
+  "id": 81260,
+  "created": "2024-10-31 00:38:45",
+  "updated": "2024-10-31 00:38:45",
+  "numcli": "  AF8",
+  "nomcli": "SERVICIOS Y MAQUILADOS INTERNACIONALES",
+  "calle": "CHURUBUSCO",
+  "numext": "660",
+  "colonia": "CUAUHTEMOC ESTE",
+  "ciudad": "TECATE",
+  "estado": "BAJA CALIFORNIA",
+  "cp": "21470",
+  "telefono": "665 654 25 71",
+  "fax": "",
+  "clasif": "",
+  "ventano": 398062.8,
+  "ultvent": "2024-06-19",
+  "atvent": "",
+  "atcobr": "",
+  "email1": "compras@smimx.net, Vazquez@smimx.net",
+  "email2": "",
+  "rfc": "SMI890804PH2",
+  "limcred": 50000,
+  "saldo": 1166.76,
+  "pjedesc": 0,
+  "diascred": 15,
+  "precioutil": "5",
+  "recepfac": "",
+  "pagofac": "",
+  "obs": "",
+  "numcta": "102-101-S01",
+  "uid": 1215,
+  "numvend": "",
+  "obligareq": 1,
+  "suspendido": 0,
+  "direnvio": "",
+  "otrosdatos": "",
+  "impuesto1": 0,
+  "retencion1": 0,
+  "retencion2": 0,
+  "permitecod": 0,
+  "llavecred": 0,
+  "pais": "",
+  "clavecli": "",
+  "curp": "",
+  "nomcomer": "",
+  "cfgdatdoc": "",
+  "datosfe": "",
+  "statusweb": 0,
+  "claveweb": "",
+  "numzona": "  CSF",
+  "metodopago": "",
+  "metodousar": "",
+  "numint": "",
+  "usocfdi": "",
+  "formapago": "",
+  "implocal": "",
+  "condpago": "",
+  "emailtw": "",
+  "numidtrib": "",
+  "idregimen": "601",
+  "rec": 0
+}
+```
+
+
+---
+### Leer Cliente
+
+GET /api/v3/clientes/AF8
+
+response:
+```json
+{
+  "id": 81260,
+  "created": "2024-10-31 00:38:45",
+  "updated": "2024-10-31 00:38:45",
+  "numcli": "  AF8",
+  "nomcli": "SERVICIOS Y MAQUILADOS INTERNACIONALES",
+  "calle": "CHURUBUSCO",
+  "numext": "660",
+  "colonia": "CUAUHTEMOC ESTE",
+  "ciudad": "TECATE",
+  "estado": "BAJA CALIFORNIA",
+  "cp": "21470",
+  "telefono": "665 654 25 71",
+  "fax": "",
+  "clasif": "",
+  "ventano": 398062.8,
+  "ultvent": "2024-06-19",
+  "atvent": "",
+  "atcobr": "",
+  "email1": "compras@smimx.net, Vazquez@smimx.net",
+  "email2": "",
+  "rfc": "SMI890804PH2",
+  "limcred": 50000,
+  "saldo": 1166.76,
+  "pjedesc": 0,
+  "diascred": 15,
+  "precioutil": "5",
+  "recepfac": "",
+  "pagofac": "",
+  "obs": "",
+  "numcta": "102-101-S01",
+  "uid": 1215,
+  "numvend": "",
+  "obligareq": 1,
+  "suspendido": 0,
+  "direnvio": "",
+  "otrosdatos": "",
+  "impuesto1": 0,
+  "retencion1": 0,
+  "retencion2": 0,
+  "permitecod": 0,
+  "llavecred": 0,
+  "pais": "",
+  "clavecli": "",
+  "curp": "",
+  "nomcomer": "",
+  "cfgdatdoc": "",
+  "datosfe": "",
+  "statusweb": 0,
+  "claveweb": "",
+  "numzona": "  CSF",
+  "metodopago": "",
+  "metodousar": "",
+  "numint": "",
+  "usocfdi": "",
+  "formapago": "",
+  "implocal": "",
+  "condpago": "",
+  "emailtw": "",
+  "numidtrib": "",
+  "idregimen": "601",
+  "rec": 0
 }
 ```
 
 ---
-### Buscar clientes
+### Actualizar Cliente
 
-GET /api/v3/clientes?filtros...
+PUT /api/v3/clientes/AF8
 
-**filtros**
-| filtro  | Significado                                             |
-|---------|---------------------------------------------------------|
-| offset  | A partir de que registro iniciar búsqueda. Default 0    |
-| limit   | Cuantos registros obtener. Default 100                  |
-| order   | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc |
-| q       | Palabras a buscar                                       |
-| estado  | filtro por estado del pais                              |
-| rfc     | filtro por rfc del cliente                              |
-| numvend | filtro por vendedor que atiende a cliente               |
-| numzon  | filtro por zona de clientes                             |
+request:
+```json
+{
+  "nomcli": "MODIFICACION PRUEBA",
+  "calle": "CHURUBUSCO",
+  "numext": "660",
+  "colonia": "CUAUHTEMOC ESTE",
+  "ciudad": "TECATE",
+  "estado": "BAJA CALIFORNIA",
+  "cp": "21470",
+  "telefono": "665 654 25 71",
+  "fax": "",
+  "clasif": "",
+  "atvent": "",
+  "atcobr": "",
+  "email1": "compras@smimx.net, Vazquez@smimx.net",
+  "email2": "",
+  "rfc": "SMI890804PH2",
+  "limcred": 50000,
+  "pjedesc": 0,
+  "diascred": 15,
+  "precioutil": "5",
+  "recepfac": "",
+  "pagofac": "",
+  "obs": "",
+  "numvend": "",
+  "direnvio": "",
+  "otrosdatos": "",
+  "impuesto1": 0,
+  "retencion1": 0,
+  "retencion2": 0,
+  "pais": "",
+  "clavecli": "",
+  "curp": "",
+  "nomcomer": "",
+  "numzona": "  CSF",
+  "numint": "",
+  "usocfdi": "",
+  "formapago": "",
+  "condpago": "",
+  "emailtw": "",
+  "idregimen": "601",
+}
+```
+
+response:
+```json
+"UPDATED"
+```
+
+---
+### Borrar Cliente
+
+DELETE api/v3/clientes/AF8
+
+Request:
+```json
+"DELETED"
+```
+
+---
+### Buscar Clientes
+
+GET /api/v3/clientes?variables
+
+| Variable | Significado                                             |
+|----------|---------------------------------------------------------|
+| offset   | A partir de que registro iniciar búsqueda. Default 0    |
+| limit    | Cuantos registros obtener. Default 100                  |
+| order    | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc |
+| q        | Palabras a buscar                                       |
+| estado   | filtro por estado del pais                              |
+| rfc      | filtro por rfc del cliente                              |
+| numvend  | filtro por vendedor que atiende a cliente               |
+| numzon   | filtro por zona de clientes                             |
+| emailtw  | filtro por emailtw de clientes                          |
+
+| Ejemplo de Búsqueda                      | Ruta                                       |
+|------------------------------------------|--------------------------------------------|
+| Clientes con nombre ignacio              | /api/v3/clientes?q=ignacio                 |
+| Clientes con nombre ignacio gonzalez     | /api/v3/clientes?q=ignacio+gonzalez        |
+| Clientes de Colima                       | /api/v3/clientes?estado=colima             |
+| Clientes de Colimna con nombre Industria | /api/v3/clientes?estado=colima&q=industria |
+| 20 ultimos clientes modificados          | /api/v3/clientes?limit=20&order=-updated   |
 
 response:
 ```json
 [
     {
-        "id": 1,
-        "created": "2024-06-29 12:36:46",
-        "updated": "2025-11-27 09:00:22",
-        "numcli": "    0",
-        "nomcli": "C O N T A D O",
-        "calle": "HIDALGO",
-        "numext": "183 OTE",
-        "colonia": "CENTRO",
+        "id": 81260,
+        "created": "2024-10-31 00:38:45",
+        "updated": "2024-10-31 00:38:45",
+        "numcli": "  AF8",
+        "nomcli": "SERVICIOS Y MAQUILADOS INTERNACIONALES",
+        "calle": "CHURUBUSCO",
+        "numext": "660",
+        "colonia": "CUAUHTEMOC ESTE",
         "ciudad": "TECATE",
         "estado": "BAJA CALIFORNIA",
-        "pais": "MEXICO",
-        "cp": "21400",
-        "telefono": "665-654-13-74",
-        "telefono2": "",
-        "email": "",
-        "rfc": "XAXX010101000",
+        "cp": "21470",
+        "telefono": "665 654 25 71",
+        "fax": "",
+        "clasif": "",
+        "ventano": 398062.8,
+        "ultvent": "2024-06-19",
+        "atvent": "",
+        "atcobr": "",
+        "email1": "compras@smimx.net, Vazquez@smimx.net",
+        "email2": "",
+        "rfc": "SMI890804PH2",
+        "limcred": 50000,
+        "saldo": 1166.76,
+        "pjedesc": 0,
+        "diascred": 15,
+        "precioutil": "5",
+        "recepfac": "",
+        "pagofac": "",
+        "obs": "",
+        "numcta": "102-101-S01",
+        "uid": 1215,
+        "numvend": "",
+        "obligareq": 1,
+        "suspendido": 0,
+        "direnvio": "",
+        "otrosdatos": "",
+        "impuesto1": 0,
+        "retencion1": 0,
+        "retencion2": 0,
+        "permitecod": 0,
+        "llavecred": 0,
+        "pais": "",
+        "clavecli": "",
+        "curp": "",
         "nomcomer": "",
+        "cfgdatdoc": "",
+        "datosfe": "",
+        "statusweb": 0,
+        "claveweb": "",
         "numzona": "  CSF",
+        "metodopago": "",
+        "metodousar": "",
+        "numint": "",
+        "usocfdi": "",
+        "formapago": "",
+        "implocal": "",
+        "condpago": "",
+        "emailtw": "",
+        "numidtrib": "",
+        "idregimen": "601",
+        "rec": 0
     },
     {}...
 ]
