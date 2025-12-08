@@ -1,18 +1,42 @@
 # SAIT API 3.0
 
 Tabla de Contenido:
-- [Introducción](#introducción)
-- [Encabezados](#encabezados)
-- [Respuestas](#respuestas)
-- [Pruebas](#pruebas)
+
 - Indice de Rutas
+    - Auth
+        - [Permisos de usuario y Apikeys](./auth/readme.md)
     - Ventas
         - [Clientes](./ventas/clientes/readme.md)
-        - [Clientes Eventuales](./ventas/clienteseventuales/readme.md)
         - [Vendedores](./ventas/vendedores/readme.md)
         - [zonas](./ventas/zonas/readme.md)
+        - [Facturas](./ventas/facturas/readme.md)
+        - [Cotizaciones](./ventas/cotizaciones/readme.md)
+        - [Pedidos](./ventas/pedidos/readme.md)
+        - [Calcular precios](./ventas/calcularprecios/readme.md)
+    - Caja
+        - [Movimientos de caja](./caja/readme.md)
+        - [Cortes](./caja/cortes/readme.md)
+        - [Conceptos de caja](./caja/conccaja/readme.md)
+        - [Beneficiarios](/caja/beneficiarios/readme.md)
     - Inventario
         - [Artículos](./inventario/articulos/readme.md)
+            - [Imagenes](./inventario/imagenes/readme.md)
+        - [Unidades](./inventario/unidades/readme.md)
+        - [ClaveSat](./inventario/satprod/readme.md)
+        - [Categorias](./inventario/categorias/readme.md)
+        - [Familias](./inventario/familias/readme.md)
+        - [Lineas](./inventario/lineas/readme.md)
+        - [departamentos en inventario de articulos](./inventario/deptos/readme.md)
+        - [Existencias](./inventario/multialm/readme.md)
+    - Cobranza
+        - [Catalogo de movimientos](./cobranza/catmov/readme.md)
+        - [Estado de cuente de cliente](./cobranza/estadocuenta/readme.md)
+    - otros 
+        - [Almacenes](./utils/almacenes/readme.md)
+        - [Configuracion](./pkg/config/readme.md)
+            - [Templates/Plantillas](./pkg/config/readmetemplates.md) 
+            - [Series](./pkg/series/readme.md)
+
 
 ## Introducción
 
@@ -100,6 +124,7 @@ Los códigos HTTP de respuesta son los típicos de las API Restful, según el ti
 |            |                                    | 400    | Error de validación al acualizar recurso |
 | **DELETE** | (D) Delete - Borrar un recurso     | 200    | Recurso ha sido borrado                  |
 |            |                                    | 404    | Recurso no existe                        |
+| **GET**    | (L) List - Listar recursos         | 200    | Recursos han sido listados               |
 
 Además de los código errores generales:
 
@@ -152,20 +177,6 @@ Ejemplo de falla de validacions 400
     }
 }
 ```
-
-
-
-### Respuestas por Tipo de Acción
-
-En caso de éxito en la llamada, el valor de result será dependiendo del tipo de acción, ver la siguiente tabla:
-
-| Verbo     | Acción    | Código | Valor regresado en "result"     | Ejemplo                                                                           |
-|-----------|-----------|--------|---------------------------------|-----------------------------------------------------------------------------------|
-| POST      | Create    | 201    | Recurso creado                  | {"id":1,"created":"2023-02-07 21:37:46","numcli":"10","nomcli":"Bimbo de Mexico"} |
-| GET       | Read      | 200    | Recurso leido                   | {"id":1,"created":"2023-02-07 21:37:46","numcli":"10","nomcli":"Bimbo de Mexico"} |
-| PUT       | Update    | 200    | UPDATED                         | "UPDATED"                                                                         |
-| DELETE    | Delete    | 200    | DELETED                         | "DELETED"                                                                         |
-| GET ?cond | Read Many | 200    | Arreglo de Recursos solicitados | [ {recurso1},{recurso2},{recurso3} ]                                              |
 
 ---
 ## Pruebas
