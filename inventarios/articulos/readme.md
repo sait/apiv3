@@ -1,222 +1,205 @@
-## Artículos
+## Articulos
 
-Representan a los objetos que son comprados y vendidos por la empresa. **Los servicios que presta la empresa también se incluyen en este catálogo**, marcando el campo boleano *arts.servicio* como verdadero.
+Rutas de Artículos
 
-### Rutas de Artículos
+| Acción                                | Ruta                              |
+|---------------------------------------|-----------------------------------|
+| [Leer por clave](#leer-por-numdoc)    | GET  /api/v3/articulos/:numart    |
+| [Buscar articulos](#buscar-articulos) | GET  /api/v3/articulos?filters... |
 
-| Acción                                                 | Ruta                               |
-| ------------------------------------------------------ | ---------------------------------- |
-| [Crear](#crear-artículo)                               | POST /api/v3/articulos             |
-| [Actualizar](#actualizar-artículo)                     | PUT  /api/v3/articulos/:numart     |
-| [Leer](#leer-artículo)                                 | GET  /api/v3/articulos/:numart     |
-| [Leer por UPC](#leer-artículo-por-upc)                 | GET  /api/v3/articulos/upc/:upc    |
-| [Leer por UPC o Clave](#leer-artículo-por-upc-o-clave) | GET  /api/v3/articulos/upccve/:txt |
-| [Buscar](#buscar-artículos)                            | GET  /api/v3/articulos?condiciones |
+| Campo      | tipo     | Significado                                            |
+|------------|----------|--------------------------------------------------------|
+| id         | int      | id incremental disponible solo através de SAIT API     |
+| created    | datetime | timestamp del momento de creación                      |
+| updated    | datetime | timestamp ultima actualizacion                         |
+| numart     | varchar  | clave del articulo (Obligatorio)                       |
+| desc       | varchar  | descripción del articulo (Obligatorio)                 |
+| obs        | text     | descripción larga u observaciones del artículo         |
+| linea      | varchar  | clave de linea para clasificacion                      |
+| familia    | varchar  | clave de familia para clasificacion                    |
+| categoria  | varchar  | clave de categoria para clasifiacion                   |
+| activo     | tinyint  | boleano para indicar si articulo está activo           |
+| marca      | varchar  |                                                        |
+| modelo     | varchar  |                                                        |
+| unidad     | varchar  | unidad de venta: PZ,CJ,MTS (Obligatorio)               |
+| precio1    | decimal  | precio segun lista 1 sin impuestos                     |
+| precio2    | decimal  | precio segun lista 2 sin impuestos                     |
+| precio3    | decimal  | precio segun lista 3 sin impuestos                     |
+| precio4    | decimal  | precio segun lista 4 sin impuestos                     |
+| precio5    | decimal  | precio segun lista 5 sin impuestos                     |
+| preciopub  | decimal  | precio publico con impuestos incluidos                 |
+| divisa     | char     | moneda para precio P=Pesos D=Dolar                     |
+| ultcosto   | decimal  | ultimo costo de compra                                 |
+| clavesat   | varchar  | clave segun SAT (Obligatorio)                          |
+| excento    | tinyint  | boleando indicando si es excento de impuestos para SAT |
+| impuesto1  | decimal  | % de IVA segun SAT                                     |
+| impuesto2  | decimal  | % de IEPS segun SAT                                    |
+| esmatpelig | tinyint  | Es Material Peligroso segun SAT                        |
+| matpelig   | varchar  | Clave SAT para Material Peligroso                      |
+| existencia | decimal  | Existencia TOTAL sumando TODAS las sucursales          |
 
-
-### Campos del Artículo
-
-| Campo      | Significado                                               |
-| ---------- | --------------------------------------------------------- |
-| created    | timestamp del momento de creación                         |
-| updated    | timestamp ultima actualizacion                            |
-| numart     | clave del articulo (número de artículo) |
-| desc       | descripción del articulo                                  |
-| codigo     | upc o código de barra del articulo                        |
-| obs        | descripción larga u observaciones del artículo            |
-| linea      | clave de linea para clasificacion                         |
-| familia    | clave de familia para clasificacion                       |
-| categoria  | clave de categoria para clasifiacion                      |
-| activo     | boleano para indicar si articulo está activo              |
-| marca      |                                                           |
-| model      |                                                           |
-| unidad     | unidad de venta: PZ,CJ,MTS                                |
-| precio1    | precio segun lista 1 sin impuestos                        |
-| precio2    | precio segun lista 2 sin impuestos                        |
-| precio3    | precio segun lista 3 sin impuestos                        |
-| precio4    | precio segun lista 4 sin impuestos                        |
-| precio5    | precio segun lista 5 sin impuestos                        |
-| preciopub  | precio publico con impuestos incluidos                    |
-| divisa     | moneda para precio P=Pesos D=Dolar                        |
-| ultcosto   | ultimo costo de compra                                    |
-| clavesat   | clave segun SAT                                           |
-| excento    | boleando indicando si es excento de impuestos para SAT    |
-| impuesto1  | % de IVA segun SAT                                        |
-| impuesto2  | % de IEPS segun SAT                                       |
-| esmatpelig | Es Material Peligroso segun SAT                           |
-| matpelig   | Clave SAT para Material Peligroso                         |
-| existencia | Existencia TOTAL sumando TODAS las sucursales             |
-
-
-
----
-### Crear Artículo
-
-POST /api/v3/articulos
-##### Request  
-```json
-{
-    "numart": "GRC-55657",
-    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
-    "activo": 1,
-    "categoria": "SUS",
-    "clavesat": "25172000",
-    "codigo": "55657",
-    "divisa": "P",
-    "esmatpelig": 0,
-    "excento": 0,
-    "existencia": 0,
-    "familia": "SUS02",
-    "impuesto1": 16,
-    "impuesto2": 0,
-    "linea": "  114",
-    "marca": "GRC",
-    "matpelig": "",
-    "modelo": "",
-    "obs": "",
-    "precio1": 1689.59,
-    "precio2": 1500.87,
-    "precio3": 1466.19,
-    "precio4": 1441.71,
-    "precio5": 1355,
-    "preciopub": 1799.92,
-    "unidad": "PZA  "
-}
-```
-##### Response.result
-```json
-{
-    "id": 1,
-    "created": "2023-02-05 21:53:21",
-    "updated": "2023-02-06 15:23:57",
-    "numart": "           GRC-55657",
-    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
-    "activo": 1,
-    "categoria": "  SUS",
-    "clavesat": "25172000",
-    "codigo": "55657",
-    "divisa": "P",
-    "esmatpelig": 0,
-    "excento": 0,
-    "existencia": 0,
-    "familia": "SUS02",
-    "impuesto1": 16,
-    "impuesto2": 0,
-    "linea": "  114",
-    "marca": "GRC",
-    "matpelig": "",
-    "modelo": "",
-    "obs": "",
-    "precio1": 1689.59,
-    "precio2": 1500.87,
-    "precio3": 1466.19,
-    "precio4": 1441.71,
-    "precio5": 1355,
-    "preciopub": 1799.92,
-    "unidad": "PZA  "
-}
- ```
-
-
-
----
-### Actualizar Artículo
-PUT /api/v3/articulos/:numart
-```json
-{
-    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
-    "impuesto1": 16.00,
-    "divisa": "P"
-}
-```
-```json
-{"UPDATED"}
-```
-
-
-
----
-### Leer Artículo
+### Leer por numdoc
 GET /api/v3/articulos/:numart
+
+example: /api/v3/articulos/1040
+
+response:
 ```json
 {
-    "id": 1,
-    "created": "2023-02-05 21:53:21",
-    "updated": "2023-02-06 15:23:57",
-    "numart": "           GRC-55657",
-    "desc": "AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146",
-    "activo": 1,
-    "categoria": "  SUS",
-    "clavesat": "25172000",
-    "codigo": "55657",
-    "divisa": "P",
-    "esmatpelig": 0,
-    "excento": 0,
-    "existencia": 0,
-    "familia": "SUS02",
-    "impuesto1": 16,
+    "id": 1054,
+    "created": "2024-06-29 12:18:40",
+    "updated": "2025-12-01 16:59:17",
+    "numalm": "",
+    "numart": "                1040",
+    "desc": "DICCIONARIO LAROUSSE ENCICLOPEDIA USUAL",
+    "marca": "LAROUSSE",
+    "modelo": "PREPARATORIA",
+    "preciopub": 185,
+    "clavesat": "60102300",
+    "aplicacion": "",
+    "codigo": "9789706073594",
+    "unidad": "PZA",
+    "unidefa": "",
+    "linea": "11039",
+    "familia": "  113",
+    "categoria": " 1109",
+    "numdep": "11",
+    "valdep": " 11",
+    "ubica": "",
+    "series": 0,
+    "impuesto1": 0,
     "impuesto2": 0,
-    "linea": "  114",
-    "marca": "GRC",
-    "matpelig": "",
-    "modelo": "",
+    "numprov": "",
+    "numprov1": "",
+    "numprov2": "",
+    "numprov3": "",
+    "ultcomp": "2025-09-04",
+    "ultcomp1": "",
+    "ultcomp2": "",
+    "ultcomp3": "",
+    "ultvent": "2023-08-14",
+    "existencia": 95,
+    "minimo": 1,
+    "maximo": 3,
+    "reorden": 0,
+    "divisa": "P",
+    "precio1": 185,
+    "precio2": 151,
+    "precio3": 169,
+    "precio4": 141,
+    "precio5": 141,
+    "factor1": 2.3046000003814697,
+    "factor2": 1.9107999801635742,
+    "factor3": 2.142400026321411,
+    "factor4": 1.7719000577926636,
+    "factor5": 1.7719000577926636,
+    "ultcosto": 86.34600067138672,
+    "ultcosto1": 0,
+    "ultcosto2": 0,
+    "ultcosto3": 0,
+    "maxcosto": 86.3499984741211,
+    "Costoactua": 0,
+    "Costopro": 0,
+    "Ventano": 0,
+    "Ventanoqty": 0,
+    "activo": 1,
+    "Ultmaxcost": 0,
+    "Ultactcost": 0,
+    "Compano": 0,
+    "Companoqty": 0,
+    "Repyy": 0,
+    "cant_defa": 0,
+    "excento": 0,
+    "preciof": 0,
+    "servicio": 0,
+    "fechamod": "2024-11-29",
     "obs": "",
-    "precio1": 1689.59,
-    "precio2": 1500.87,
-    "precio3": 1466.19,
-    "precio4": 1441.71,
-    "precio5": 1355,
-    "preciopub": 1799.92,
-    "unidad": "PZA  "
-}
+    "usacaduc": 0,
+    "usalotes": 0,
+    "ventacorte": 0,
+    "eskit": 0,
+    "uid": 0,
+    "otrosdatos": "",
+    "pjedesc": 0,
+    "oferta": 120,
+    "insumo": 0,
+    "peso": 0,
+    "largo": 0,
+    "ancho": 0,
+    "altura": 0,
+    "cantxcj": 0,
+    "foto": "",
+    "fotos": "",
+    "idmarca": "212",
+    "preciov2": 151,
+    "preciov3": 141,
+    "preciov4": 0,
+    "preciov5": 0,
+    "ppubv2": 163.08,
+    "ppubv3": 152.28,
+    "ppubv4": 0,
+    "ppubv5": 0,
+    "vol2": 0,
+    "vol3": 0,
+    "vol4": 0,
+    "vol5": 0,
+    "statusweb": 1,
+    "implocal": 0,
+    "fracaranc": "",
+    "matpelig": "",
+    "embalaje": "",
+    "guiaid": "",
+    "guiaiddesc": "",
+    "esmatpelig": 0,
+    "fraccok": 0,
+    "imagenes": null,
+    "unidades": null
+  }
 ```
 
+### Buscar articulos
+
+GET /api/v3/articulos?filtros...
+
+**filtros**
+| filtro    | Significado                                                |
+|-----------|------------------------------------------------------------|
+| offset    | A partir de que registro iniciar búsqueda. Default 0       |
+| limit     | Cuantos registros obtener. Default 100                     |
+| order     | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc    |
+| divisa    | P = pesos - D = Dolares                                    |
+| statusweb | 0 = no disponible en tienda web - 1 = disponible en tienda |
+| categoria | numero de categoria de articulo                            |
+| familia   | numero de familia de articulo                              |
+| linea     | numero de linea de articulo                                |
+| numprov   | numero de proveedor                                        |
+| numdep    | numero de departamento                                     |
+| marca     | marca del articulo                                         |
 
 
----
-### Leer Artículo por UPC 
-GET /api/v3/articulos/upc/:upc
 
-Leer un artículo, buscarlo usando el UPC (Código de barra).  
-La respuesta igual que [Leer Artículo](#leer-artículo)
-
-
----
-### Leer Artículo por UPC o Clave
-GET /api/v3/articulos/cveupc/:txt
-
-Leer un artículo, buscarlo usando el UPC, sino lo encuentra buscarlo por la clave *numart*.  
-La respuesta igual que [Leer Artículo](#leer-artículo)
-
-
----
-### Buscar Artículos
-
-Buscar los artículos que cumplan las condiciones indicadas en las variables recibidas.
-
-| Variable | Significado                                               |
-| -------- | --------------------------------------------------------- |
-| offset   | A partir de que registro iniciar búsqueda. Default 0      |
-| limit    | Cuantos registros obtener. Default 100                    |
-| order    | Orden deseado. Los disponibles son:updated,id,numart,desc |
-| q        | Palabras a buscar dentro de la descripción.                                         |
-
-
-| Ejemplo de Búsqueda                                | Ruta                                |
-| -------------------------------------------------- | ----------------------------------- |
-| Buscar los primeros 25 arts                        | /api/v3/articulos?limit=25          |
-| Buscar articulos que contenga la palabra: *rotula* | /api/v3/articulos?q=rotula          |
-| Buscar rótulas para Suburban                       | /api/v3/articulos?q=rotula+suburban |
-
-GET /api/v3/articulos?condiciones
-
+response:
 ```json
 [
-{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
-{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
-{"id":1,"created":"2023-02-05 21:53:21","updated":"2023-02-06 15:23:57","numart":"           GRC-55657","desc":"AMORTIGUADOR DEL L = G55657 = MW872 = 400872 = 7000146","activo":1,"categoria":"  SUS","clavesat":"25172000","codigo":"55657","divisa":"P","esmatpelig":0,"excento":0,"existencia":0,"familia":"SUS02","impuesto1":16,"impuesto2":0,"linea":"  114","marca":"GRC","matpelig":"","modelo":"","obs":"","precio1":1689.59,"precio2":1500.87,"precio3":1466.19,"precio4":1441.71,"precio5":1355,"preciopub":1799.92,"unidad":"PZA  "},
+    {
+      "numart": "                  SE",
+      "desc": "SOLICITUD DE EMPLEO PZA",
+      "preciopub": 3,
+      "clavesat": "14111800",
+      "codigo": "",
+      "unidad": "PZA",
+      "linea": "14039",
+      "familia": "  123",
+      "categoria": " 1408",
+      "numdep": "14",
+      "numprov": "",
+      "existencia": -20785,
+      "divisa": "P",
+      "activo": 1,
+      "statusweb": 1,
+      "imagenes": null,
+      "unidades": null
+    },
+    {}...
 ]
-
 ```
-
-
