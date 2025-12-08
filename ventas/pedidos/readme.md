@@ -57,6 +57,14 @@ Rutas de pedidos
 
 POST  /api/v3/pedidos
 
+```
+Nota: al enviar el parametro "dryrun=true" se prevalidaran los datos sin afectar los campos en la base de datos
+ejemplo: /api/v3/pedidos?dryrun=true
+
+response: OK
+```
+
+
 **body** 
 | campo     | descrip                                    |
 |-----------|--------------------------------------------|

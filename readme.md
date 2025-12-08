@@ -4,8 +4,9 @@
 - [Recursos](#recursos)
 - [Introducción](#introducción)
 - [Encabezados](#encabezados)
+- [Credenciales de acceso a entorno de pruebas](#credenciales-de-acceso-a-entorno-de-pruebas)
 - [Respuestas](#respuestas)
-- [Test](#test)
+
 
 ## Recursos
 
@@ -57,8 +58,6 @@ GET http://miempresa.saitnube.com/api/v3/clientes/13
 X-sait-api-key: frizispe9swlhim0
 ```
 
-```
-
 ### Formato de Datos 
 
 La API puede manejar el formato JSON o XML según la preferencia del programador.
@@ -69,6 +68,19 @@ La API puede manejar el formato JSON o XML según la preferencia del programador
 GET http://miempresa.saitnube.com/api/v3/clientes/13
 X-sait-api-key: frizispe9swlhim0
 Content-Type: application/xml
+```
+
+---
+## Credenciales de acceso a entorno de pruebas
+
+url base:
+```
+test.saitnube.com
+```
+
+header:
+```
+X-sait-api-key: "fqkzlbklwliaeo1r"
 ```
 
 ## Respuestas
@@ -153,16 +165,4 @@ En caso de éxito en la llamada, el valor de result será dependiendo del tipo d
 | DELETE    | Delete    | 200    | DELETED                         | "DELETED"                                                                         |
 | GET ?cond | Read Many | 200    | Arreglo de Recursos solicitados | [ {recurso1},{recurso2},{recurso3} ]                                              |
 
----
-## Test
 
-### Datos para acceso a API de pruebas
-
-url base:
-```
-test.saitnube.com
-```
-
-header:
-```
-X-sait-api-key: "fqkzlbklwliaeo1r"
