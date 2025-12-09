@@ -1,41 +1,47 @@
 # SAIT API 3.0
 
-Tabla de Contenido:
+## indice
 
-- Indice de Rutas
-    - Auth
-        - [Permisos de usuario y Apikeys](./auth/readme.md)
-    - Ventas
-        - [Clientes](./ventas/clientes/readme.md)
-        - [Vendedores](./ventas/vendedores/readme.md)
-        - [zonas](./ventas/zonas/readme.md)
-        - [Facturas](./ventas/facturas/readme.md)
-        - [Cotizaciones](./ventas/cotizaciones/readme.md)
-        - [Pedidos](./ventas/pedidos/readme.md)
-        - [Calcular precios](./ventas/calcularprecios/readme.md)
-    - Caja
-        - [Movimientos de caja](./caja/readme.md)
-        - [Cortes](./caja/cortes/readme.md)
-        - [Conceptos de caja](./caja/conccaja/readme.md)
-        - [Beneficiarios](/caja/beneficiarios/readme.md)
-    - Inventario
-        - [Artículos](./inventario/articulos/readme.md)
-            - [Imagenes](./inventario/imagenes/readme.md)
-        - [Unidades](./inventario/unidades/readme.md)
-        - [ClaveSat](./inventario/satprod/readme.md)
-        - [Categorias](./inventario/categorias/readme.md)
-        - [Familias](./inventario/familias/readme.md)
-        - [Lineas](./inventario/lineas/readme.md)
-        - [departamentos en inventario de articulos](./inventario/deptos/readme.md)
-        - [Existencias](./inventario/multialm/readme.md)
-    - Cobranza
-        - [Catalogo de movimientos](./cobranza/catmov/readme.md)
-        - [Estado de cuente de cliente](./cobranza/estadocuenta/readme.md)
-    - otros 
-        - [Almacenes](./utils/almacenes/readme.md)
-        - [Configuracion](./pkg/config/readme.md)
-            - [Templates/Plantillas](./pkg/config/templates/readme.md) 
-            - [Series](./pkg/series/readme.md)
+- [Rutas](#indice-de-rutas)
+- [Introduccion](#introducción)
+- [Encabezados](#encabezados)
+- [Respuestas](#respuestas)
+- [Pruebas](#pruebas)
+
+## Indice de Rutas
+- Auth
+    - [Permisos de usuario y Apikeys](./auth/readme.md)
+- Ventas
+    - [Clientes](./ventas/clientes/readme.md)
+    - [Vendedores](./ventas/vendedores/readme.md)
+    - [zonas](./ventas/zonas/readme.md)
+    - [Facturas](./ventas/facturas/readme.md)
+    - [Cotizaciones](./ventas/cotizaciones/readme.md)
+    - [Pedidos](./ventas/pedidos/readme.md)
+    - [Calcular precios](./ventas/calcularprecios/readme.md)
+- Caja
+    - [Movimientos de caja](./caja/readme.md)
+    - [Cortes](./caja/cortes/readme.md)
+    - [Conceptos de caja](./caja/conccaja/readme.md)
+    - [Beneficiarios](/caja/beneficiarios/readme.md)
+- Inventario
+    - [Artículos](./inventario/articulos/readme.md)
+        - [Imagenes](./inventario/imagenes/readme.md)
+    - [Unidades](./inventario/unidades/readme.md)
+    - [ClaveSat](./inventario/satprod/readme.md)
+    - [Categorias](./inventario/categorias/readme.md)
+    - [Familias](./inventario/familias/readme.md)
+    - [Lineas](./inventario/lineas/readme.md)
+    - [departamentos en inventario de articulos](./inventario/deptos/readme.md)
+    - [Existencias](./inventario/multialm/readme.md)
+- Cobranza
+    - [Catalogo de movimientos](./cobranza/catmov/readme.md)
+    - [Estado de cuente de cliente](./cobranza/estadocuenta/readme.md)
+- otros 
+    - [Almacenes](./utils/almacenes/readme.md)
+    - [Configuracion](./pkg/config/readme.md)
+        - [Templates/Plantillas](./pkg/config/templates/readme.md) 
+        - [Series](./pkg/series/readme.md)
 
 
 ## Introducción
@@ -62,29 +68,6 @@ En SAIT, los recursos los agrupamos según el módulo de operación del sistema.
 - Cuentas por Pagar
 - Bancos
 - Contabilidad
-
-### Recursos del Sistema
-
-Algunos recursos con los que cuenta el programador en SAIT son:
-- Ventas
-    - Vendedores
-    - Clientes
-    - Clientes Eventuales
-    - Sucursales de Clientes
-- Inventario
-    - Articulos
-    - Precios
-    - Existencias
-    - Lineas
-    - Familias
-    - Categorias
-    - Unidades de Wmpaque
-- Otros
-    - Usuarios
-    - Grupos de Usuario
-    - Sucursales de la Empresa
-    - Series de Documentos
-
 
 ## Encabezados
 
@@ -181,6 +164,12 @@ Ejemplo de falla de validacions 400
 ---
 ## Pruebas
 
+### URL Base
+
+```
+test.saitnube.com
+```
+
 ### Tokens para pruebas
 
 En saitnube contamos con 2 tipos de accesos:
@@ -188,6 +177,7 @@ En saitnube contamos con 2 tipos de accesos:
 - token de acceso otorgado por login/autenticacion
 
 #### apikey
+
 ```
 X-sait-api-key:fqkzlbklwliaeo1r
 ```
