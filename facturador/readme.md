@@ -193,9 +193,9 @@ result:[
     {
        "tipo"     : "clientes",
         "numcli"  : "89",
-        "rfc"     : "BIM011108DJ5 ",
-        "nomcli"  : "BIMBO",
-        "email"   : "compras@bimbo.com",
+        "rfc"     : "BYC011108DJ5 ",
+        "nomcli"  : "BYCO",
+        "email"   : "compras@byco.com",
         "calle"   : "MIMOSAS",
         "numext"  : "117",
         "colonia" : "INSURGENTES",
@@ -206,9 +206,9 @@ result:[
     {
         "tipo"    : "clievent",
         "numcli"  : "AF-1221",
-        "rfc"     : "BIM011108DJ5 ",
-        "nomcli"  : "BIMBO",
-        "email"   : "compras@bimbo.com",
+        "rfc"     : "BYC011108DJ5 ",
+        "nomcli"  : "BYCO",
+        "email"   : "compras@byco.com",
         "calle"   : "LAZARO CARDENAS",
         "numext"  : "1231",
         "colonia" : "CENTRO",
@@ -250,14 +250,14 @@ si solo manda nomcliev
 request
 ```json
 {
-    "email"     : "otonieldesarrollosait@gmail.com",
+    "email"     : "daniel.241095@gmail.com",
 	"usocfdi"   : "S01",
 	"cp"        : "01160",
 	"idregimen" : "616",
 	"tipo"      : "cliente",  // Tipo de Cliente: cliente o clievent
 	"numcli"    : "1203",
 	"rfc"       : "JUFA7608212V6",
-	"nombre"    : "ADRIANA JUAREZ FERNANDEZ",
+	"nombre"    : "DANIEL FERNANDEZ",
 }
 ```
 Notas:

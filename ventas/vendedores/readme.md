@@ -37,7 +37,7 @@ request:
 ```json
 {
   "numvend"    : "DEV1",
-	"nomvend"    : "Otoniel Morfin",
+	"nomvend"    : "Luis vendedor",
 	"comision"   : 5.00,
 	"maxpjedesc" : 30.00,
 	"clasif1"    : "",
@@ -53,7 +53,7 @@ response:
   "created"    : "2024-10-30 19:21:28",
   "updated"    : "2024-10-30 19:21:28",
   "numvend"    : " DEV1",
-  "nomvend"    : "Otoniel Morfin",
+  "nomvend"    : "Luis vendedor",
   "comision"   : 5,
   "maxpjedesc" : 30,
   "clasif1"    : "",
@@ -74,7 +74,7 @@ response:
   "created"    : "2024-10-30 19:21:28",
   "updated"    : "2024-10-30 19:21:28",
   "numvend"    : " DEV1",
-  "nomvend"    : "Otoniel Morfin",
+  "nomvend"    : "Luis vendedor",
   "comision"   : 5,
   "maxpjedesc" : 30,
   "clasif1"    : "",
@@ -91,7 +91,7 @@ PUT /api/v3/vendedores/DEV1
 request:
 ```json
 {
-	"nomvend"  : "Luis Otoniel Morfin",
+	"nomvend"  : "Luis vendedor",
   "comision"   : 5,
   "maxpjedesc" : 30,
   "clasif1"    : "",
@@ -151,7 +151,7 @@ response:
       "created": "2024-10-16 21:30:14",
       "updated": "2024-10-16 21:30:14",
       "numvend": "    2",
-      "nomvend": "José Rodriguez",
+      "nomvend": "José Mateo",
       "comision": 0,
       "maxpjedesc": 0,
       "clasif1": "",

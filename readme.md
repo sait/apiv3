@@ -34,7 +34,7 @@ Tabla de Contenido:
     - otros 
         - [Almacenes](./utils/almacenes/readme.md)
         - [Configuracion](./pkg/config/readme.md)
-            - [Templates/Plantillas](./pkg/config/readmetemplates.md) 
+            - [Templates/Plantillas](./pkg/config/templates/readme.md) 
             - [Series](./pkg/series/readme.md)
 
 

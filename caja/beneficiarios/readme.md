@@ -32,5 +32,13 @@ GET /api/v3/beneficiarios
 
 ```json
 [
+    {
+        "id":"1",
+        "created": "2025-04-25 23:17:48",
+        "updated": "2025-04-25 23:17:48",
+        "numbenef":"XIQB",
+        "nombenef":"Xiomara Quiroz Bora",
+        "rfc":"XIQB891116QE4"
+    }
 ]
 ```

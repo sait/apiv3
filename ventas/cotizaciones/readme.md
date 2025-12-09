@@ -58,9 +58,11 @@ Rutas de Cotizaciones
 
 POST /api/v3/cotizaciones
 
+```
 **Dryrun para validar los datos sin crear la cotizacion:**
 
 POST /api/v3/cotizaciones?dryrun=true
+```
 
 request
 ```json
@@ -223,9 +225,11 @@ response:
 
 PUT /api/v3/cotizaciones/OT80
 
+```
 **Dryrun para validar los datos sin actualizar la cotizacion:**
 
 PUT /api/v3/cotizaciones/:numdoc?dryrun=true
+```
 
 request
 ```json
@@ -297,21 +301,20 @@ result
 
 GET /api/v3/cotizaciones?filters...
 
-| Variable  | Significado                                          |
-|-----------|------------------------------------------------------|
-| offset    | A partir de que registro iniciar búsqueda. Default 0 |
-| limit     | Cuantos registros obtener. Default 100               |
-| order     | Orden deseado. updated,id, tipodoc,numdoc            |
-| q         | Palabras a buscar (numdoc, nomcli,nomcliev)          |
-| numcli    | clave de cliente o cliente eventual                  |
-| numclisuc | Clave Sucursal de cliente                            |
-| numalm    | Numero de almacen                                    |
-| numuser   | Numero de usuario                                    |
-| numvend   | clave de vendedor                                    |
-| fecha1    | traer todos los documentos mayores a fecha1          |
-| fecha2    | traer todos los documentos menores a fecha2          |
-| precio1   | traer todos los documentos con total mayor a precio1 |
-| precio2   | traer todos los documentos con total menor a precio2 |
+| Filtros | significado                                          | Tipo de filtro         | Uso                                                                       |
+|---------|------------------------------------------------------|------------------------|---------------------------------------------------------------------------|
+| offset  | A partir de que registro iniciar búsqueda. Default 0 | despues de             | desde que registro empezar: offset=10                                     |
+| limit   | Cuantos registros obtener. Default 100               | cantidad               | cuantos registros recibir: limit=50                                       |
+| q       | Palabras a buscar (numdoc, nomcli,nomcliev)          | busqueda por similitud | traer cotizaciones donde numdoc,numcli,nomcliev sean similares a q=AF134  |
+| numalm  | clave de almacen                                     | busqueda por exactitud | traer cotizaciones cuando numalm=" 1"                                     |
+| numuser | clave de usuario                                     | busqueda por exactitud | traer cotizaciones cuando numuser="  MSL"                                 |
+| numcli  | clave de cliente                                     | busqueda por exactitud | traer cotizaciones cuando numcli="  B10" o numcliev="       B10"          |
+| numvend | clave de vendedor                                    | busqueda por exactitud | traer cotizaciones cuando numvend="  MSL"                                 |
+| fecha1  | traer todos los documentos mayores a fecha1          | busqueda mayor a       | traer cotizaciones con fecha de registro mayor a "2025-03-21"             |
+| fecha2  | traer todos los documentos menores a fecha2          | busqueda menor a       | traer cotizaciones con fecha de registro menor a "2025-03-29"             |
+| precio1 | traer todos los documentos con total mayor a precio1 | busqueda mayor a       | traer cotizaciones con total de venta mayor a 50 pesos                    |
+| precio2 | traer todos los documentos con total menor a precio2 | busqueda menor a       | traer cotizaciones con total de venta menor a 250 pesos                   |
+| order   |                                                      | ordenar cotizaciones   | ordenar cotizaciones segun updated,id,numdoc,fecha,numcli,numvend,numuser |
 
 response:
 ```json
@@ -357,21 +360,3 @@ response:
     {}...
 ]
 ```
-
-
-
-
-# tablas de filtros para cotizaciones
-
-
-| Filtros | significado | Tipo de filtro         | Uso                                                                       |
-|---------|-------------|------------------------|---------------------------------------------------------------------------|
-| numalm  |             | busqueda por exactitud | traer cotizaciones cuando numalm=" 1"                                     |
-| numuser |             | busqueda por exactitud | traer cotizaciones cuando numuser="  MSL"                                 |
-| numcli  |             | busqueda por exactitud | traer cotizaciones cuando numcli="  B10" o numcliev="       B10"          |
-| numvend |             | busqueda por exactitud | traer cotizaciones cuando numvend="  MSL"                                 |
-| fecha1  |             | busqueda mayor a       | traer cotizaciones con fecha de registro mayor a "2025-03-21"             |
-| fecha2  |             | busqueda menor a       | traer cotizaciones con fecha de registro menor a "2025-03-29"             |
-| precio1 |             | busqueda mayor a       | traer cotizaciones con total de venta mayor a 50 pesos                    |
-| precio2 |             | busqueda menor a       | traer cotizaciones con total de venta menor a 250 pesos                   |
-| order   |             | ordenar cotizaciones   | ordenar cotizaciones segun updated,id,numdoc,fecha,numcli,numvend,numuser |

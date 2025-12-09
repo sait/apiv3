@@ -74,13 +74,6 @@ request
   "fentrega":"20250620",
   "hentrega":"15:30",
 	"obs":"",
-	"otrosdatos":{
-	  "metododepago":"efectivo",
-	  "nombre":"Otoniel",
-	  "telefono":"6531465216",
-	  "correo":"otonieldesarrollosait@gmail.com",
-	  "clinum":"0"
-	},
 	"items":[
 		{
 			"numart":"528790",
@@ -184,8 +177,7 @@ response
         "unidad": "PZA",
         "obs": ""
       }
-    ],
-    "otrosdatosstring": ""
+    ]
   },
   "error": ""
 }
@@ -305,7 +297,7 @@ response:
       "tipodoc": " P",
       "numdoc": "    WC2056",
       "numcli": "      AF-7",
-      "nomcli": "prueba crear clievent en pedidos",
+      "nomcli": "prueba clievent en pedidos",
       "fecha": "2024-11-12",
       "divisa": "P",
       "tc": 25,

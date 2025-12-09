@@ -49,8 +49,8 @@ GET api/v3/datosgenerales/1144
 response:
 ```json
 {
-    "numcli" : " 1144",
-    "nomcli" : "ARROYO HOLDINGS DE MEXICO",
+    "numcli" : " 1130",
+    "nomcli" : "PROVEEDORA MANTENIMIENTO DE MEXICO",
     "saldomn" : 7556.17,
     "limcred" : 40000,
     "totalcargos" : 866206.1,

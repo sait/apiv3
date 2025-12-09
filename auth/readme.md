@@ -36,17 +36,48 @@ GET /api/v3/auth/permisos
 response:
 ```json
 {
+    "CajaAbrirCorte": false,
+    "CajaAutoCiertosTiposMovimiento": false,
+    "CajaCerrarCorte": false,
+    "CajaConsultarCortes": false,
+    "CajaConsultarMovimientos": false,
+    "CajaRecibirPagos": false,
+    "CajaRegistrarVentas": false,
     "CatalogoDeSucursalesCambiarseDeSuc": false,
-    "VentasCrearCotizaciones": true,
-    "VentasCrearCotizacionesME": true,
-    "VentasCrearFacturas": true,
-    "VentasCrearNotas": true,
-    "VentasCrearPedidos": true,
-    "VentasCrearRemisiones": true,
-    "VentasModificarDescuentos": true,
+    "InventarioAccesoCatArticulos": false,
+    "InventarioActualizarPreciosArt": false,
+    "InventarioCategoArticulos": false,
+    "InventarioClasifArticulos": false,
+    "InventarioDeptosArticulos": false,
+    "InventarioEliminarArticulos": false,
+    "InventarioFamiliasArticulos": false,
+    "InventarioGrabarArticulo": false,
+    "InventarioLineasArticulos": false,
+    "UsuarioSAITNube": false,
+    "UtileriasConfigDelSistema": false,
+    "VentasAgregarClientes": false,
+    "VentasCatalogoVendedores": false,
+    "VentasCrearCotizaciones": false,
+    "VentasCrearCotizacionesME": false,
+    "VentasCrearCotizacionesMN": false,
+    "VentasCrearFacturas": false,
+    "VentasCrearNotas": false,
+    "VentasCrearPedidos": false,
+    "VentasCrearPedidosCred": false,
+    "VentasCrearPedidosME": false,
+    "VentasCrearPedidosMN": false,
+    "VentasCrearRemisiones": false,
+    "VentasEliminarClientes": false,
+    "VentasEliminarProveedores": false,
+    "VentasModDatosCreditoCliente": false,
+    "VentasModRfcNombreCliente": false,
+    "VentasModificarCotizacionesPedidos": false,
+    "VentasModificarDescuentos": false,
     "VentasModificarPrecio": false,
     "VentasModificarVendedor": false,
-    "VentasRegistrarVentas": true
+    "VentasRegistrarVentas": false,
+    "VentasVerCatalogoProveedores": false,
+    "VentasZonasYClasifDeClientes": false
 }
 ```
 
@@ -59,17 +90,48 @@ GET /api/v3/auth/descpermisos
 response:
 ```json
 {
+    "CajaAbrirCorte": "Caja - Permiso para abrir corte",
+    "CajaAutoCiertosTiposMovimiento": "Caja - Autorizar uso de ciertos tipos de movimiento",
+    "CajaCerrarCorte": "Caja - Permiso para cerrar corte",
+    "CajaConsultarCortes": "Caja - Consultar cortes de caja",
+    "CajaConsultarMovimientos": "Caja - Consultar movimientos de caja",
+    "CajaRecibirPagos": "Caja - Permiso para Recibir pagos",
+    "CajaRegistrarVentas": "Caja - Permiso para Registrar ventas",
     "CatalogoDeSucursalesCambiarseDeSuc": "Utilerias - Catálogo de Sucursales / Cambiarse de Suc",
+    "InventarioAccesoCatArticulos": "Acceso al catalogo de articulos",
+    "InventarioActualizarPreciosArt": "Actualizar Precios de articulos",
+    "InventarioCategoArticulos": "Categorias de articulos",
+    "InventarioClasifArticulos": "Clasificacion de articulos",
+    "InventarioDeptosArticulos": "Departamentos de articulos",
+    "InventarioEliminarArticulos": "Eliminar articulos",
+    "InventarioFamiliasArticulos": "Familias de articulos",
+    "InventarioGrabarArticulo": "Grabar articulos",
+    "InventarioLineasArticulos": "Lineas de articulos",
+    "UsuarioSAITNube": "General - Usuario SAIT Nube",
+    "UtileriasConfigDelSistema": "Utilerias - Configuración del Sistema",
+    "VentasAgregarClientes": "Ventas - Agregar nuevos clientes",
+    "VentasCatalogoVendedores": "Ventas - Acceder a catalogo de vendedores",
     "VentasCrearCotizaciones": "Ventas - Crear Cotizaciones",
     "VentasCrearCotizacionesME": "Ventas - Crear Cotizaciones en Dolares",
+    "VentasCrearCotizacionesMN": "Ventas - Crear Cotizaciones en Pesos",
     "VentasCrearFacturas": "Ventas - Crear Facturas",
     "VentasCrearNotas": "Ventas - Crear Notas de venta",
     "VentasCrearPedidos": "Ventas - Crear Facturas",
+    "VentasCrearPedidosCred": "Ventas - Crear pedidos a Credito",
+    "VentasCrearPedidosME": "Ventas - Crear pedidos en Dolares",
+    "VentasCrearPedidosMN": "Ventas - Crear pedidos en Pesos",
     "VentasCrearRemisiones": "Ventas - Crear Remisiones",
+    "VentasEliminarClientes": "Ventas - Eliminar clientes",
+    "VentasEliminarProveedores": "Ventas - Eliminar proveedores",
+    "VentasModDatosCreditoCliente": "Ventas - Modificar datos de crédito (en catalogo de clientes)",
+    "VentasModRfcNombreCliente": "Ventas - Permitir modificar RFC o nombre (en Catalogo de Clientes)",
+    "VentasModificarCotizacionesPedidos": "ventas - Modificar cotizaciones y pedidos",
     "VentasModificarDescuentos": "Ventas - Modificar descuento al crear documentos",
     "VentasModificarPrecio": "Ventas - Modificar precio al crear documentos",
     "VentasModificarVendedor": "Ventas - Modificar Vendedor",
-    "VentasRegistrarVentas": "Ventas - Registrar Ventas"
+    "VentasRegistrarVentas": "Ventas - Registrar Ventas",
+    "VentasVerCatalogoProveedores": "Ventas - Catalogo de proveedores",
+    "VentasZonasYClasifDeClientes": "Ventas - Definir zonas y clasificaciones (de Clientes)"
 }
 ```
 
@@ -103,7 +165,7 @@ response:
     "id": 16,
     "created" : "2024-09-13 17:46:41",
     "updated" : "2024-09-13 17:46:41",
-    "name" : "Tienda web2",
+    "name" : "tienda web",
     "apikey" : "llsovafzravf_0iz"
 }
 ```
@@ -116,7 +178,7 @@ PUT /api/v3/apikeys/:id
 request:
 ```json
 {
-    "name" : "tienda web",
+    "name" : "Tienda web2",
 }
 
 ```
@@ -147,7 +209,7 @@ response:
 ---
 ### Buscar apikeys
 
-GET /api/v3/apikeys?filters...
+GET /api/v3/auth/apikeys?filters...
 
 | Variable | Significado                                          |
 |----------|------------------------------------------------------|

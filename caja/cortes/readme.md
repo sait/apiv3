@@ -230,23 +230,3 @@ response:
     },
 ]
 ```
-
-
-
-SELECT 
-	c.id,
-	c.created,
-	c.updated,
-	c.corte, 
-	c.fecha, 
-	c.numest as caja,
-	u.Nomuser as usuario,
-	c.hora as hora_inicial,
-	c.horafin as hora_final,
-	if(c.fechacc="" or c.fechacc is null, "Entregado", if(c.fechafin="" or c.fechafin is null, "Cerrado", "Abierto")) as status  
-FROM 
-	cortes2 c
-LEFT JOIN usuarios u ON u.numuser=c.numuser
-WHERE 
-    c.numest='1'
-order by updated;
