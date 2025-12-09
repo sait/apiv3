@@ -6,7 +6,49 @@
 - [Introduccion](#introducción)
 - [Encabezados](#encabezados)
 - [Respuestas](#respuestas)
-- [Pruebas](#pruebas)
+
+## Credenciales de Acceso para realizar pruebas
+
+Para realizar pruebas de la API, utilice las siguientes credenciales de acceso:
+```
+host: https://test.saitnube.com/api/v3/
+header: X-sait-api-key:fqkzlbklwliaeo1r
+```
+
+Ejemplos:
+```
+curl https://test.saitnube.com/api/v3/version
+{"result":"3.0.0","error":""}
+
+curl https://test.saitnube.com/api/v3/hello
+{"result":"Hello World!","error":""}
+
+curl -si -H "X-sait-api-key: fqkzlbklwliaeo1r" "https://test.saitnube.com/api/v3/clientes?q=home&limit=10&order=-id"
+
+{"result":
+	[
+
+		{"id":3953,"created":"2024-06-29 12:36:47","updated":"2024-08-02 09:11:58",
+		"numcli":"  F10","nomcli":"HOME DEPOT MEXICO","calle":"RICARDO MARGAIN ZOZAYA","numext":"605",
+		"colonia":"SANTA ENGRACI","ciudad":"SAN PEDRO GARZA","estado":"NUEVO LEON","pais":"MEXICO","cp":"66267"}
+	],
+"error":""
+}
+
+curl -si -H "X-sait-api-key: fqkzlbklwliaeo1r" "https://test.saitnube.com/api/v3/clientes?q=farmacia&limit=10&order=-id"
+{"result":
+	[
+		{"id":4281,"created":"2024-06-29 12:36:47","updated":"2025-09-09 08:45:33",
+		"numcli":"  B83","nomcli":"FARMACIAS DE SIMILARES","calle":"ALEMANIA","numext":"10",
+		"colonia":"INDEPENDENCIA","ciudad":"BENITO JUAREZ","estado":"CIUDAD DE MEXICO","pais":"MEXICO","cp":"03630"},
+
+		{"id":481,"created":"2024-06-29 12:36:46","updated":"2025-11-13 10:55:47",
+		"numcli":"  511","nomcli":"DISTRIBUIDORA DE MIS FARMACIAS","calle":"","numext":"",
+		"colonia":"","ciudad":"","estado":"","pais":"MEXICO","cp":"22010"}
+	],
+"error":""
+}
+```
 
 ## Indice de Rutas
 - Auth
@@ -159,41 +201,4 @@ Ejemplo de falla de validacions 400
         "estado":"No es valido"
     }
 }
-```
-
----
-## Pruebas
-
-### URL Base
-
-```
-test.saitnube.com
-```
-
-### Tokens para pruebas
-
-En saitnube contamos con 2 tipos de accesos:
-- apikeys
-- token de acceso otorgado por login/autenticacion
-
-#### apikey
-
-```
-X-sait-api-key:fqkzlbklwliaeo1r
-```
-
-#### Login Authentication
-
-POST api/v3/login
-
-```json
-{
-    "numuser":"TEST",
-    "password":"5348800"
-}
-```
-
-token acceso:
-```
-X-sait-token:{token de acceso otorgado por autenticacion}
 ```
