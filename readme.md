@@ -12,7 +12,7 @@
 Para realizar pruebas de la API, utilice las siguientes credenciales de acceso:
 ```
 host: https://test.saitnube.com/api/v3/
-header: X-sait-api-key:fqkzlbklwliaeo1r
+header: X-sait-api-key:****************
 ```
 
 Ejemplos:
@@ -23,7 +23,7 @@ curl https://test.saitnube.com/api/v3/version
 curl https://test.saitnube.com/api/v3/hello
 {"result":"Hello World!","error":""}
 
-curl -si -H "X-sait-api-key: fqkzlbklwliaeo1r" "https://test.saitnube.com/api/v3/clientes?q=home&limit=10&order=-id"
+curl -si -H "X-sait-api-key: ****************" "https://test.saitnube.com/api/v3/clientes?q=home&limit=10&order=-id"
 
 {"result":
 	[
@@ -35,7 +35,7 @@ curl -si -H "X-sait-api-key: fqkzlbklwliaeo1r" "https://test.saitnube.com/api/v3
 "error":""
 }
 
-curl -si -H "X-sait-api-key: fqkzlbklwliaeo1r" "https://test.saitnube.com/api/v3/clientes?q=farmacia&limit=10&order=-id"
+curl -si -H "X-sait-api-key: ****************" "https://test.saitnube.com/api/v3/clientes?q=farmacia&limit=10&order=-id"
 {"result":
 	[
 		{"id":4281,"created":"2024-06-29 12:36:47","updated":"2025-09-09 08:45:33",
@@ -119,7 +119,7 @@ El acceso a la API se otorga mediante una API Key única para cada **Sistema de 
 
 ```yaml
 GET http://miempresa.saitnube.com/api/v3/clientes/13
-X-sait-api-key: frizispe9swlhim0
+X-sait-api-key: ****************
 ```
 
 ### Formato de Datos 
@@ -130,7 +130,7 @@ La API puede manejar el formato JSON o XML según la preferencia del programador
 
 ```yaml
 GET http://miempresa.saitnube.com/api/v3/clientes/13
-X-sait-api-key: frizispe9swlhim0
+X-sait-api-key: ****************
 Content-Type: application/xml
 ```
 
