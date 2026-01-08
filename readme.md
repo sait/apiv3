@@ -84,6 +84,8 @@ curl -si -H "X-sait-api-key: ****************" "https://test.saitnube.com/api/v3
     - [Configuracion](./pkg/config/readme.md)
         - [Templates/Plantillas](./pkg/config/templates/readme.md) 
         - [Series](./pkg/series/readme.md)
+- Dashboard
+    - [Ventas](./bi/ventas/readme.md)
 
 
 ## Introducción
