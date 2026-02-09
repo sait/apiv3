@@ -5,6 +5,7 @@ Rutas de facturas
 | Accion                            | Ruta                           |
 |-----------------------------------|--------------------------------|
 | [Leer por clave](#leer-por-clave) | GET   /api/v3/facturas/:numdoc |
+| [Listar](#listar)                 | GET   /api/v3/facturas         |
 
 ---
 ### Leer por Clave
@@ -61,4 +62,47 @@ response:
     "tiporelacion": "",
     "CfdiRes": null,
 }
+```
+
+---
+### Listar
+
+GET /api/v3/facturas?filters...
+
+| Filtros | significado                                          | Tipo de filtro         | Uso                                                                   |
+|---------|------------------------------------------------------|------------------------|-----------------------------------------------------------------------|
+| offset  | A partir de que registro iniciar búsqueda. Default 0 | despues de             | desde que registro empezar: offset=10                                 |
+| limit   | Cuantos registros obtener. Default 100               | cantidad               | cuantos registros recibir: limit=50                                   |
+| q       | Palabras a buscar (numdoc, nomcli,nomcliev)          | busqueda por similitud | traer facturas donde numdoc,numcli,nomcliev sean similares a q=AF134  |
+| numalm  | clave de almacen                                     | busqueda por exactitud | traer facturas cuando numalm=" 1"                                     |
+| numuser | clave de usuario                                     | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                 |
+| numcli  | clave de cliente                                     | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"          |
+| numvend | clave de vendedor                                    | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                 |
+| fecha1  | traer todos los documentos mayores a fecha1          | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
+| fecha2  | traer todos los documentos menores a fecha2          | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
+| precio1 | traer todos los documentos con total mayor a precio1 | busqueda mayor a       | traer facturas con total de venta mayor a 50 pesos                    |
+| precio2 | traer todos los documentos con total menor a precio2 | busqueda menor a       | traer facturas con total de venta menor a 250 pesos                   |
+| order   |                                                      | ordenar facturas       | ordenar facturas segun updated,id,numdoc,fecha,numcli,numvend,numuser |
+
+Response
+```json
+[
+  {
+    "id": 2283739,
+    "created": "2024-07-10 08:51:23",
+    "updated": "2026-01-06 14:30:33",
+    "tipodoc": " F",
+    "numdoc": "       AF2",
+    "tc": 17.4,
+    "fecha": "2024-07-10",
+    "divisa": "P",  
+    "numcli": "    0",
+    "importe": 4.17,
+    "descuento": 0,
+    "impuesto1": 0.33,
+    "impuesto2": 0,
+    "total": 4.5,
+  }
+]
+
 ```
