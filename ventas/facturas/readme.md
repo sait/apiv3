@@ -2,10 +2,11 @@
 
 Rutas de facturas
 
-| Accion                            | Ruta                           |
-|-----------------------------------|--------------------------------|
-| [Leer por clave](#leer-por-clave) | GET   /api/v3/facturas/:numdoc |
-| [Listar](#listar)                 | GET   /api/v3/facturas         |
+| Accion                            | Ruta                                             |
+|-----------------------------------|--------------------------------------------------|
+| [Leer por clave](#leer-por-clave) | GET   /api/v3/facturas/:numdoc                   |
+| [Listar](#listar)                 | GET   /api/v3/facturas?filters...                |
+| [Totales](#totales-de-facturas)      | GET   /api/v3/facturas?totalizar=true&filters... |
 
 ---
 ### Leer por Clave
@@ -69,20 +70,20 @@ response:
 
 GET /api/v3/facturas?filters...
 
-| Filtros | significado                                          | Tipo de filtro         | Uso                                                                   |
-|---------|------------------------------------------------------|------------------------|-----------------------------------------------------------------------|
-| offset  | A partir de que registro iniciar búsqueda. Default 0 | despues de             | desde que registro empezar: offset=10                                 |
-| limit   | Cuantos registros obtener. Default 100               | cantidad               | cuantos registros recibir: limit=50                                   |
-| q       | Palabras a buscar (numdoc, nomcli,nomcliev)          | busqueda por similitud | traer facturas donde numdoc,numcli,nomcliev sean similares a q=AF134  |
-| numalm  | clave de almacen                                     | busqueda por exactitud | traer facturas cuando numalm=" 1"                                     |
-| numuser | clave de usuario                                     | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                 |
-| numcli  | clave de cliente                                     | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"          |
-| numvend | clave de vendedor                                    | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                 |
-| fecha1  | traer todos los documentos mayores a fecha1          | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
-| fecha2  | traer todos los documentos menores a fecha2          | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
-| precio1 | traer todos los documentos con total mayor a precio1 | busqueda mayor a       | traer facturas con total de venta mayor a 50 pesos                    |
-| precio2 | traer todos los documentos con total menor a precio2 | busqueda menor a       | traer facturas con total de venta menor a 250 pesos                   |
-| order   |                                                      | ordenar facturas       | ordenar facturas segun updated,id,numdoc,fecha,numcli,numvend,numuser |
+| Filtros  | significado                                 | Tipo de filtro         | Uso                                                                                 |
+|----------|---------------------------------------------|------------------------|-------------------------------------------------------------------------------------|
+| offset   | A partir del registro a iniciar. Default 0  | despues de             | desde que registro empezar: offset=10                                               |
+| limit    | Cuantos registros obtener. Default 100      | cantidad               | cuantos registros recibir: limit=50                                                 |
+| q        | Palabras a buscar (numdoc, nomcli,nomcliev) | busqueda por similitud | traer facturas donde numdoc,numcli,nomcliev sean similares a q=AF134                |
+| numalm   | clave de almacen                            | busqueda por exactitud | traer facturas cuando numalm=" 1"                                                   |
+| numuser  | clave de usuario                            | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                               |
+| numcli   | clave de cliente                            | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"                        |
+| numvend  | clave de vendedor                           | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                               |
+| tipofact | tipo de factura                             | busqueda por exactitud | 1=Facturas diarias/globales, 2=facturas de notas, 3= Facturas de SAITNube, ""=todas |
+| status   | status de la factura                        | busqueda por exactitud | 1=cancelada, ""=todas las facturas                                                  |
+| fecha1   | traer todos los documentos mayores a fecha1 | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"                           |
+| fecha2   | traer todos los documentos menores a fecha2 | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"                           |
+| order    |                                             | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                                  |
 
 Response
 ```json
@@ -104,5 +105,47 @@ Response
     "total": 4.5,
   }
 ]
+```
 
+---
+### Totales de facturas
+
+Totales agrupados por Divisa, en el caso de la divisa "X" se refiere a la suma de los totales de todas las divisas convertidas a pesos mexicanos
+
+GET /api/v3/facturas?totalizar=true&filters...
+
+| Filtros  | significado                                 | Tipo de filtro         | Uso                                                                                 |
+|----------|---------------------------------------------|------------------------|-------------------------------------------------------------------------------------|
+| numalm   | clave de almacen                            | busqueda por exactitud | traer facturas cuando numalm=" 1"                                                   |
+| numuser  | clave de usuario                            | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                               |
+| numcli   | clave de cliente                            | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"                        |
+| numvend  | clave de vendedor                           | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                               |
+| tipofact | tipo de factura                             | busqueda por exactitud | 1=Facturas diarias/globales, 2=facturas de notas, 3= Facturas de SAITNube, ""=todas |
+| status   | status de la factura                        | busqueda por exactitud | 1=cancelada, ""=todas las facturas                                                  |
+| fecha1   | traer todos los documentos mayores a fecha1 | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"                           |
+| fecha2   | traer todos los documentos menores a fecha2 | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"                           |
+| order    |                                             | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                                  |
+
+Response
+```json
+[
+  {
+    "descuento": "84917.750000",
+    "divisa": "P",
+    "importe": "145039011.720000",
+    "impuesto1": "11184892.610000",
+    "impuesto2": "2379.640000",
+    "items": "29460",
+    "total": "156141366.220000"
+  },
+  {
+    "descuento": "84917.750000",
+    "divisa": "X",
+    "importe": "145039011.720000",
+    "impuesto1": "11184892.610000",
+    "impuesto2": "2379.640000",
+    "items": "29460",
+    "total": "156141366.220000"
+  }
+]
 ```
