@@ -29,6 +29,7 @@ response:
     "numalm": " 2",
     "mostrador": "",
     "divisa": "P",
+    "moneda":"MXN",
     "tc": 16.35,
     "importe": 14.81,
     "pjedesc": 0,
@@ -71,22 +72,22 @@ response:
 
 GET /api/v3/facturas?filters...
 
-| Filtros  | significado                                 | Tipo de filtro         | Uso                                                                  |
-|----------|---------------------------------------------|------------------------|----------------------------------------------------------------------|
-| offset   | A partir del registro a iniciar. Default 0  | despues de             | desde que registro empezar: offset=10                                |
-| limit    | Cuantos registros obtener. Default 100      | cantidad               | cuantos registros recibir: limit=50                                  |
-| q        | Palabras a buscar (numdoc, nomcli,nomcliev) | busqueda por similitud | traer facturas donde numdoc,numcli,nomcliev sean similares a q=AF134 |
-| numdoc   | clave de factura                            | busqueda por exactitud | traer facturas cuando numdoc="AF10001"                               |
-| uuid     | uuid de factura                             | busqueda por exactitud | traer facturas cuando uuid="E2D8896557F14ADFAF3F03F7853DDAD2"        |
-| numalm   | clave de almacen                            | busqueda por exactitud | traer facturas cuando numalm=" 1"                                    |
-| numuser  | clave de usuario                            | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                |
-| numcli   | clave de cliente                            | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"         |
-| numvend  | clave de vendedor                           | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                |
-| tipofact | tipo de factura                             | busqueda por exactitud | 1=Normales, 2=Globales, 3=De notas, 3=De SAITNube, omitir=todas      |
-| status   | status de la factura                        | busqueda por exactitud | 1=canceladas, ""=todas las facturas                                  |
-| fecha1   | traer las facturas mayores a fecha1         | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"            |
-| fecha2   | traer las facturas menores a fecha2         | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"            |
-| order    |                                             | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                   |
+| Filtros  | significado                                 | Tipo de filtro         | Uso                                                                   |
+|----------|---------------------------------------------|------------------------|-----------------------------------------------------------------------|
+| offset   | A partir del registro a iniciar. Default 0  | despues de             | desde que registro empezar: offset=10                                 |
+| limit    | Cuantos registros obtener. Default 100      | cantidad               | cuantos registros recibir: limit=50                                   |
+| q        | Palabras a buscar (numdoc, nomcli,nomcliev) | busqueda por similitud | traer facturas donde numdoc,numcli,nomcliev sean similares a q=AF134  |
+| numdoc   | clave de factura                            | busqueda por exactitud | traer facturas cuando numdoc="AF10001"                                |
+| uuid     | uuid de factura                             | busqueda por exactitud | traer facturas cuando uuid="E2D8896557F14ADFAF3F03F7853DDAD2"         |
+| numalm   | clave de almacen                            | busqueda por exactitud | traer facturas cuando numalm=" 1"                                     |
+| numuser  | clave de usuario                            | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                 |
+| numcli   | clave de cliente                            | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"          |
+| numvend  | clave de vendedor                           | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                 |
+| tipofact | tipo de factura                             | busqueda por exactitud | 1=Normales, 2=Globales, 3=De notas, 3=De Autofacturador, omitir=todas |
+| status   | status de la factura                        | busqueda por exactitud | 1=canceladas, ""=todas las facturas                                   |
+| fecha1   | traer las facturas mayores a fecha1         | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
+| fecha2   | traer las facturas menores a fecha2         | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
+| order    |                                             | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                    |
 
 Response
 ```json
@@ -100,7 +101,9 @@ Response
     "tc": 17.4,
     "fecha": "2024-07-10",
     "divisa": "P",  
+    "moneda":"MXN",
     "numcli": "    0",
+    "nomcli": "Publico general",
     "importe": 4.17,
     "descuento": 0,
     "impuesto1": 0.33,
@@ -117,26 +120,26 @@ Totales agrupados por Divisa, en el caso de la divisa "X" se refiere a la suma d
 
 GET /api/v3/facturas?totalizar=true&filters...
 
-| Filtros  | significado                         | Tipo de filtro         | Uso                                                             |
-|----------|-------------------------------------|------------------------|-----------------------------------------------------------------|
-| numdoc   | clave de factura                    | busqueda por exactitud | traer facturas cuando numdoc="AF10001"                          |
-| uuid     | uuid de factura                     | busqueda por exactitud | traer facturas cuando uuid="E2D8896557F14ADFAF3F03F7853DDAD2"   |
-| numalm   | clave de almacen                    | busqueda por exactitud | traer facturas cuando numalm=" 1"                               |
-| numuser  | clave de usuario                    | busqueda por exactitud | traer facturas cuando numuser="  MSL"                           |
-| numcli   | clave de cliente                    | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"    |
-| numvend  | clave de vendedor                   | busqueda por exactitud | traer facturas cuando numvend="  MSL"                           |
-| tipofact | tipo de factura                     | busqueda por exactitud | 1=Normales, 2=Globales, 3=De notas, 3=De SAITNube, omitir=todas |
-| status   | status de la factura                | busqueda por exactitud | 1=canceladas, ""=todas las facturas                             |
-| fecha1   | traer las facturas mayores a fecha1 | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"       |
-| fecha2   | traer las facturas menores a fecha2 | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"       |
-| order    |                                     | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total              |
+| Filtros  | significado                         | Tipo de filtro         | Uso                                                                   |
+|----------|-------------------------------------|------------------------|-----------------------------------------------------------------------|
+| numdoc   | clave de factura                    | busqueda por exactitud | traer facturas cuando numdoc="AF10001"                                |
+| uuid     | uuid de factura                     | busqueda por exactitud | traer facturas cuando uuid="E2D8896557F14ADFAF3F03F7853DDAD2"         |
+| numalm   | clave de almacen                    | busqueda por exactitud | traer facturas cuando numalm=" 1"                                     |
+| numuser  | clave de usuario                    | busqueda por exactitud | traer facturas cuando numuser="  MSL"                                 |
+| numcli   | clave de cliente                    | busqueda por exactitud | traer facturas cuando numcli="  B10" o numcliev="       B10"          |
+| numvend  | clave de vendedor                   | busqueda por exactitud | traer facturas cuando numvend="  MSL"                                 |
+| tipofact | tipo de factura                     | busqueda por exactitud | 1=Normales, 2=Globales, 3=De notas, 3=De Autofacturador, omitir=todas |
+| status   | status de la factura                | busqueda por exactitud | 1=canceladas, ""=todas las facturas                                   |
+| fecha1   | traer las facturas mayores a fecha1 | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
+| fecha2   | traer las facturas menores a fecha2 | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
+| order    |                                     | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                    |
 
 Response
 ```json
 [
   {
     "descuento": "84917.750000",
-    "divisa": "P",
+    "moneda": "MXN",
     "importe": "145039011.720000",
     "impuesto1": "11184892.610000",
     "impuesto2": "2379.640000",
@@ -145,7 +148,7 @@ Response
   },
   {
     "descuento": "84917.750000",
-    "divisa": "X",
+    "moneda": "ZZZ",
     "importe": "145039011.720000",
     "impuesto1": "11184892.610000",
     "impuesto2": "2379.640000",
