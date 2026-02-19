@@ -87,7 +87,7 @@ GET /api/v3/facturas?filters...
 | status   | status de la factura                        | busqueda por exactitud | 1=canceladas, ""=todas las facturas                                   |
 | fecha1   | traer las facturas mayores a fecha1         | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
 | fecha2   | traer las facturas menores a fecha2         | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
-| order    |                                             | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                    |
+| order    |                                             | ordenar facturas       | ordenar facturas segun id, created, updated,numdoc,fecha, total       |
 
 Response
 ```json
@@ -132,7 +132,7 @@ GET /api/v3/facturas?totalizar=true&filters...
 | status   | status de la factura                | busqueda por exactitud | 1=canceladas, ""=todas las facturas                                   |
 | fecha1   | traer las facturas mayores a fecha1 | busqueda mayor a       | traer facturas con fecha de registro mayor a "2025-03-21"             |
 | fecha2   | traer las facturas menores a fecha2 | busqueda menor a       | traer facturas con fecha de registro menor a "2025-03-29"             |
-| order    |                                     | ordenar facturas       | ordenar facturas segun updated,numdoc,fecha, total                    |
+| order    |                                     | ordenar facturas       | ordenar facturas segun id, created, updated,numdoc,fecha, total       |
 
 Response
 ```json
