@@ -136,24 +136,35 @@ GET /api/v3/facturas?totalizar=true&filters...
 
 Response
 ```json
-[
-  {
-    "descuento": "84917.750000",
-    "moneda": "MXN",
-    "importe": "145039011.720000",
-    "impuesto1": "11184892.610000",
-    "impuesto2": "2379.640000",
-    "items": "29460",
-    "total": "156141366.220000"
-  },
-  {
-    "descuento": "84917.750000",
+{
+  "total": {
+    "descuento": 89865.6125,
+    "importe": 149012052.78,
+    "impuesto1": 11514039.56,
+    "impuesto2": 2372.31,
+    "items": 29468,
     "moneda": "ZZZ",
-    "importe": "145039011.720000",
-    "impuesto1": "11184892.610000",
-    "impuesto2": "2379.640000",
-    "items": "29460",
-    "total": "156141366.220000"
-  }
-]
+    "total": 160438599.0375
+  },
+  "totalesmoneda": [
+    {
+      "descuento": 314.15,
+      "importe": 3915285.33,
+      "impuesto1": 300302.58,
+      "impuesto2": 7.33,
+      "items": 1203,
+      "moneda": "USD",
+      "total": 4215281.09
+    },
+    {
+      "descuento": 84603.6,
+      "importe": 141126582.44,
+      "impuesto1": 10885026.02,
+      "impuesto2": 2372.31,
+      "items": 28265,
+      "moneda": "MXN",
+      "total": 151929377.17
+    }
+  ]
+}
 ```
