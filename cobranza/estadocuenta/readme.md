@@ -71,42 +71,60 @@ GET api/v3/cxc/mov?filters...
 | limit    | Cuantos registros obtener. Default 100               |
 | order    | Orden deseado. Disponibles:updated,id,numlin         |
 | numcli   | numero de identifiacion de cliente                   |
+| fecha1   | traer movimientos con fecha mayor a fecha1           |
+| fecha2   | traer movimientos con fecha menor a fecha2           |
 
 response:
 ```json
 [
-        {
-        "keycxc": " F    A17196",
-        "fecha": "2024-03-14",
+    {
+        "keycxc": " F    A11597",
+        "fecha": "2022-10-04",
         "conc": "FA",
         "concdesc": "FACTURA",
-        "numdoc": "A17196",
-        "refer": "FAA17196",
-        "cargo": 0,
-        "abono": 1755.65,
+        "numdoc": "A11597",
+        "keyrefer": "",
+        "cargo": 514,
+        "abono": 0,
         "divisa": "P",
-        "moneda": "mxn",
+        "moneda": "MXN",
         "tc": 0,
-        "saldoacummxn": 0,
+        "saldoacum": 0,
         "saldodoc": 0,
         "uuid": ""
     },
     {
-        "keycxc": "       A4797",
-        "fecha": "2024-03-22",
-        "conc": "TS",
-        "concdesc": "TRANSF. SANTANDER",
-        "numdoc": "",
-        "refer": "FAA17196",
-        "cargo": 0,
-        "abono": 1755.65,
+        "keycxc": " F    A11662",
+        "fecha": "2022-10-08",
+        "conc": "FA",
+        "concdesc": "FACTURA",
+        "numdoc": "A11662",
+        "keyrefer": "",
+        "cargo": 134,
+        "abono": 0,
         "divisa": "P",
-        "moneda": "mxn",
+        "moneda": "MXN",
         "tc": 0,
-        "saldoacummxn": 1755.65,
+        "saldoacum": 0,
         "saldodoc": 0,
-        "uuid": "E7C2802ED9124EFF999A7A4D0168574E"
-    }
+        "uuid": ""
+    },
+    {
+        "keycxc": " F    A11663",
+        "fecha": "2022-10-08",
+        "conc": "FA",
+        "concdesc": "FACTURA",
+        "numdoc": "A11663",
+        "keyrefer": "",
+        "cargo": 220.6,
+        "abono": 0,
+        "divisa": "P",
+        "moneda": "MXN",
+        "tc": 0,
+        "saldoacum": 0,
+        "saldodoc": 0,
+        "uuid": ""
+    },
     {}...
 ]
 ```
