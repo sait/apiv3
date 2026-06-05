@@ -65,14 +65,17 @@ response:
 
 GET api/v3/cxc/mov?filters...
 
-| Variable | Significado                                          |
-|----------|------------------------------------------------------|
-| offset   | A partir de que registro iniciar búsqueda. Default 0 |
-| limit    | Cuantos registros obtener. Default 100               |
-| order    | Orden deseado. Disponibles:updated,id,numlin         |
-| numcli   | numero de identifiacion de cliente                   |
-| fecha1   | traer movimientos con fecha mayor a fecha1           |
-| fecha2   | traer movimientos con fecha menor a fecha2           |
+| Variable     | Significado                                                                                                                      |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------|
+| offset       | A partir de que registro iniciar búsqueda. Default 0                                                                             |
+| limit        | Cuantos registros obtener. Default 100                                                                                           |
+| order        | Orden deseado. Disponibles: fecha, factura                                                                                       |
+| numcli       | numero de identifiacion de cliente                                                                                               |
+| fecha1       | traer movimientos con fecha mayor a fecha1                                                                                       |
+| fecha2       | traer movimientos con fecha menor a fecha2                                                                                       |
+| totalizar    | totalizar=true - mostrar totales de items y suma de importes segun cada divisa de movimientos                                    |
+| format       | format=xlsx - generar reporte en XLSX, format=pdf - Generar reporte en PDF, format= - dejar vacio para obtener respuesta en json |
+| soloconsaldo | solo mostrar movimientos que tienen saldo > 0                                                                                    |
 
 response:
 ```json
