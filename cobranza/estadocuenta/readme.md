@@ -44,19 +44,35 @@ Rutas de estado de cuenta
 ---
 ### Datos generales del cliente
 
-GET api/v3/datosgenerales/1144
+GET api/v3/datosgenerales/828
 
 response:
 ```json
 {
-    "numcli" : " 1130",
-    "nomcli" : "PROVEEDORA MANTENIMIENTO DE MEXICO",
-    "saldomn" : 7556.17,
-    "limcred" : 40000,
-    "totalcargos" : 866206.1,
-    "totalabonos" : 858649.93,
-    "sdocxcdls" : 0,
-    "sdocxc" : 7556.17
+    "numcli": "  828",
+    "nomcli": "JAVIER ENRIQUEZ CURIEL",
+    "telefono": "638-107-20-23",
+    "rfc": "XAXX010101000",
+    "cp": "83400",
+    "pais": "MEXICO",
+    "estado": "SONORA",
+    "ciudad": "PUERTO PEÑASCO",
+    "contacto": "",
+    "emailcontacto": "",
+    "saldomn": 31703.06,
+    "limcred": 20000,
+    "diascred": 8,
+    "saldo": 0,
+    "creditodisp": -11703.06,
+    "totalcargos": 2931675.74,
+    "totalabonos": 2900056.3,
+    "sdocxcdls": 870.21,
+    "sdocxc": 16543.22,
+    "AdeudeMasAntiguo": {
+        "fecha": "2026-06-04",
+        "folio": " F   B106120",
+        "saldo": "9084.45"
+    }
 }
 ```
 
