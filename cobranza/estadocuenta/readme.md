@@ -92,57 +92,48 @@ GET api/v3/cxc/mov?filters...
 | totalizar    | totalizar=true - mostrar totales de items y suma de importes segun cada divisa de movimientos                                    |
 | format       | format=xlsx - generar reporte en XLSX, format=pdf - Generar reporte en PDF, format= - dejar vacio para obtener respuesta en json |
 | soloconsaldo | solo mostrar movimientos que tienen saldo > 0                                                                                    |
+| conc         | traer solo los movimientos de estado de cuenta cuando conc=?                                                                     |
+| numdoc       | Obtener registro donde numdoc=?                                                                                                  |
+| divisa       | Traer movimientos de estado de cuenta cunado divisa=?                                                                            |
 
 response:
 ```json
 [
     {
-        "keycxc": " F    A11597",
-        "fecha": "2022-10-04",
-        "conc": "FA",
-        "concdesc": "FACTURA",
-        "numdoc": "A11597",
-        "keyrefer": "",
-        "cargo": 514,
-        "abono": 0,
-        "divisa": "P",
-        "moneda": "MXN",
-        "tc": 0,
-        "saldoacum": 0,
-        "saldodoc": 0,
-        "uuid": ""
+      "id": 52,
+      "sec": 4,
+      "keycxc": "       A2614",
+      "fecha": "2022-09-30",
+      "conc": "TS",
+      "concdesc": "TRANSF. SANTANDER",
+      "numdoc": "",
+      "keyrefer": " F    A11363",
+      "cargo": 0,
+      "abono": 2043,
+      "divisa": "P",
+      "moneda": "MXN",
+      "tc": 0,
+      "saldoacum": -6932.48,
+      "saldodoc": 0,
+      "uuid": "1B5A40AB25DD4467A36F1987F9AC8C46"
     },
     {
-        "keycxc": " F    A11662",
-        "fecha": "2022-10-08",
-        "conc": "FA",
-        "concdesc": "FACTURA",
-        "numdoc": "A11662",
-        "keyrefer": "",
-        "cargo": 134,
-        "abono": 0,
-        "divisa": "P",
-        "moneda": "MXN",
-        "tc": 0,
-        "saldoacum": 0,
-        "saldodoc": 0,
-        "uuid": ""
-    },
-    {
-        "keycxc": " F    A11663",
-        "fecha": "2022-10-08",
-        "conc": "FA",
-        "concdesc": "FACTURA",
-        "numdoc": "A11663",
-        "keyrefer": "",
-        "cargo": 220.6,
-        "abono": 0,
-        "divisa": "P",
-        "moneda": "MXN",
-        "tc": 0,
-        "saldoacum": 0,
-        "saldodoc": 0,
-        "uuid": ""
+      "id": 53,
+      "sec": 5,
+      "keycxc": "       A2615",
+      "fecha": "2022-09-30",
+      "conc": "TS",
+      "concdesc": "TRANSF. SANTANDER",
+      "numdoc": "",
+      "keyrefer": " F    A11386",
+      "cargo": 0,
+      "abono": 425.5,
+      "divisa": "P",
+      "moneda": "MXN",
+      "tc": 0,
+      "saldoacum": -6932.48,
+      "saldodoc": 0,
+      "uuid": "1B5A40AB25DD4467A36F1987F9AC8C46"
     },
     {}...
 ]
