@@ -68,3 +68,19 @@ Response
   {}...
 ]
 ```
+
+Totalizar resultado:
+
+GET  /api/v3/movinv/:numart/kardex?totalizar=true
+
+response:
+```json
+{
+    "disp": "4.000",
+    "entradas": "5.000",
+    "existencias": "-1.000",
+    "items": "5",
+    "salidas": "2.000",
+    "valor_inv": "0"
+}
+```
