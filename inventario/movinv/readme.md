@@ -1,8 +1,8 @@
 ## Kardex de articulos
 
-| Accion            | Ruta                                          |
-|-------------------|-----------------------------------------------|
-| [Kardex](#kardex) | GET  /api/v3/movinv/:numart/kardex?filters... |
+| Accion            | Ruta                                            |
+|-------------------|-------------------------------------------------|
+| [Kardex](#kardex) | POST   /api/v3/movinv/:numart/kardex?filters... |
 
 Campos kardex
 
@@ -34,7 +34,7 @@ tabla de costos
 ---
 ### Kardex
 
-GET  /api/v3/movinv/:numart/kardex?filters
+POST /api/v3/movinv/:numart/kardex?filters
 
 filtros
 
@@ -71,7 +71,7 @@ Response
 
 Totalizar resultado:
 
-GET  /api/v3/movinv/:numart/kardex?totalizar=true
+POST /api/v3/movinv/:numart/kardex?totalizar=true
 
 response:
 ```json
