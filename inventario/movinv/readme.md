@@ -1,8 +1,9 @@
 ## Kardex de articulos
 
-| Accion            | Ruta                                            |
-|-------------------|-------------------------------------------------|
-| [Kardex](#kardex) | POST   /api/v3/movinv/:numart/kardex?filters... |
+| Accion                                            | Ruta                                                            |
+|---------------------------------------------------|-----------------------------------------------------------------|
+| [Kardex](#kardex)                                 | POST   /api/v3/movinv/:numart/kardex?filters...                 |
+| [Existencias en almacén](#existencias-en-almacén) | POST   /api/v3/movinv/:numalm/existencias_en_almacen?filtros... |
 
 Campos kardex
 
@@ -82,5 +83,73 @@ response:
     "items": "5",
     "salidas": "2.000",
     "valor_inv": "0"
+}
+```
+
+
+
+---
+
+## Existencias en almacén
+
+```
+POST /api/v3/movinv/:numalm/existencias_en_almacen?filtros
+```
+
+Campos existencias en almacén
+
+| Campo              | Tipo   | Significado                                                      |
+|--------------------|--------|------------------------------------------------------------------|
+| numart             | string | numero de identificacion del articulo                            |
+| desc               | string | descripcion del articulo                                         |
+| unidad             | string | unidad de medida del articulo                                    |
+| existencia_inicial | string | existencia acumulada antes de fecha1                             |
+| entradas           | string | sumatoria de entradas entre fecha1 y fecha2                      |
+| salidas            | string | sumatoria de salidas entre fecha1 y fecha2                       |
+| existencia_final   | string | existencia acumulada total (entradas - salidas) dentro del rango |
+
+
+filtros
+
+| Filtro    | Descripcion                                                                                                        |
+|-----------|--------------------------------------------------------------------------------------------------------------------|
+| fecha1    | (obligatorio) A partir de tal fecha para tomar registros                                                           |
+| fecha2    | (obligatorio) Hasta tal fecha para tomar registros                                                                 |
+| numalm    | (obligatorio) Numero de identificacion del almacen                                                                 |
+| q         | Busqueda de palabras dentro de la descripcion del articulo (hasta 4 palabras separadas por espacio)                |
+| familia   | Numero de identificacion de familia del articulo                                                                   |
+| linea     | Numero de identificacion de linea del articulo                                                                     |
+| categoria | Numero de identificacion de categoria del articulo                                                                 |
+| marca     | Numero de identificacion de marca del articulo                                                                     |
+| order     | Campo para ordenar resultado: desc, numart, existencia, linea, categoria. Agregar "-" antes para orden descendente |
+| limit     | cantidad de registros a tomar                                                                                      |
+| offset    | tomar registros a partir del registro X                                                                            |
+
+Response
+```json
+[
+  {
+    "desc":"FRANELA DE ALGODON",
+    "entradas":"0.000",
+    "existencia_final":"-7.000",
+    "existencia_inicial":"0.000",
+    "numart":"                   0",
+    "salidas":"7.000",
+    "unidad":"PIEZA"
+  },
+  {}...
+]
+```
+
+Totalizar resultado:
+
+```
+POST /api/v3/movinv/:numalm/existencias_en_almacen?filters...&totalizar=true
+```
+
+response:
+```json
+{
+  "items":"18778"
 }
 ```
