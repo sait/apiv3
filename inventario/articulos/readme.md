@@ -8,6 +8,11 @@ Rutas de Artículos
 | [Leer por clave](#leer-por-clave)     | GET  /api/v3/articulos/:numart    |
 | [Actualizar](#actualizar-articulo)    | PUT  /api/v3/articulos/:numart    |
 | [Listar articulos](#buscar-artículos) | GET  /api/v3/articulos?filters... |
+| [Subir imagenes](#subir-imagenes-s3obj) | POST /api/v3/articulos/:numart/imagenes |
+| [Consultar imagenes](#consultar-imagenes) | GET /api/v3/articulos/:numart/imagenes |
+| [Reordenar imagenes](#reordenar-imagenes) | PUT /api/v3/articulos/:numart/imagenes/order |
+| [Borrar imagen](#borrar-imagen) | DELETE /api/v3/articulos/:numart/imagenes/:uid |
+| [Borrar varias imagenes](#borrar-varias-imagenes) | DELETE /api/v3/articulos/:numart/imagenes |
 
 Campos de Artículo
 
@@ -41,6 +46,277 @@ Campos de Artículo
 | esmatpelig | tinyint  | Es Material Peligroso segun SAT                        |
 | matpelig   | varchar  | Clave SAT para Material Peligroso                      |
 | existencia | decimal  | Existencia TOTAL sumando TODAS las sucursales          |
+| imagenes   | []string | URLs `lg` desde s3obj para compatibilidad legacy |
+
+---
+### Imagenes de articulos con s3obj
+
+Las imagenes nuevas de articulos se manejan desde `inventario/articulos` usando `pkg/s3obj`.
+
+La ruta vigente para subir imagenes de articulos es:
+
+```txt
+POST /api/v3/articulos/:numart/imagenes
+```
+
+La ruta global legacy `POST /api/v3/imagenes` ya no se usa para articulos. Tampoco se actualizan `arts.foto` ni `arts.fotos` al subir imagenes nuevas; la relacion queda en `objects` de `s3obj`.
+
+Los eventos legacy `ADDFOTO` ya no alimentan imagenes de articulos. Durante la migracion a `s3obj`, esos eventos se omiten con log.
+
+El tipo de objeto usado internamente es:
+
+```go
+ObjTypeArticuloImagen // 99
+```
+
+El cliente no envia `objTypeID`. Las rutas de articulos usan ese tipo de objeto de forma interna y usan `numart` como `pk` de negocio en `s3obj`.
+
+Las consultas normales de articulos regresan dos campos:
+
+- `imagenes`: arreglo legacy de strings. Cada string usa la URL `lg` para mantener compatibilidad con pantallas existentes.
+- `images`: estructura nueva con `uuid`, `sm`, `md` y `lg`.
+
+Si el articulo ya tiene imagenes `uploaded` en `s3obj`, ambos campos se llenan desde `s3obj`. Si no hay imagenes `uploaded`, ambos regresan vacios. La migracion legacy se encarga de copiar `arts.foto` y `arts.fotos` al nuevo bucket.
+
+Ejemplo de respuesta parcial de `GET /api/v3/articulos/:numart`:
+
+```json
+{
+  "numart": "ART-001",
+  "desc": "Articulo demo",
+  "imagenes": [
+    "https://pub.saitcdn.com/777/items-image/4355e7f6-1a44-456d-a209-834a5a0ec59f_lg.webp",
+    "https://pub.saitcdn.com/777/items-image/84374f52-24d7-4775-a182-dbe4d17647d2_lg.webp"
+  ],
+  "images": [
+    {
+      "uuid": "4355e7f6-1a44-456d-a209-834a5a0ec59f",
+      "sm": "https://pub.saitcdn.com/777/items-image/4355e7f6-1a44-456d-a209-834a5a0ec59f_sm.webp",
+      "md": "https://pub.saitcdn.com/777/items-image/4355e7f6-1a44-456d-a209-834a5a0ec59f_md.webp",
+      "lg": "https://pub.saitcdn.com/777/items-image/4355e7f6-1a44-456d-a209-834a5a0ec59f_lg.webp"
+    },
+    {
+      "uuid": "84374f52-24d7-4775-a182-dbe4d17647d2",
+      "sm": "https://pub.saitcdn.com/777/items-image/84374f52-24d7-4775-a182-dbe4d17647d2_sm.webp",
+      "md": "https://pub.saitcdn.com/777/items-image/84374f52-24d7-4775-a182-dbe4d17647d2_md.webp",
+      "lg": "https://pub.saitcdn.com/777/items-image/84374f52-24d7-4775-a182-dbe4d17647d2_lg.webp"
+    }
+  ]
+}
+```
+
+`filename` se guarda internamente en `objects.filename` para auditoria y usos futuros, pero no se expone en la respuesta publica normal del articulo.
+
+Las variantes `sm`, `md` y `lg` viven en `object_types` y representan ancho en pixeles. Para `items-image`, los valores actuales son `sm=100`, `md=400` y `lg=1200`.
+
+La migracion de imagenes legacy del bucket anterior al nuevo flujo se ejecuta con el comando `migrar-imagenes-articulos-s3obj`. No se borran imagenes legacy durante la migracion.
+
+Ejemplo de respuesta completa del envoltorio HTTP con campos principales:
+
+```json
+{
+  "result": {
+    "id": 244,
+    "numart": "                TRRE",
+    "desc": "TRIPITAS DE RES",
+    "foto": "trre.jpg",
+    "fotos": "trre2.jpg\n",
+    "imagenes": [
+      "https://pub.saitcdn.com/777/items-image/81f739ff-83ea-4af7-a988-34166bad61f0_lg.webp",
+      "https://pub.saitcdn.com/777/items-image/113ffe23-d67a-4a1c-8925-233e5c489dfb_lg.webp"
+    ],
+    "images": [
+      {
+        "uuid": "81f739ff-83ea-4af7-a988-34166bad61f0",
+        "sm": "https://pub.saitcdn.com/777/items-image/81f739ff-83ea-4af7-a988-34166bad61f0_sm.webp",
+        "md": "https://pub.saitcdn.com/777/items-image/81f739ff-83ea-4af7-a988-34166bad61f0_md.webp",
+        "lg": "https://pub.saitcdn.com/777/items-image/81f739ff-83ea-4af7-a988-34166bad61f0_lg.webp"
+      },
+      {
+        "uuid": "113ffe23-d67a-4a1c-8925-233e5c489dfb",
+        "sm": "https://pub.saitcdn.com/777/items-image/113ffe23-d67a-4a1c-8925-233e5c489dfb_sm.webp",
+        "md": "https://pub.saitcdn.com/777/items-image/113ffe23-d67a-4a1c-8925-233e5c489dfb_md.webp",
+        "lg": "https://pub.saitcdn.com/777/items-image/113ffe23-d67a-4a1c-8925-233e5c489dfb_lg.webp"
+      }
+    ],
+    "unidades": null
+  },
+  "error": ""
+}
+```
+
+Pruebas rapidas desde el repo:
+
+```bash
+cd apiv3/src
+go test ./inventario/articulos
+```
+
+Si el entorno local tiene problemas con el cache global de Go, se puede usar un cache temporal:
+
+```bash
+cd apiv3/src
+GOCACHE=/tmp/codex-go-build go test -mod=mod ./inventario/articulos
+```
+
+Las pruebas unitarias actuales validan la conversion de objetos `s3obj` a `imagenes`, la compatibilidad de entrada con strings legacy y la respuesta enfocada de imagenes con estados. Las pruebas que suben archivos reales, reordenan contra DB o borran en S3 deben tratarse como pruebas de integracion.
+
+---
+### Subir imagenes s3obj
+
+POST /api/v3/articulos/:numart/imagenes
+
+Request:
+
+```json
+{
+  "imagenes": [
+    {
+      "filename": "principal.jpg",
+      "contentBase64": "base64-de-la-imagen"
+    },
+    {
+      "filename": "detalle.png",
+      "contentBase64": "base64-de-la-imagen"
+    }
+  ]
+}
+```
+
+Cada item requiere `contentBase64`. `filename` es opcional y se usa para que el cliente pueda relacionar la respuesta con su archivo local.
+
+La ruta llama internamente:
+
+```go
+s3obj.StoreImage(
+	ObjTypeArticuloImagen, // objTypeID = 99
+	numart,                // pk
+	contentBase64,         // contentBase64
+	"",                    // uid
+)
+```
+
+Respuesta:
+
+```json
+{
+  "result": [
+    {
+      "filename": "principal.jpg",
+      "uid": "uid-1",
+      "status": "pending"
+    },
+    {
+      "filename": "detalle.png",
+      "error": "imagen_invalida"
+    }
+  ]
+}
+```
+
+`pending` significa que la imagen ya quedo registrada y el upload/procesamiento puede terminar en background.
+
+---
+### Consultar imagenes
+
+GET /api/v3/articulos/:numart/imagenes
+
+Esta ruta regresa unicamente las imagenes del articulo, sin los demas datos del articulo. Incluye `uid`, `status` y `sort_order` para poder borrar, mostrar pendientes y reordenar.
+
+Respuesta:
+
+```json
+{
+  "result": [
+    {
+      "uid": "uid-1",
+      "status": "uploaded",
+      "url": "https://pub.saitcdn.com/777/items-image/uid-1_lg.webp",
+      "variantes": {
+        "sm": "https://pub.saitcdn.com/777/items-image/uid-1_sm.webp",
+        "md": "https://pub.saitcdn.com/777/items-image/uid-1_md.webp",
+        "lg": "https://pub.saitcdn.com/777/items-image/uid-1_lg.webp"
+      },
+      "sort_order": 1
+    },
+    {
+      "uid": "uid-2",
+      "status": "pending",
+      "sort_order": 2
+    }
+  ]
+}
+```
+
+---
+### Reordenar imagenes
+
+PUT /api/v3/articulos/:numart/imagenes/order
+
+Request:
+
+```json
+{
+  "orderedUIDs": ["uid-3", "uid-1", "uid-2"]
+}
+```
+
+La lista debe incluir todos los UIDs actuales del articulo. `s3obj.Order` valida lista incompleta, UIDs duplicados y UIDs que no pertenezcan al articulo.
+
+Respuesta:
+
+```json
+{
+  "result": {
+    "ok": true
+  }
+}
+```
+
+---
+### Borrar imagen
+
+DELETE /api/v3/articulos/:numart/imagenes/:uid
+
+La ruta valida que el UID pertenezca al articulo y al tipo `ObjTypeArticuloImagen` antes de llamar a `s3obj.Delete`.
+
+Respuesta:
+
+```json
+{
+  "result": {
+    "ok": true
+  }
+}
+```
+
+---
+### Borrar varias imagenes
+
+DELETE /api/v3/articulos/:numart/imagenes
+
+Request:
+
+```json
+{
+  "uids": ["uid-1", "uid-2", "uid-3"]
+}
+```
+
+La ruta valida primero que todos los UIDs pertenezcan al articulo. Si falta un UID, viene duplicado o no pertenece al articulo, no se borra ninguna imagen.
+
+Despues de borrar las imagenes indicadas, se reordena una sola vez la lista restante.
+
+Respuesta:
+
+```json
+{
+  "result": {
+    "ok": true,
+    "deleted": 3
+  }
+}
+```
 
 ---
 ### Crear articulo
