@@ -78,6 +78,8 @@ POST /api/v3/compras/:pk/consultas_generales?filtros...&totalizar=true
 response:
 ```json
 {
-  "items": "18778"
+    "items": "11769013",
+    "total_me": "0.00",
+    "total_mn": "2311628.77"
 }
 ```
