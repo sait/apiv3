@@ -342,7 +342,8 @@ GET /api/v3/clientes?variables
 | order    | Orden deseado. Disponibles:updated,id,numcli,nomcli,rfc |
 | q        | Palabras a buscar                                       |
 | estado   | filtro por estado del pais                              |
-| rfc      | filtro por rfc del cliente                              |
+| rfc      | filtro por similitud de rfc del cliente                 |
+| ciudad   | filtro por similitud de ciudad del cliente              |
 | numvend  | filtro por vendedor que atiende a cliente               |
 | numzon   | filtro por zona de clientes                             |
 | emailtw  | filtro por emailtw de clientes                          |
