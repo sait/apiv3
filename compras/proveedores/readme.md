@@ -1,11 +1,12 @@
 ## Proveedores
 
-| Accion                                | Ruta                                                                                                      |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| [Consultar](#consultar)               | GET   /api/v3/proveedores/:pk                                                                             |
-| [Listar](#listar)                     | GET   /api/v3/proveedores?filtros...                                                                      |
-| [Resumen](#resumen)                   | POST  /api/v3/proveedores/:pk/resumen                                                                     |
-| [Estado de cuenta](#estado-de-cuenta) | POST  /api/v3/proveedores/:pk/estado_de_cuenta?fecha1=..&fecha2=..&solo_con_saldo=true&limit=..&offset=.. |
+| Accion                                                      | Ruta                                                                                                  |
+|-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| [Consultar](#consultar)                                     | GET   /api/v3/proveedores/:pk                                                                         |
+| [Listar](#listar)                                           | GET   /api/v3/proveedores?filtros...                                                                  |
+| [Resumen](#resumen)                                         | POST  /api/v3/proveedores/:pk/resumen                                                                 |
+| [Estado de cuenta](#estado-de-cuenta)                       | POST  /api/v3/proveedores/:pk/estado_de_cuenta?filters...                                             |
+| [Estado de cuenta totalizado](#estado-de-cuenta-totalizado) | POST  /api/v3/proveedores/:pk/estado_de_cuenta?totalizar=true&fecha1=..&fecha2=..&solo_con_saldo=true |
 
 > `:pk` corresponde al número de proveedor (`numprov`). Se alinea internamente a 5 caracteres en todas las rutas.
 
@@ -206,20 +207,24 @@ Response
 
 ### Estado de cuenta
 
-POST /api/v3/proveedores/:pk/estado_de_cuenta?fecha1=..&fecha2=..&solo_con_saldo=true&limit=..&offset=..
+POST /api/v3/proveedores/:pk/estado_de_cuenta?fecha1=..&fecha2=..&folio=..&concepto=..&solo_con_saldo=true&order=..&limit=..&offset=..
 
-Regresa el listado de movimientos (tabla `cxp`) del proveedor, con saldo acumulado calculado en orden cronológico (por `fechahora`).
+Regresa el listado de movimientos (tabla `cxp`) del proveedor, con saldo acumulado calculado en orden cronológico (por `fechahora`). Si se manda `totalizar=true`, en vez del listado regresa los totales agregados (ver [Estado de cuenta totalizado](#estado-de-cuenta-totalizado)).
 
 `:pk` (obligatorio) corresponde al número de proveedor a consultar.
 
 filtros
-| Filtro         | Descripcion                                                                   |
-|----------------|-------------------------------------------------------------------------------|
-| fecha1         | (opcional) Fecha inicial del rango a consultar — filtra `cxp.fecha >= fecha1` |
-| fecha2         | (opcional) Fecha final del rango a consultar — filtra `cxp.fecha <= fecha2`   |
-| solo_con_saldo | (opcional) `"true"` filtra solo movimientos con saldo pendiente (`saldo > 0`) |
-| limit          | (opcional) Cantidad de registros a tomar                                      |
-| offset         | (opcional) Tomar registros a partir del registro X                            |
+| Filtro         | Descripcion                                                                                                                                                                                                               |
+|----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| fecha1         | (opcional) Fecha inicial del rango a consultar — filtra `cxp.fecha >= fecha1`                                                                                                                                             |
+| fecha2         | (opcional) Fecha final del rango a consultar — filtra `cxp.fecha <= fecha2`                                                                                                                                               |
+| folio          | (opcional) Filtra por número de documento exacto (`cxp.numdoc = folio`)                                                                                                                                                   |
+| concepto       | (opcional) Filtra por clave de concepto exacta (`cxp.conc = concepto`)                                                                                                                                                    |
+| solo_con_saldo | (opcional) `"true"` filtra solo movimientos con saldo pendiente (`saldo > 0`)                                                                                                                                             |
+| totalizar      | (opcional) `"true"` regresa los totales agregados en vez del listado (ver [Estado de cuenta totalizado](#estado-de-cuenta-totalizado))                                                                                    |
+| order          | (opcional) Cambia el orden del listado. Acepta exactamente uno de: `fecha`, `numdoc`, Cualquier otro valor se ignora y se conserva el orden por defecto (`fechahora, id` ascendente). Solo admite un único campo a la vez |
+| limit          | (opcional) Cantidad de registros a tomar                                                                                                                                                                                  |
+| offset         | (opcional) Tomar registros a partir del registro X                                                                                                                                                                        |
 
 Campos
 | Campo      | Tipo   | Significado                                                                     |
@@ -270,4 +275,59 @@ Response
   },
   {}
 ]
+```
+
+---
+
+### Estado de cuenta totalizado
+
+POST /api/v3/proveedores/:pk/estado_de_cuenta?totalizar=true&fecha1=..&fecha2=..&folio=..&concepto=..&solo_con_saldo=true
+
+Variante de [Estado de cuenta](#estado-de-cuenta) que, en vez del listado de movimientos, regresa los totales agregados: uno consolidado en moneda nacional y otro desglosado por divisa. Acepta los mismos filtros (`fecha1`, `fecha2`, `solo_con_saldo`); `limit`/`offset` no aplican aquí.
+
+> ⚠️ Los filtros `folio` y `concepto` actualmente truenan cuando se usan junto con `totalizar=true`: la consulta de totales no define el alias `c` que esas condiciones referencian (`c.numdoc`, `c.conc`), por lo que la ruta regresará un error de SQL si se mandan. Deben corregirse en el código antes de documentarlos como funcionales en este modo.
+
+Campos
+| Campo                  | Tipo   | Significado                                                                                           |
+|------------------------|--------|-------------------------------------------------------------------------------------------------------|
+| total                  | object | Totales consolidados en moneda nacional (importes en USD convertidos con `tc`)                        |
+| total.moneda           | string | Siempre `"ZZZ"` (marcador del renglón consolidado, no representa una divisa real)                     |
+| total.items            | int    | Cantidad de movimientos considerados                                                                  |
+| total.cargos           | float  | Suma de cargos (`ca='0'`) en moneda nacional                                                          |
+| total.abonos           | float  | Suma de abonos (`ca='1'`) en moneda nacional                                                          |
+| total.saldos           | float  | Saldo neto (cargos - abonos) en moneda nacional                                                       |
+| totalesmoneda          | array  | Totales desglosados por divisa (`MXN`/`USD`), **sin** convertir a moneda nacional (importes tal cual) |
+| totalesmoneda[].moneda | string | `"MXN"` o `"USD"` según `divisa`                                                                      |
+| totalesmoneda[].items  | int    | Cantidad de movimientos en esa divisa                                                                 |
+| totalesmoneda[].cargos | float  | Suma de cargos (`ca='0'`) en esa divisa, sin convertir                                                |
+| totalesmoneda[].abonos | float  | Suma de abonos (`ca='1'`) en esa divisa, sin convertir                                                |
+| totalesmoneda[].saldos | float  | Saldo neto (cargos - abonos) en esa divisa, sin convertir                                             |
+
+Response
+```json
+{
+  "total": {
+    "moneda": "ZZZ",
+    "items": "48",
+    "cargos": "185300.00",
+    "abonos": "175764.00",
+    "saldos": "9536.00"
+  },
+  "totalesmoneda": [
+    {
+      "moneda": "MXN",
+      "items": "40",
+      "cargos": "160300.00",
+      "abonos": "152000.00",
+      "saldos": "8300.00"
+    },
+    {
+      "moneda": "USD",
+      "items": "8",
+      "cargos": "1500.00",
+      "abonos": "1350.00",
+      "saldos": "150.00"
+    }
+  ]
+}
 ```
