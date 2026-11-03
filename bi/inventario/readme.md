@@ -5,11 +5,11 @@
 | [Totales](#totales)                                                   | POST   /api/v3/bi_inventario/:pk/totales                                                  |
 | [Stock actual](#stock-actual)                                         | POST   /api/v3/bi_inventario/:pk/stock_actual?limit=..&offset=..                          |
 | [Valor por familia](#valor-por-familia)                               | POST   /api/v3/bi_inventario/:pk/valor_familia?limit=..&offset=..                         |
-| [Top artículos vendidos](#top-articulos-vendidos)                     | POST   /api/v3/bi_inventario/:pk/top_articulos?fecha1=..&fecha2=..&limit=..&offset=..     |
-| [Valor de inventario por sucursal](#valor-de-inventario-por-sucursal) | POST   /api/v3/bi_inventario/:pk/valor_sucursal?limit=..&offset=..                        |
-| [Índice de rotación](#indice-de-rotacion)                             | POST   /api/v3/bi_inventario/:pk/indice_rotacion?periodo=mes\|anio                        |
-| [Márgenes de ganancia](#margenes-de-ganancia)                         | POST   /api/v3/bi_inventario/:pk/margenes?fecha1=..&fecha2=..&limit=..&offset=..          |
-| [Unidades vendidas por artículo](#unidades-vendidas-por-articulo)     | POST   /api/v3/bi_inventario/:pk/unidades_vendidas?fecha1=..&fecha2=..&limit=..&offset=.. |
+| [Top artículos vendidos](#top-articulos-vendidos)                     | 📅 POST   /api/v3/bi_inventario/:pk/top_articulos?ano=..&mes=..&limit=..&offset=..      |
+| [Valor de inventario por sucursal](#valor-de-inventario-por-sucursal) | 📅 POST   /api/v3/bi_inventario/:pk/valor_sucursal?ano=..&mes=..&limit=..&offset=..     |
+| [Índice de rotación](#indice-de-rotacion)                             | 📅 POST   /api/v3/bi_inventario/:pk/indice_rotacion?ano=..&mes=..                       |
+| [Márgenes de ganancia](#margenes-de-ganancia)                         | 📅 POST   /api/v3/bi_inventario/:pk/margenes?ano=..&mes=..&limit=..&offset=..           |
+| [Unidades vendidas por artículo](#unidades-vendidas-por-articulo)     | 📅 POST   /api/v3/bi_inventario/:pk/unidades_vendidas?ano=..&mes=..&limit=..&offset=..  |
 
 > `:pk` (obligatorio) actualmente no se usa para filtrar la consulta, pero es requerido por la ruta. Ejemplo: `1`.
 
@@ -22,6 +22,27 @@ Varias rutas de este módulo consideran como "venta" únicamente los movimientos
 - `cant` negativo (salida de almacén), verificado con `abs(cant) != cant`
 
 En ninguna de las rutas `limit`/`offset` tienen un valor por defecto: si no se envían, la consulta regresa todos los registros sin límite.
+
+Las rutas basadas en existencias (`totales`, `stock_actual`, `valor_familia`) usan la tabla `multialm`, que no tiene fecha: siempre muestran la foto actual del inventario y no aceptan filtros de fecha.
+
+---
+
+### Filtros de fecha
+
+Las rutas marcadas con 📅 filtran por fecha usando la tabla `fechas` (igual que `bi/ventas`). Es obligatorio enviar al menos uno de los siguientes parámetros:
+
+| parametro | descripcion                                                                  |
+|-----------|------------------------------------------------------------------------------|
+| dia       | Día especificado (será necesario especificar mes y ano)                      |
+| semana    | Semana especificada (será necesario especificar ano)                         |
+| mes       | Mes especificado (será necesario especificar ano)                            |
+| trimestre | Trimestre especificado (será necesario especificar ano)                      |
+| semestre  | Semestre especificado (será necesario especificar ano)                       |
+| ano       | Año especificado                                                             |
+| fini      | Fecha inicial a considerar (20250101), debe enviarse junto con ffin          |
+| ffin      | Fecha límite a considerar  (20251231), debe enviarse junto con fini          |
+
+Ejemplos: `?ano=2025&mes=3`, `?ano=2025&trimestre=2`, `?fini=20250101&ffin=20250630`
 
 ---
 
@@ -118,19 +139,16 @@ Response
 
 ### Top artículos vendidos
 
-POST /api/v3/bi_inventario/:pk/top_articulos?fecha1=..&fecha2=..&limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/top_articulos?ano=..&mes=..&limit=..&offset=..
 
 Regresa los artículos con mayor cantidad vendida (ver [criterio de venta](#conceptos-generales)), junto con su nombre/descripción (tabla `arts`), ordenado de mayor a menor cantidad vendida.
 
 filtros
 | Filtro | Descripcion                                                                    |
 |--------|--------------------------------------------------------------------------------|
-| fecha1 | (opcional) Fecha inicial del rango a consultar — filtra `minv.fecha >= fecha1` |
-| fecha2 | (opcional) Fecha final del rango a consultar — filtra `minv.fecha <= fecha2`   |
+| 📅     | (obligatorio) [Filtros de fecha](#filtros-de-fecha) sobre `minv.fecha`         |
 | limit  | (opcional) Cantidad de registros a tomar                                       |
 | offset | (opcional) Tomar registros a partir del registro X                             |
-
-> Si no se envían `fecha1` ni `fecha2`, el cálculo considera todos los movimientos históricos de `minv`.
 
 Campos
 | Campo     | Tipo   | Significado                                                                             |
@@ -154,13 +172,14 @@ Response
 
 ### Valor de inventario por sucursal
 
-POST /api/v3/bi_inventario/:pk/valor_sucursal?limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/valor_sucursal?ano=..&mes=..&limit=..&offset=..
 
-Regresa el valor de inventario (cantidad x costo) agrupado por almacén/sucursal, a partir de la tabla `minv`, junto con el nombre del almacén (tabla `almacen`).
+Regresa el valor de inventario (cantidad x costo) agrupado por almacén/sucursal, a partir de los movimientos de la tabla `minv` dentro del periodo, junto con el nombre del almacén (tabla `almacen`).
 
 filtros
-| Filtro | Descripcion                                        |
-|--------|----------------------------------------------------|
+| Filtro | Descripcion                                                                    |
+|--------|--------------------------------------------------------------------------------|
+| 📅     | (obligatorio) [Filtros de fecha](#filtros-de-fecha) sobre `minv.fecha`         |
 | limit  | (opcional) Cantidad de registros a tomar           |
 | offset | (opcional) Tomar registros a partir del registro X |
 
@@ -186,19 +205,14 @@ Response
 
 ### Índice de rotación
 
-POST /api/v3/bi_inventario/:pk/indice_rotacion?periodo=mes
+POST /api/v3/bi_inventario/:pk/indice_rotacion?ano=2025&mes=3
 
-Calcula el índice de rotación de inventario y los días que tardaría en venderse todo el inventario actual, dentro del **mes actual** o del **año actual** (según servidor).
+Calcula el índice de rotación de inventario y los días que tardaría en venderse todo el inventario actual, dentro del periodo indicado con los [filtros de fecha](#filtros-de-fecha).
 
 `indice_rotacion` = costo de ventas del periodo (ver [criterio de venta](#conceptos-generales)) / valor actual del inventario.
-`dias_rotacion` = días del periodo entre `indice_rotacion` — usando **365** cuando `periodo="anio"` o **30** cuando `periodo="mes"` (calculado en Go antes de armar la consulta, no en SQL).
+`dias_rotacion` = días del periodo entre `indice_rotacion`.
 
-filtros
-| Filtro  | Descripcion                                                                                |
-|---------|--------------------------------------------------------------------------------------------|
-| periodo | (obligatorio) Rango a calcular: `mes` (mes actual completo) o `anio` (año actual completo) |
-
-> El rango de fechas se calcula directamente en la base de datos con `CURDATE()`: para `mes` toma del día 1 al último día del mes en curso (`LAST_DAY`); para `anio` toma del 1 de enero al 31 de diciembre del año en curso.
+> El rango (fecha inicial, fecha final y cantidad de días) se resuelve con la tabla `fechas` a partir de los filtros enviados. Reemplaza al parámetro `periodo=mes|anio`, que ya no se acepta.
 
 > El inventario se toma como el valor **actual** de existencias (`multialm`), no un promedio histórico entre inicio y fin del periodo, ya que no se lleva snapshot histórico de existencias.
 
@@ -206,7 +220,7 @@ Campos
 | Campo           | Tipo  | Significado                                                                                                                                                |
 |-----------------|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | indice_rotacion | float | Costo de ventas del periodo entre el valor actual del inventario                                                                                           |
-| dias_rotacion   | float | Días que tardaría en venderse todo el inventario actual al ritmo de venta del periodo (`365/indice_rotacion` para `anio`, `30/indice_rotacion` para `mes`) |
+| dias_rotacion   | float | Días que tardaría en venderse todo el inventario actual al ritmo de venta del periodo (`días del periodo / indice_rotacion`)                                 |
 
 Response
 ```json
@@ -222,15 +236,14 @@ Response
 
 ### Márgenes de ganancia
 
-POST /api/v3/bi_inventario/:pk/margenes?fecha1=..&fecha2=..&limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/margenes?ano=..&mes=..&limit=..&offset=..
 
 Regresa ventas totales, costo total y ganancia por artículo (ver [criterio de venta](#conceptos-generales)), ordenado de mayor a menor ganancia.
 
 filtros
 | Filtro | Descripcion                                                                    |
 |--------|--------------------------------------------------------------------------------|
-| fecha1 | (opcional) Fecha inicial del rango a consultar — filtra `minv.fecha >= fecha1` |
-| fecha2 | (opcional) Fecha final del rango a consultar — filtra `minv.fecha <= fecha2`   |
+| 📅     | (obligatorio) [Filtros de fecha](#filtros-de-fecha) sobre `minv.fecha`         |
 | limit  | (opcional) Cantidad de registros a tomar                                       |
 | offset | (opcional) Tomar registros a partir del registro X                             |
 
@@ -257,15 +270,14 @@ Response
 
 ### Unidades vendidas por artículo
 
-POST /api/v3/bi_inventario/:pk/unidades_vendidas?fecha1=..&fecha2=..&limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/unidades_vendidas?ano=..&mes=..&limit=..&offset=..
 
 Regresa las unidades vendidas agrupadas por artículo (ver [criterio de venta](#conceptos-generales)), ordenado de mayor a menor cantidad vendida.
 
 filtros
 | Filtro | Descripcion                                                                    |
 |--------|--------------------------------------------------------------------------------|
-| fecha1 | (opcional) Fecha inicial del rango a consultar — filtra `minv.fecha >= fecha1` |
-| fecha2 | (opcional) Fecha final del rango a consultar — filtra `minv.fecha <= fecha2`   |
+| 📅     | (obligatorio) [Filtros de fecha](#filtros-de-fecha) sobre `minv.fecha`         |
 | limit  | (opcional) Cantidad de registros a tomar                                       |
 | offset | (opcional) Tomar registros a partir del registro X                             |
 

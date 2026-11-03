@@ -13,6 +13,11 @@
 | [Ventas Top Categorias](#ventas-top-categorias) | GET  /api/v3/bi/ventas/categorias?params... |
 | [Ventas Top Familias](#ventas-top-familias)     | GET  /api/v3/bi/ventas/familias?params...   |
 | [Ventas Top Vendedores](#ventas-top-vendedores) | GET  /api/v3/bi/ventas/vendedores?params... |
+| [Tendencia mensual de vendedores](#tendencia-mensual-de-vendedores) | GET  /api/v3/bi/ventas/vendedores/tendenciamensual?params... |
+| [Crear meta de vendedor](#crear-meta-de-vendedor)                   | POST /api/v3/bi/ventas/vendedores/meta                       |
+| [Obtener meta de vendedor](#obtener-meta-de-vendedor)               | GET  /api/v3/bi/ventas/vendedores/meta/:numvend              |
+| [Actualizar meta de vendedor](#actualizar-meta-de-vendedor)         | PUT  /api/v3/bi/ventas/vendedores/meta/:numvend              |
+| [Listar metas de vendedores](#listar-metas-de-vendedores)           | GET  /api/v3/bi/ventas/vendedores/meta?params...             |
 
 ### Parametros
 
@@ -239,6 +244,9 @@ GET api/v3/bi/ventas/familias?metrica=1&ano=2023&semana=1
 
 GET api/v3/bi/ventas/vendedores
 
+`meta` es la meta mensual del vendedor prorrateada a los dias del periodo consultado
+(meta / 31 * dias del periodo); es 0 si el vendedor no tiene meta registrada.
+
 Ejemplo:
 ```
 GET api/v3/bi/ventas/vendedores?metrica=1&ano=2024
@@ -247,12 +255,131 @@ GET api/v3/bi/ventas/vendedores?metrica=1&ano=2024
     {
       "clave": "536",
       "nombre": "ROSA MELISA ALVAREZ GARCIA",
-      "valor": 1829802.11
+      "valor": 1829802.11,
+      "meta": 500000
     },
     {
       "clave": "104",
       "nombre": "VANESSA FERNANDEZ ALOR",
-      "valor": 534820.7
+      "valor": 534820.7,
+      "meta": 300000
+    },
+]
+```
+
+---
+### Tendencia mensual de vendedores
+
+GET api/v3/bi/ventas/vendedores/tendenciamensual
+
+Obtiene los 6 vendedores con mayor valor de la metrica indicada en los ultimos 6 meses
+(el mes actual y los 5 anteriores), desglosado por mes. `mes1` corresponde al mes mas
+antiguo y `mes6` al mes actual. Solo utiliza el parametro `metrica`.
+
+Ejemplo:
+```
+GET api/v3/bi/ventas/vendedores/tendenciamensual?metrica=1
+
+[
+    {
+      "clave": "536",
+      "nombre": "ROSA MELISA ALVAREZ GARCIA",
+      "mes1": 150230.5,
+      "mes2": 160120.0,
+      "mes3": 148900.75,
+      "mes4": 172300.1,
+      "mes5": 165000.0,
+      "mes6": 98000.4,
+      "total": 894551.75
+    },
+]
+```
+
+---
+## Metas de vendedores
+
+Metas mensuales de venta por vendedor, almacenadas en la tabla `bi_ventas_vend_metas_mes`.
+Cada vendedor solo puede tener una meta registrada. La clave del vendedor (`numvend`) se
+alinea a la derecha a 5 caracteres.
+
+| campo  | descripcion                     |
+|--------|---------------------------------|
+| clave  | Clave del vendedor (numvend)    |
+| nombre | Nombre del vendedor             |
+| meta   | Meta mensual de venta           |
+
+---
+### Crear meta de vendedor
+
+POST api/v3/bi/ventas/vendedores/meta
+
+Regresa error si el vendedor ya tiene una meta registrada.
+
+Ejemplo:
+```
+POST api/v3/bi/ventas/vendedores/meta
+
+{
+    "clave": "536",
+    "meta": 500000
+}
+```
+
+---
+### Obtener meta de vendedor
+
+GET api/v3/bi/ventas/vendedores/meta/:numvend
+
+Regresa 404 si el vendedor no tiene meta registrada.
+
+Ejemplo:
+```
+GET api/v3/bi/ventas/vendedores/meta/536
+
+{
+    "clave": "536",
+    "nombre": "ROSA MELISA ALVAREZ GARCIA",
+    "meta": 500000
+}
+```
+
+---
+### Actualizar meta de vendedor
+
+PUT api/v3/bi/ventas/vendedores/meta/:numvend
+
+Actualiza la meta de un vendedor existente; regresa error si el vendedor no tiene meta registrada.
+
+Ejemplo:
+```
+PUT api/v3/bi/ventas/vendedores/meta/536
+
+{
+    "meta": 550000
+}
+```
+
+---
+### Listar metas de vendedores
+
+GET api/v3/bi/ventas/vendedores/meta
+
+| parametro | descripcion                                       |
+|-----------|---------------------------------------------------|
+| numvend   | Filtrar por clave de vendedor                     |
+| q         | Buscar por clave o nombre del vendedor            |
+| limit     | limitar cantidad de registros                     |
+| offset    | registros a omitir (paginacion)                   |
+
+Ejemplo:
+```
+GET api/v3/bi/ventas/vendedores/meta?q=ROSA
+
+[
+    {
+      "clave": "536",
+      "nombre": "ROSA MELISA ALVAREZ GARCIA",
+      "meta": 500000
     },
 ]
 ```

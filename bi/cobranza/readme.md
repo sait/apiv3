@@ -2,11 +2,11 @@
 
 | Accion                                        | Ruta                                                             |
 |-----------------------------------------------|------------------------------------------------------------------|
-| [Totales](#totales)                           | POST   /api/v3/bi_cobranza/:pk/totales                           |
-| [Antigüedad de saldos](#antiguedad-de-saldos) | POST   /api/v3/bi_cobranza/:pk/antiguedad_saldos                 |
-| [Clientes deudores](#clientes-deudores)       | POST   /api/v3/bi_cobranza/:pk/clientes_deudores                 |
-| [Cartera](#cartera)                           | POST   /api/v3/bi_cobranza/:pk/cartera                           |
-| [Índice de rotación](#indice-de-rotacion)     | POST   /api/v3/bi_cobranza/:pk/indice_rotacion?periodo=mes\|anio |
+| [Totales](#totales)                           | 📅 POST   /api/v3/bi_cobranza/:pk/totales?ano=..&mes=..           |
+| [Antigüedad de saldos](#antiguedad-de-saldos) | 📅 POST   /api/v3/bi_cobranza/:pk/antiguedad_saldos?ano=..&mes=.. |
+| [Clientes deudores](#clientes-deudores)       | 📅 POST   /api/v3/bi_cobranza/:pk/clientes_deudores?ano=..&mes=.. |
+| [Cartera](#cartera)                           | 📅 POST   /api/v3/bi_cobranza/:pk/cartera?ano=..&mes=..           |
+| [Índice de rotación](#indice-de-rotacion)     | 📅 POST   /api/v3/bi_cobranza/:pk/indice_rotacion?ano=..&mes=..   |
 
 > Header requerido en todas las rutas: `Sait-x-api-key: <token>`
 
@@ -22,7 +22,28 @@
 | % Vencido         | Porcentaje de cartera vencida respecto a la cartera total        |
 | Clientes deudores | Clientes con deudas después de 30 días                           |
 
+En las rutas de cartera (totales, antigüedad de saldos, clientes deudores y cartera) el filtro de fechas se aplica sobre la fecha del documento (`cxc.fecha`): se consideran los saldos pendientes de los documentos emitidos dentro del periodo. La antigüedad (vigente/vencido) se sigue calculando contra el día de hoy.
+
 Todos los importes se normalizan a moneda nacional: si `divisa='D'` se multiplica por el tipo de cambio (`tc`), de lo contrario se toma el saldo tal cual.
+
+---
+
+### Filtros de fecha
+
+Las rutas marcadas con 📅 filtran por fecha usando la tabla `fechas` (igual que `bi/ventas`). Es obligatorio enviar al menos uno de los siguientes parámetros:
+
+| parametro | descripcion                                                                  |
+|-----------|------------------------------------------------------------------------------|
+| dia       | Día especificado (será necesario especificar mes y ano)                      |
+| semana    | Semana especificada (será necesario especificar ano)                         |
+| mes       | Mes especificado (será necesario especificar ano)                            |
+| trimestre | Trimestre especificado (será necesario especificar ano)                      |
+| semestre  | Semestre especificado (será necesario especificar ano)                       |
+| ano       | Año especificado                                                             |
+| fini      | Fecha inicial a considerar (20250101), debe enviarse junto con ffin          |
+| ffin      | Fecha límite a considerar  (20251231), debe enviarse junto con fini          |
+
+Ejemplos: `?ano=2025&mes=3`, `?ano=2025&trimestre=2`, `?fini=20250101&ffin=20250630`
 
 ---
 
@@ -160,22 +181,17 @@ Response
 
 ### Índice de rotación
 
-POST /api/v3/bi_cobranza/:pk/indice_rotacion?periodo=mes
+POST /api/v3/bi_cobranza/:pk/indice_rotacion?ano=2025&mes=3
 
-Calcula el índice de rotación de cartera y la velocidad de cobro (en días) dentro del **mes actual** o del **año actual** (según servidor), a partir del saldo inicial, saldo final y las facturas generadas a crédito en ese rango.
+Calcula el índice de rotación de cartera y la velocidad de cobro (en días) dentro del periodo indicado con los [filtros de fecha](#filtros-de-fecha), a partir del saldo inicial, saldo final y las facturas generadas a crédito en ese rango.
 
-filtros
-| Filtro  | Descripcion                                                                                |
-|---------|--------------------------------------------------------------------------------------------|
-| periodo | (obligatorio) Rango a calcular: `mes` (mes actual completo) o `anio` (año actual completo) |
-
-> El rango de fechas se calcula directamente en la base de datos con `CURDATE()`: para `mes` toma del día 1 al último día del mes en curso (`LAST_DAY`); para `anio` toma del 1 de enero al 31 de diciembre del año en curso. Ya no se aceptan fechas explícitas.
+> El rango (fecha inicial, fecha final y cantidad de días) se resuelve con la tabla `fechas` a partir de los filtros enviados. Reemplaza al parámetro `periodo=mes|anio`, que ya no se acepta.
 
 Campos
 | Campo           | Tipo  | Significado                                                                                                     |
 |-----------------|-------|-----------------------------------------------------------------------------------------------------------------|
 | indice_rotacion | float | Facturas a crédito en el periodo, dividido entre el saldo promedio de cartera (saldo_inicial + saldo_final) / 2 |
-| velocidad_cobro | float | Días promedio que tarda en recuperarse la cartera: `365 / indice_rotacion`                                      |
+| velocidad_cobro | float | Días promedio que tarda en recuperarse la cartera: `días del periodo / indice_rotacion`                         |
 
 > El saldo inicial y saldo final se calculan igual que en las demás rutas: facturas (`ca=0`) suman, abonos (`ca=1`) restan, y los importes en moneda extranjera (`divisa != 'P'`) se convierten a moneda nacional multiplicando por el tipo de cambio (`tc`) del movimiento.
 
