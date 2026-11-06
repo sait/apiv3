@@ -20,8 +20,10 @@ Campos kardex
 | salidas    | string | cantidad de salidas en movimiento                  |
 | costo      | string | costo por unidad de articulo                       |
 | costo_mov  | string | costo x cantidad de articulo                       |
-| existencia | string | sumatoria de cantidad en registros                 |
-| valor_inv  | string | sumatoria de costos en registros                   |
+| existencia | string | existencia inicial + sumatoria de cantidad en registros |
+| valor_inv  | string | valor inicial + sumatoria de costos en registros   |
+
+Si se envia `fecha1`, `existencias` y `valor_inv` parten del saldo inicial: la suma de los movimientos del articulo (y del almacen si se envia `numalm`) con fecha anterior a `fecha1`. El filtro `mostrar` no afecta al saldo inicial.
 
 tabla de costos
 
@@ -72,17 +74,34 @@ Response
 
 Totalizar resultado:
 
-POST /api/v3/movinv/:numart/kardex?totalizar=true
+POST /api/v3/movinv/:numart/kardex?totalizar=true&filters...
+
+Acepta los mismos filtros que el kardex, excepto `limit` y `offset`. Regresa la suma de los registros filtrados:
+
+| Campo       | Significado                                                        |
+|-------------|--------------------------------------------------------------------|
+| items       | cantidad de registros                                              |
+| entradas    | suma de cantidades de entrada                                      |
+| salidas     | suma de cantidades de salida                                       |
+| disp            | suma del campo disp                                                    |
+| existencias_ini | existencia antes de `fecha1` (0 si no se envia `fecha1`)               |
+| valor_inv_ini   | valor de inventario antes de `fecha1`, segun el filtro `costo`         |
+| existencias     | existencias_ini + entradas - salidas de los registros filtrados        |
+| valor_inv       | valor_inv_ini + suma de costo x cantidad, segun el filtro `costo`      |
+
+Si se envia `onlyitems=true` solo regresa la cantidad de registros: `{"items": "5"}`.
 
 response:
 ```json
 {
     "disp": "4.000",
     "entradas": "5.000",
-    "existencias": "-1.000",
+    "existencias": "12.000",
+    "existencias_ini": "9.000",
     "items": "5",
     "salidas": "2.000",
-    "valor_inv": "0"
+    "valor_inv": "117.6",
+    "valor_inv_ini": "88.2"
 }
 ```
 
