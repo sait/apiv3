@@ -7,6 +7,7 @@ Rutas de pedidos
 | [Crear](#crear)             | POST  /api/v3/pedidos         |
 | [Listado](#listado-pedidos) | GET   /api/v3/pedidos         |
 | [Leer](#leer-pedido)        | GET   /api/v3/pedidos/:numdoc |
+| [Totales](#totales-de-pedidos)        | GET   /api/v3/pedidos?totalizar=true&filters... |
 
 **Campos pedido**
 
@@ -307,6 +308,62 @@ response:
       "impuesto2": 0,
       "total": 160,
     },
+  ]
+}
+```
+
+---
+### Totales de pedidos
+
+Totales agrupados por divisa, `total` es la suma de todas las divisas convertidas a pesos mexicanos (moneda "ZZZ")
+
+GET /api/v3/pedidos?totalizar=true&filters...
+
+Si se envia `onlyitems=true` solo regresa la cantidad de pedidos: `{"items": "1203"}`.
+
+| Filtros   | significado                              | Tipo de filtro         | Uso                                                          |
+|-----------|------------------------------------------|------------------------|--------------------------------------------------------------|
+| numalm    | clave de almacen                         | busqueda por exactitud | traer pedidos cuando numalm=" 1"                            |
+| numuser   | clave de usuario                         | busqueda por exactitud | traer pedidos cuando numuser="  MSL"                        |
+| numcli    | clave de cliente                         | busqueda por exactitud | traer pedidos cuando numcli="  B10" o numcliev="       B10" |
+| numclisuc | clave de sucursal del cliente            | busqueda por exactitud | traer pedidos cuando numclisuc="     B10-1"                 |
+| numvend   | clave de vendedor                        | busqueda por exactitud | traer pedidos cuando numvend="  MSL"                        |
+| fecha1    | traer los documentos mayores a fecha1    | busqueda mayor a       | traer pedidos con fecha mayor o igual a "2025-03-21"        |
+| fecha2    | traer los documentos menores a fecha2    | busqueda menor a       | traer pedidos con fecha menor o igual a "2025-03-29"        |
+| precio1   | total del documento mayor o igual a      | busqueda mayor a       | traer pedidos con total mayor o igual a 1000                |
+| precio2   | total del documento menor o igual a      | busqueda menor a       | traer pedidos con total menor o igual a 5000                |
+
+Response
+```json
+{
+  "total": {
+    "descuento": 89865.6125,
+    "importe": 149012052.78,
+    "impuesto1": 11514039.56,
+    "impuesto2": 2372.31,
+    "items": 29468,
+    "moneda": "ZZZ",
+    "total": 160438599.0375
+  },
+  "totalesmoneda": [
+    {
+      "descuento": 314.15,
+      "importe": 3915285.33,
+      "impuesto1": 300302.58,
+      "impuesto2": 7.33,
+      "items": 1203,
+      "moneda": "USD",
+      "total": 4215281.09
+    },
+    {
+      "descuento": 84603.6,
+      "importe": 141126582.44,
+      "impuesto1": 10885026.02,
+      "impuesto2": 2372.31,
+      "items": 28265,
+      "moneda": "MXN",
+      "total": 151929377.17
+    }
   ]
 }
 ```

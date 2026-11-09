@@ -17,11 +17,16 @@
 
 ### Conceptos generales
 
-Varias rutas de este módulo consideran como "venta" únicamente los movimientos de la tabla `minv` que cumplen **ambas** condiciones:
-- `tipodoc = ' F'` (Factura) o `tipodoc = ' N'` (Nota de venta)
-- `cant` negativo (salida de almacén), verificado con `abs(cant) != cant`
+Cada ruta basada en movimientos (`minv`) usa su propio criterio de "venta":
 
-En ninguna de las rutas `limit`/`offset` tienen un valor por defecto: si no se envían, la consulta regresa todos los registros sin límite.
+| Ruta                | Movimientos que considera                                                                                |
+|---------------------|----------------------------------------------------------------------------------------------------------|
+| `top_articulos`     | `tipodoc = ' F'` (Factura) o `tipodoc = ' N'` (Nota de venta), sumando `abs(cant)`                       |
+| `indice_rotacion`   | `tipodoc = ' F'` o `' N'` **y** `cant` negativo (salida de almacén)                                      |
+| `margenes`          | Cualquier movimiento con `cant` negativo (salida de almacén), sin importar el `tipodoc`                  |
+| `unidades_vendidas` | `tipodoc` `' F'`, `' N'`, `'DV'` y `'DN'` (ventas y sus devoluciones), venta neta: ventas menos devoluciones |
+
+`limit`/`offset` no tienen un valor por defecto: si no se envían, la consulta regresa todos los registros sin límite. La excepción es [Unidades vendidas por artículo](#unidades-vendidas-por-articulo), que regresa 15 registros si no se envía `limit`.
 
 Las rutas basadas en existencias (`totales`, `stock_actual`, `valor_familia`) usan la tabla `multialm`, que no tiene fecha: siempre muestran la foto actual del inventario y no aceptan filtros de fecha.
 
@@ -43,6 +48,23 @@ Las rutas marcadas con 📅 filtran por fecha usando la tabla `fechas` (igual qu
 | ffin      | Fecha límite a considerar  (20251231), debe enviarse junto con fini          |
 
 Ejemplos: `?ano=2025&mes=3`, `?ano=2025&trimestre=2`, `?fini=20250101&ffin=20250630`
+
+Todas las combinaciones válidas de filtros forman un rango continuo de días. Por eso, excepto en [Márgenes de ganancia](#margenes-de-ganancia) (que hace el join con `fechas`), los filtros se resuelven primero contra `fechas` para obtener la fecha inicial, la final y los días, y las consultas filtran `minv.fecha BETWEEN fecha inicial AND fecha final`, lo que permite usar los índices de fecha de `minv`. Si los filtros no encuentran fechas, la ruta regresa vacío (o `NULL` en índice de rotación).
+
+---
+
+### Índices utilizados
+
+| Ruta                | Optimización                                                                                                                              |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `totales`           | Sin cambios, recorre `multialm`                                                                                                           |
+| `stock_actual`      | Join diferido: agrupa y pagina `multialm` y después une `arts` solo con los artículos de la página                                        |
+| `valor_familia`     | Agrupa `multialm` por artículo antes de unir `arts` y `familias`                                                                          |
+| `top_articulos`     | Con `limit`: `force index (tip_fec)` solo con `' F'`/`' N'` y join diferido a `arts`. Si la página no se llena con ventas > 0, usa la consulta completa por `fecha` (ver [Top artículos vendidos](#top-articulos-vendidos)) |
+| `valor_sucursal`    | Obtiene los almacenes de `minv` leyendo solo el índice `alm_fec` y recorre cada almacén por rango de fecha con `force index (alm_fec)`; une `almacen` ya agrupado |
+| `indice_rotacion`   | Costo de ventas con `force index (tip_fec)`                                                                                                |
+| `margenes`          | Sin índice forzado, join con `fechas`                                                                                                      |
+| `unidades_vendidas` | Join diferido: agrupa y pagina `minv` y después une `arts`                                                                                 |
 
 ---
 
@@ -143,6 +165,8 @@ POST /api/v3/bi_inventario/:pk/top_articulos?ano=..&mes=..&limit=..&offset=..
 
 Regresa los artículos con mayor cantidad vendida (ver [criterio de venta](#conceptos-generales)), junto con su nombre/descripción (tabla `arts`), ordenado de mayor a menor cantidad vendida.
 
+También regresa con `cant_vend` en 0 los artículos que tuvieron movimientos de otro tipo en el periodo. Cuando se envía `limit` primero se consultan solo facturas y notas; si la página no se llena o su último registro tiene `cant_vend` en 0, se ejecuta la consulta completa para incluir esos ceros.
+
 filtros
 | Filtro | Descripcion                                                                    |
 |--------|--------------------------------------------------------------------------------|
@@ -174,7 +198,7 @@ Response
 
 POST /api/v3/bi_inventario/:pk/valor_sucursal?ano=..&mes=..&limit=..&offset=..
 
-Regresa el valor de inventario (cantidad x costo) agrupado por almacén/sucursal, a partir de los movimientos de la tabla `minv` dentro del periodo, junto con el nombre del almacén (tabla `almacen`).
+Regresa el valor de inventario (cantidad x costo) agrupado por almacén/sucursal, a partir de los movimientos de la tabla `minv` dentro del periodo, junto con el nombre del almacén (tabla `almacen`), ordenado por `numalm`.
 
 filtros
 | Filtro | Descripcion                                                                    |
@@ -212,6 +236,8 @@ Calcula el índice de rotación de inventario y los días que tardaría en vende
 `indice_rotacion` = costo de ventas del periodo (ver [criterio de venta](#conceptos-generales)) / valor actual del inventario.
 `dias_rotacion` = días del periodo entre `indice_rotacion`.
 
+Si no hay ventas en el periodo, `costo_ventas` es 0 cuando hubo otros movimientos en `minv` y `NULL` cuando no hubo ningún movimiento.
+
 > El rango (fecha inicial, fecha final y cantidad de días) se resuelve con la tabla `fechas` a partir de los filtros enviados. Reemplaza al parámetro `periodo=mes|anio`, que ya no se acepta.
 
 > El inventario se toma como el valor **actual** de existencias (`multialm`), no un promedio histórico entre inicio y fin del periodo, ya que no se lleva snapshot histórico de existencias.
@@ -238,7 +264,7 @@ Response
 
 POST /api/v3/bi_inventario/:pk/margenes?ano=..&mes=..&limit=..&offset=..
 
-Regresa ventas totales, costo total y ganancia por artículo (ver [criterio de venta](#conceptos-generales)), ordenado de mayor a menor ganancia.
+Regresa ventas totales, costo total y ganancia por artículo (ver [criterio de venta](#conceptos-generales)), ordenado de mayor a menor ganancia. Agrupa `minv` por `numart` dentro del periodo: los artículos que solo tuvieron entradas regresan en 0.
 
 filtros
 | Filtro | Descripcion                                                                    |
@@ -272,27 +298,31 @@ Response
 
 POST /api/v3/bi_inventario/:pk/unidades_vendidas?ano=..&mes=..&limit=..&offset=..
 
-Regresa las unidades vendidas agrupadas por artículo (ver [criterio de venta](#conceptos-generales)), ordenado de mayor a menor cantidad vendida.
+Regresa las unidades y el monto vendido agrupados por artículo (ver [criterio de venta](#conceptos-generales)), junto con su descripción (tabla `arts`), ordenado por `cant_vendida` de mayor a menor.
 
 filtros
 | Filtro | Descripcion                                                                    |
 |--------|--------------------------------------------------------------------------------|
 | 📅     | (obligatorio) [Filtros de fecha](#filtros-de-fecha) sobre `minv.fecha`         |
-| limit  | (opcional) Cantidad de registros a tomar                                       |
+| limit  | (opcional) Cantidad de registros a tomar, default 15                           |
 | offset | (opcional) Tomar registros a partir del registro X                             |
 
 Campos
-| Campo            | Tipo   | Significado                                                            |
-|------------------|--------|------------------------------------------------------------------------|
-| numart           | string | Número de identificación del artículo                                  |
-| cantidad_vendida | float  | Suma de las unidades vendidas (`cant`, en valor absoluto) del artículo |
+| Campo         | Tipo   | Significado                                                                   |
+|---------------|--------|-------------------------------------------------------------------------------|
+| numart        | string | Número de identificación del artículo                                         |
+| desc          | string | Descripción del artículo (`arts.desc`)                                        |
+| cant_vendida  | float  | Unidades vendidas netas: facturas y notas (`' F'`,`' N'`) menos devoluciones (`DV`,`DN`) |
+| monto_vendido | float  | Monto vendido neto (`precio x cant`) de los mismos movimientos                           |
+
+> En `minv` las ventas tienen `cant` negativa y las devoluciones positiva, por eso se regresa `-sum(cant)` y `-sum(precio*cant)`: una venta suma en positivo y una devolución resta. Un artículo con más devoluciones que ventas en el periodo regresa valores negativos.
 
 Response
 ```json
 {
   "result": [
-    { "numart": "  A102", "cantidad_vendida": "845.0000" },
-    { "numart": "  B045", "cantidad_vendida": "712.0000" },
+    { "numart": "  A102", "desc": "TORNILLO 1/4 X 2", "cant_vendida": "845.0000", "monto_vendido": "4225.0000" },
+    { "numart": "  B045", "desc": "TUERCA HEXAGONAL 1/2", "cant_vendida": "712.0000", "monto_vendido": "3560.0000" },
     {}
   ]
 }

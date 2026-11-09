@@ -21,19 +21,19 @@
 
 ### Parametros
 
-| parametro | descripcion                                                                     |
-|-----------|---------------------------------------------------------------------------------|
-| metrica   | datos que desea mostrar en la grafica                                           |
-| dia       | Obtener ventas del día especificado (será necesario especificar mes y año)      |
-| semana    | Obtener ventas de la semana especificada (será necesario especificar mes y año) |
-| mes       | Obtener ventas del mes especificado (será necesario especificar año)            |
-| trimestre | Obtener ventas del trimestre especificado (será necesario especificar año)      |
-| semestre  | Obtener ventas del semestre especificado (será necesario especificar año)       |
-| ano       | Obtener ventas del año especificado (será necesario especificar año)            |
-| fini      | Fecha inicial a considerar (20250101)                                           |
-| ffin      | Fecha limite a considerar  (20251231)                                           |
-| groupby   | Agrupar por: dia, semana, mes, trimestre, semestre, ano                         |
-| limit     | limitar cantidad de registros                                                   |
+| parametro | descripcion                                                                                 |
+|-----------|---------------------------------------------------------------------------------------------|
+| metrica   | datos que desea mostrar en la grafica, ver [Tabla de metricas](#tabla-de-metricas). Default 1 |
+| dia       | Obtener ventas del día especificado (será necesario especificar mes y año)                  |
+| semana    | Obtener ventas de la semana especificada (será necesario especificar año)                   |
+| mes       | Obtener ventas del mes especificado (será necesario especificar año)                        |
+| trimestre | Obtener ventas del trimestre especificado (será necesario especificar año)                  |
+| semestre  | Obtener ventas del semestre especificado (será necesario especificar año)                   |
+| ano       | Obtener ventas del año especificado                                                         |
+| fini      | Fecha inicial a considerar (20250101)                                                       |
+| ffin      | Fecha limite a considerar  (20251231)                                                       |
+| groupby   | Solo en `empresa`. Agrupar por: dia, semana, mes, trimestre, semestre, ano. Default mes     |
+| limit     | Solo en las rutas top (sucursales, clientes, articulos, lineas, categorias, familias, vendedores). Limitar cantidad de registros, default 10 |
 
 ### Tabla de metricas
 

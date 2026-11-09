@@ -8,7 +8,9 @@
 | [Cartera](#cartera)                           | 📅 POST   /api/v3/bi_cobranza/:pk/cartera?ano=..&mes=..           |
 | [Índice de rotación](#indice-de-rotacion)     | 📅 POST   /api/v3/bi_cobranza/:pk/indice_rotacion?ano=..&mes=..   |
 
-> Header requerido en todas las rutas: `Sait-x-api-key: <token>`
+> Header requerido en todas las rutas: `X-sait-api-key: <token>`
+
+> `:pk` (obligatorio) actualmente no se usa para filtrar la consulta, pero es requerido por la ruta. Ejemplo: `1`.
 
 ---
 
@@ -192,6 +194,8 @@ Campos
 |-----------------|-------|-----------------------------------------------------------------------------------------------------------------|
 | indice_rotacion | float | Facturas a crédito en el periodo, dividido entre el saldo promedio de cartera (saldo_inicial + saldo_final) / 2 |
 | velocidad_cobro | float | Días promedio que tarda en recuperarse la cartera: `días del periodo / indice_rotacion`                         |
+
+> La consulta fuerza el índice `rotacion` de la tabla `cxc` (`FORCE INDEX (rotacion)`), por lo que el índice debe existir en la base de datos o la ruta regresa error.
 
 > El saldo inicial y saldo final se calculan igual que en las demás rutas: facturas (`ca=0`) suman, abonos (`ca=1`) restan, y los importes en moneda extranjera (`divisa != 'P'`) se convierten a moneda nacional multiplicando por el tipo de cambio (`tc`) del movimiento.
 
