@@ -4,6 +4,7 @@
 |-------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | [Consultar](#consultar)                                     | GET   /api/v3/proveedores/:pk                                                                         |
 | [Listar](#listar)                                           | GET   /api/v3/proveedores?filtros...                                                                  |
+| [Totales](#totales-de-proveedores)                          | GET   /api/v3/proveedores?totalizar=true&filtros...                                                   |
 | [Resumen](#resumen)                                         | POST  /api/v3/proveedores/:pk/resumen                                                                 |
 | [Estado de cuenta](#estado-de-cuenta)                       | POST  /api/v3/proveedores/:pk/estado_de_cuenta?filters...                                             |
 | [Estado de cuenta totalizado](#estado-de-cuenta-totalizado) | POST  /api/v3/proveedores/:pk/estado_de_cuenta?totalizar=true&fecha1=..&fecha2=..&solo_con_saldo=true |
@@ -147,6 +148,21 @@ Response
   },
   {}
 ]
+```
+
+---
+
+### Totales de proveedores
+
+GET /api/v3/proveedores?totalizar=true&filtros...
+
+Regresa la cantidad de proveedores que cumplen los mismos filtros de [Listar](#listar) (`q`). No se aplican `limit` ni `offset`.
+
+Response
+```json
+{
+  "items": "152"
+}
 ```
 
 ---

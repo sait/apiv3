@@ -10,6 +10,8 @@
 | [Índice de rotación](#indice-de-rotacion)                             | 📅 POST   /api/v3/bi_inventario/:pk/indice_rotacion?ano=..&mes=..                       |
 | [Márgenes de ganancia](#margenes-de-ganancia)                         | 📅 POST   /api/v3/bi_inventario/:pk/margenes?ano=..&mes=..&limit=..&offset=..           |
 | [Unidades vendidas por artículo](#unidades-vendidas-por-articulo)     | 📅 POST   /api/v3/bi_inventario/:pk/unidades_vendidas?ano=..&mes=..&limit=..&offset=..  |
+| [Total de unidades vendidas](#total-de-unidades-vendidas)             | POST   /api/v3/bi_inventario/:pk/unidades_vendidas_total?fini=..&ffin=..                  |
+| [Alertas de inventario](#alertas-de-inventario)                       | POST   /api/v3/bi_inventario/:pk/alertas?fini=..&ffin=..&tipo=..&limit=..&offset=..       |
 
 > `:pk` (obligatorio) actualmente no se usa para filtrar la consulta, pero es requerido por la ruta. Ejemplo: `1`.
 
@@ -25,6 +27,7 @@ Cada ruta basada en movimientos (`minv`) usa su propio criterio de "venta":
 | `indice_rotacion`   | `tipodoc = ' F'` o `' N'` **y** `cant` negativo (salida de almacén)                                      |
 | `margenes`          | Cualquier movimiento con `cant` negativo (salida de almacén), sin importar el `tipodoc`                  |
 | `unidades_vendidas` | `tipodoc` `' F'`, `' N'`, `'DV'` y `'DN'` (ventas y sus devoluciones), venta neta: ventas menos devoluciones |
+| `unidades_vendidas_total`, `alertas` | Igual que `top_articulos`: `tipodoc = ' F'` o `' N'`, sumando `abs(cant)`                 |
 
 `limit`/`offset` no tienen un valor por defecto: si no se envían, la consulta regresa todos los registros sin límite. La excepción es [Unidades vendidas por artículo](#unidades-vendidas-por-articulo), que regresa 15 registros si no se envía `limit`.
 
@@ -325,5 +328,141 @@ Response
     { "numart": "  B045", "desc": "TUERCA HEXAGONAL 1/2", "cant_vendida": "712.0000", "monto_vendido": "3560.0000" },
     {}
   ]
+}
+```
+
+---
+
+### Rango fini-ffin
+
+[Total de unidades vendidas](#total-de-unidades-vendidas) y [Alertas de inventario](#alertas-de-inventario) no usan los [filtros de fecha](#filtros-de-fecha) de la tabla `fechas`. Solo reciben un rango obligatorio:
+
+| parametro | descripcion                                                                   |
+|-----------|-------------------------------------------------------------------------------|
+| fini      | (obligatorio) Fecha inicial, inclusiva, en formato `YYYYMMDD` (ej. `20260401`) |
+| ffin      | (obligatorio) Fecha final, inclusiva, en formato `YYYYMMDD` (ej. `20260430`)   |
+
+Ambas deben ser fechas reales (`20260231` no es válida) y `fini <= ffin`.
+
+Errores:
+| HTTP | Cuándo                                                                                          |
+|------|-------------------------------------------------------------------------------------------------|
+| 400  | `fini`/`ffin` faltantes o inválidas, `fini > ffin`, `tipo` desconocido, `limit`/`offset` inválidos |
+| 500  | Falla la consulta en la base de datos                                                           |
+
+```json
+{ "error": "bi_inventario.alertas: el parametro fini debe ser una fecha valida en formato YYYYMMDD" }
+```
+
+---
+
+### Total de unidades vendidas
+
+POST /api/v3/bi_inventario/:pk/unidades_vendidas_total?fini=20260401&ffin=20260430
+
+Regresa el total de unidades vendidas en el [rango](#rango-fini-ffin), con el mismo criterio que [Top artículos vendidos](#top-articulos-vendidos): suma `abs(cant)` de los movimientos de factura (`' F'`) y nota de venta (`' N'`) de todos los artículos. Conserva las cantidades fraccionarias y regresa `0` si no hubo ventas. Coincide con la suma de `cant_vend` de `top_articulos` sin paginar para el mismo rango.
+
+Campos
+| Campo                   | Tipo  | Significado                              |
+|-------------------------|-------|------------------------------------------|
+| total_unidades_vendidas | float | Unidades vendidas en el rango (inclusivo) |
+
+Response
+```json
+{
+  "result": {
+    "total_unidades_vendidas": 1240
+  }
+}
+```
+
+---
+
+### Alertas de inventario
+
+POST /api/v3/bi_inventario/:pk/alertas?fini=20260401&ffin=20260430&tipo=..&limit=..&offset=..
+
+Cruza la existencia **actual** de cada artículo (suma de todos los almacenes en `multialm`, igual que [Stock actual](#stock-actual)) con sus unidades vendidas en el [rango](#rango-fini-ffin) (mismo criterio que [Total de unidades vendidas](#total-de-unidades-vendidas)). Existencias y ventas se agrupan por artículo antes de cruzarse, para no multiplicar filas. Solo considera artículos con registro en `multialm`. Si un artículo no tuvo ventas en el rango, sus ventas cuentan como 0.
+
+`dias_periodo` son los días calendario del rango, incluyendo ambos extremos.
+
+Cada artículo queda como máximo en una alerta, evaluadas en este orden:
+
+| tipo           | Condición                                                                                             |
+|----------------|-------------------------------------------------------------------------------------------------------|
+| stock_negativo | `existencia_total < 0`, sin importar las ventas                                                        |
+| sin_ventas     | `existencia_total > 0` y `unidades_vendidas = 0`                                                       |
+| cobertura_baja | `existencia_total >= 0`, `unidades_vendidas > 0` y cobertura **estrictamente menor a 14 días**         |
+
+Cobertura = `existencia_total × dias_periodo ÷ unidades_vendidas`. La comparación contra 14 se hace con el valor sin redondear (una cobertura de exactamente 14 días no genera alerta). Con existencia 0 y ventas positivas, la cobertura es 0.
+
+filtros
+| Filtro    | Descripcion                                                                                           |
+|-----------|-------------------------------------------------------------------------------------------------------|
+| fini/ffin | (obligatorio) [Rango de fechas](#rango-fini-ffin)                                                     |
+| tipo      | (opcional) `stock_negativo`, `sin_ventas` o `cobertura_baja`. Sin `tipo` regresa solo el resumen        |
+| limit     | (opcional) Entero mayor a 0, cantidad de artículos del detalle. Default 10                             |
+| offset    | (opcional) Entero mayor o igual a 0, tomar artículos a partir del registro X. Default 0                |
+
+#### Resumen (sin tipo)
+
+POST /api/v3/bi_inventario/1/alertas?fini=20260401&ffin=20260430
+
+Cada conteo es de artículos distintos. Las alertas sin artículos regresan 0.
+
+| Campo        | Tipo | Significado                                   |
+|--------------|------|-----------------------------------------------|
+| dias_periodo | int  | Días calendario del rango (incluye ambos extremos) |
+| conteos      | obj  | Cantidad de artículos en cada tipo de alerta  |
+
+Response
+```json
+{
+  "result": {
+    "dias_periodo": 30,
+    "conteos": {
+      "cobertura_baja": 18,
+      "sin_ventas": 42,
+      "stock_negativo": 3
+    }
+  }
+}
+```
+
+#### Detalle (con tipo)
+
+POST /api/v3/bi_inventario/1/alertas?fini=20260401&ffin=20260430&tipo=cobertura_baja&limit=10&offset=0
+
+Detalle paginado de la alerta, ordenado por `numart`. `total` es la cantidad de artículos de la alerta antes de aplicar `limit` y `offset`. Una página fuera de rango regresa `articulos: []`.
+
+| Campo                         | Tipo   | Significado                                                                                      |
+|-------------------------------|--------|--------------------------------------------------------------------------------------------------|
+| tipo                          | string | Tipo de alerta consultado                                                                        |
+| total                         | int    | Artículos de la alerta sin paginar                                                               |
+| limit / offset                | int    | Paginación aplicada                                                                              |
+| articulos[].numart            | string | Número de identificación del artículo                                                            |
+| articulos[].nombre            | string | Descripción del artículo (`arts.desc`); `"Articulo sin nombre"` si viene vacío o no existe en `arts` |
+| articulos[].existencia_total  | float  | Existencia actual sumada en todos los almacenes                                                  |
+| articulos[].unidades_vendidas | float  | Unidades vendidas en el rango                                                                    |
+| articulos[].dias_cobertura    | float  | Cobertura redondeada a 2 decimales; `null` en `sin_ventas` y `stock_negativo`                    |
+
+Response
+```json
+{
+  "result": {
+    "tipo": "cobertura_baja",
+    "total": 18,
+    "limit": 10,
+    "offset": 0,
+    "articulos": [
+      {
+        "numart": "A102",
+        "nombre": "TORNILLO 1/4 X 2",
+        "existencia_total": 20,
+        "unidades_vendidas": 60,
+        "dias_cobertura": 10
+      }
+    ]
+  }
 }
 ```
