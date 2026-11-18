@@ -24,9 +24,20 @@
 | % Vencido         | Porcentaje de cartera vencida respecto a la cartera total        |
 | Clientes deudores | Clientes con deudas después de 30 días                           |
 
-En las rutas de cartera (totales, antigüedad de saldos, clientes deudores y cartera) el filtro de fechas se aplica sobre la fecha del documento (`cxc.fecha`): se consideran los saldos pendientes de los documentos emitidos dentro del periodo. La antigüedad (vigente/vencido) se sigue calculando contra el día de hoy.
+### Tablas BI
 
-Todos los importes se normalizan a moneda nacional: si `divisa='D'` se multiplica por el tipo de cambio (`tc`), de lo contrario se toma el saldo tal cual.
+Las rutas leen tablas pre-agregadas en lugar de `cxc` directamente. Las tablas y su llenado estan en `database/dbtest/dashboard_cobranza_propuesta.sql`:
+
+| Tabla                | Rutas                                                  |
+|----------------------|--------------------------------------------------------|
+| `bi_cobranza_saldos` | totales, antigüedad de saldos, clientes deudores, cartera |
+| `bi_cobranza_mov`    | índice de rotación                                     |
+
+> `bi_cobranza_saldos` calcula la antigüedad contra el día en que se cargó, por lo que debe recargarse diario. Si no se recarga, las rutas regresan la antigüedad del último día cargado.
+
+En las rutas de cartera (totales, antigüedad de saldos, clientes deudores y cartera) el filtro de fechas se aplica sobre la fecha del documento (`cxc.fecha`): se consideran los saldos pendientes de los documentos emitidos dentro del periodo. La antigüedad (vigente/vencido) se calcula contra el día de la carga de `bi_cobranza_saldos`; si el documento no tiene vencimiento (`venc`) se toma su fecha.
+
+Todos los importes se normalizan a moneda nacional al cargar las tablas: si `divisa` no es `'P'` se multiplica por el tipo de cambio (`tc`), de lo contrario se toma el importe tal cual.
 
 ---
 
@@ -113,7 +124,7 @@ Response
 
 POST /api/v3/bi_cobranza/:pk/clientes_deudores
 
-Regresa el detalle de cartera por cliente, desglosado en los mismos rangos de antigüedad que `antiguedad_saldos`.
+Regresa el detalle de cartera por cliente, desglosado en los mismos rangos de antigüedad que `antiguedad_saldos`. Ordenado por el documento más reciente de cada cliente.
 
 Campos
 | Campo        | Tipo   | Significado                                                     |
@@ -195,7 +206,7 @@ Campos
 | indice_rotacion | float | Facturas a crédito en el periodo, dividido entre el saldo promedio de cartera (saldo_inicial + saldo_final) / 2 |
 | velocidad_cobro | float | Días promedio que tarda en recuperarse la cartera: `días del periodo / indice_rotacion`                         |
 
-> La consulta fuerza el índice `rotacion` de la tabla `cxc` (`FORCE INDEX (rotacion)`), por lo que el índice debe existir en la base de datos o la ruta regresa error.
+> Se calcula con `bi_cobranza_mov` (cargos y abonos por día). Si no hay movimientos antes de la fecha inicial, el saldo inicial se toma como 0.
 
 > El saldo inicial y saldo final se calculan igual que en las demás rutas: facturas (`ca=0`) suman, abonos (`ca=1`) restan, y los importes en moneda extranjera (`divisa != 'P'`) se convierten a moneda nacional multiplicando por el tipo de cambio (`tc`) del movimiento.
 

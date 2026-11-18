@@ -8,6 +8,7 @@ Rutas de lineas
 | [Leer](#leer-linea)             | GET   /api/v3/lineas/:numlin   |
 | [Actualizar](#actualizar-linea) | PUT   /api/v3/lineas/:numlin   |
 | [Listado](#listar-lineas)       | GET  /api/v3/lineas?filters... |
+| [Totales](#totales-de-lineas)   | GET   /api/v3/lineas?totalizar=true&filters... |
 
 Campos de lineas
 
@@ -113,4 +114,24 @@ GET /api/v3/lineas?filters
   },
   {}...
 ]
+```
+
+---
+
+### Totales de lineas
+
+GET /api/v3/lineas?totalizar=true&variables
+
+Regresa la cantidad de lineas que cumplen el mismo filtro `q` de [Listar Lineas](#listar-lineas) (busca en `nomlin`). No se aplican `limit`, `offset` ni `order`.
+
+| Ejemplo                    | Ruta                                       |
+|----------------------------|--------------------------------------------|
+| Total de lineas            | /api/v3/lineas?totalizar=true              |
+| Total que contienen "tor"  | /api/v3/lineas?totalizar=true&q=tor        |
+
+response:
+```json
+{
+  "items": "25"
+}
 ```

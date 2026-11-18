@@ -122,6 +122,7 @@ Regresa los encabezados de las remisiones (sin partidas). Si no se envia `limit`
 | divisa    | divisa de la remision                                         | busqueda por exactitud | P=MXN, D=USD                                                               |
 | fecha1    | traer las remisiones con fecha mayor o igual a fecha1         | busqueda mayor a       | traer remisiones con fecha de registro mayor a "2025-03-21"                |
 | fecha2    | traer las remisiones con fecha menor o igual a fecha2         | busqueda menor a       | traer remisiones con fecha de registro menor a "2025-03-29"                |
+| order     | campo por el cual ordenar, "-" = descendente                  | ordenar remisiones     | id, created, updated, numdoc, fecha, total. Ej: order=-fecha               |
 | totalizar | regresar totales en lugar del listado                         | totales                | ver [Totales de remisiones](#totales-de-remisiones)                        |
 
 Response

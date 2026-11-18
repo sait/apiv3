@@ -8,6 +8,7 @@ Rutas de categorias
 | [Leer](#leer-categoria)             | GET   /api/v3/categorias/:numcat    |
 | [Actualizar](#actualizar-categoria) | PUT   /api/v3/categorias/:numcat    |
 | [Listado](#listar-categorias)       | GET   /api/v3/categorias?filters... |
+| [Totales](#totales-de-categorias)   | GET   /api/v3/categorias?totalizar=true&filters... |
 
 Campos de categorias
 
@@ -113,4 +114,24 @@ GET /api/v3/categorias?filters
   },
   {}...
 ]
+```
+
+---
+
+### Totales de categorias
+
+GET /api/v3/categorias?totalizar=true&variables
+
+Regresa la cantidad de categorias que cumplen el mismo filtro `q` de [Listar Categorias](#listar-categorias) (busca en `nomcat`). No se aplican `limit`, `offset` ni `order`.
+
+| Ejemplo                    | Ruta                                       |
+|----------------------------|--------------------------------------------|
+| Total de categorias        | /api/v3/categorias?totalizar=true              |
+| Total que contienen "tor"  | /api/v3/categorias?totalizar=true&q=tor        |
+
+response:
+```json
+{
+  "items": "25"
+}
 ```

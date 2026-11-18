@@ -90,6 +90,7 @@ GET api/v3/cxc/mov?filters...
 | fecha1       | traer movimientos con fecha mayor a fecha1                                                                                       |
 | fecha2       | traer movimientos con fecha menor a fecha2                                                                                       |
 | totalizar    | totalizar=true - mostrar totales de items y suma de importes segun cada divisa de movimientos                                    |
+| onlyitems    | onlyitems=true junto con totalizar=true - regresar solo la cantidad de movimientos: `{"items":"25"}`                            |
 | format       | format=xlsx - generar reporte en XLSX, format=pdf - Generar reporte en PDF, format= - dejar vacio para obtener respuesta en json |
 | soloconsaldo | solo mostrar movimientos que tienen saldo > 0                                                                                    |
 | conc         | traer solo los movimientos de estado de cuenta cuando conc=?                                                                     |

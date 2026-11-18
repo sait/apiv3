@@ -8,6 +8,7 @@ Rutas de Artículos
 | [Leer por clave](#leer-por-clave)     | GET  /api/v3/articulos/:numart    |
 | [Actualizar](#actualizar-articulo)    | PUT  /api/v3/articulos/:numart    |
 | [Listar articulos](#buscar-artículos) | GET  /api/v3/articulos?filters... |
+| [Totales](#totales-de-articulos) | GET  /api/v3/articulos?totalizar=true&filters... |
 | [Subir imagenes](#subir-imagenes-s3obj) | POST /api/v3/articulos/:numart/imagenes |
 | [Consultar imagenes](#consultar-imagenes) | GET /api/v3/articulos/:numart/imagenes |
 | [Reordenar imagenes](#reordenar-imagenes) | PUT /api/v3/articulos/:numart/imagenes/order |
@@ -872,4 +873,27 @@ GET /api/v3/articulos?variables
     },
     {}...
 ]
+```
+
+---
+
+### Totales de articulos
+
+GET /api/v3/articulos?totalizar=true&variables
+
+Regresa la cantidad de articulos que cumplen los mismos filtros de [Buscar Artículos](#buscar-artículos): `q`, `divisa`, `statusweb`, `categoria`, `familia`, `linea`, `numprov`, `numdep` y `marca`. No se aplican `limit`, `offset` ni `order`.
+
+Si `q` no tiene espacios y coincide con un numart o código de barras, el listado regresa solo ese artículo, por lo que el total es 1.
+
+| Ejemplo                          | Ruta                                           |
+|----------------------------------|------------------------------------------------|
+| Total de articulos               | /api/v3/articulos?totalizar=true               |
+| Total de rótulas                 | /api/v3/articulos?totalizar=true&q=rotula      |
+| Total disponibles en tienda web  | /api/v3/articulos?totalizar=true&statusweb=1   |
+
+response:
+```json
+{
+  "items": "3529"
+}
 ```

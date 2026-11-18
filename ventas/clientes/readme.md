@@ -9,6 +9,7 @@ Rutas de Clientes
 | [Actualizar](#actualizar-cliente) | PUT    /api/v3/clientes/:numcli        |
 | [Borrar](#borrar-cliente)         | DELETE /api/v3/clientes/:numcli        |
 | [Buscar](#buscar-clientes)        | GET    /api/v3/clientes?condiciones... |
+| [Totales](#totales-de-clientes)   | GET    /api/v3/clientes?totalizar=true&condiciones... |
 
 
 Campos de los Clientes
@@ -345,7 +346,7 @@ GET /api/v3/clientes?variables
 | rfc      | filtro por similitud de rfc del cliente                 |
 | ciudad   | filtro por similitud de ciudad del cliente              |
 | numvend  | filtro por vendedor que atiende a cliente               |
-| numzon   | filtro por zona de clientes                             |
+| numzona  | filtro por zona de clientes                             |
 | emailtw  | filtro por emailtw de clientes                          |
 
 | Ejemplo de Búsqueda                      | Ruta                                       |
@@ -424,4 +425,23 @@ response:
   },
   {}...
 ]
+```
+
+---
+### Totales de clientes
+
+GET /api/v3/clientes?totalizar=true&variables
+
+Regresa la cantidad de clientes (normales y eventuales) que cumplen los mismos filtros de [Buscar Clientes](#buscar-clientes): `q`, `estado`, `rfc`, `ciudad`, `numvend`, `numzona` y `emailtw`. No se aplican `limit`, `offset` ni `order`.
+
+| Ejemplo                      | Ruta                                           |
+|------------------------------|------------------------------------------------|
+| Total de clientes            | /api/v3/clientes?totalizar=true                |
+| Total de clientes de Colima  | /api/v3/clientes?totalizar=true&estado=colima  |
+
+response:
+```json
+{
+  "items": "1203"
+}
 ```

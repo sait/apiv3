@@ -169,6 +169,7 @@ GET /api/v3/notascred?totalizar=true&filters...
 
 Acepta los mismos filtros que [Listar](#listar), excepto `q`, `limit`, `offset`, `order` y `format`.
 Si se envia `onlyitems=true` solo regresa la cantidad de notas: `{"items": "1203"}`.
+`items` cuenta todas las notas, pero los importes no suman las notas canceladas (status 1 o 3).
 
 Response
 ```json

@@ -8,6 +8,7 @@ Rutas de familias
 | [Leer](#leer-familia)             | GET   /api/v3/familias/:numfam   |
 | [Actualizar](#actualizar-familia) | PUT   /api/v3/familias/:numfam   |
 | [Listado](#listar-familias)       | GET  /api/v3/familias?filters... |
+| [Totales](#totales-de-familias)   | GET   /api/v3/familias?totalizar=true&filters... |
 
 Campos de familias
 
@@ -112,4 +113,24 @@ GET /api/v3/familias?filters
   },
   {}...
 ]
+```
+
+---
+
+### Totales de familias
+
+GET /api/v3/familias?totalizar=true&variables
+
+Regresa la cantidad de familias que cumplen el mismo filtro `q` de [Listar Familias](#listar-familias) (busca en `nomfam`). No se aplican `limit`, `offset` ni `order`.
+
+| Ejemplo                    | Ruta                                       |
+|----------------------------|--------------------------------------------|
+| Total de familias          | /api/v3/familias?totalizar=true              |
+| Total que contienen "tor"  | /api/v3/familias?totalizar=true&q=tor        |
+
+response:
+```json
+{
+  "items": "25"
+}
 ```

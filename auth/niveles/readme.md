@@ -9,6 +9,7 @@ Rutas de Niveles (grupos de usuarios)
 | Actualizar                | PUT    /api/v3/niveles/:nivel       |
 | Borrar                    | DELETE /api/v3/niveles/:nivel       |
 | [Buscar](#buscar-niveles) | GET    /api/v3/niveles?variables... |
+| [Totales](#totales-de-niveles) | GET    /api/v3/niveles?totalizar=true&variables... |
 
 Crear, Actualizar y Borrar estan registradas pero aun no estan implementadas, regresan error `no implementado`.
 
@@ -55,6 +56,7 @@ GET /api/v3/niveles?variables...
 | q        | Palabras a buscar en nivel y desc                   | q=admin                |
 | limit    | Cuantos registros obtener                           | limit=50               |
 | offset   | A partir del registro a iniciar (requiere `limit`)  | offset=10              |
+| totalizar | Regresar solo la cantidad de niveles               | ver [Totales de niveles](#totales-de-niveles) |
 
 response:
 ```json
@@ -70,4 +72,22 @@ response:
     "creargpos" : ""
   }
 ]
+```
+
+### Totales de niveles
+
+GET /api/v3/niveles?totalizar=true&variables
+
+Regresa la cantidad de niveles que cumplen el mismo filtro `q` de [Buscar Niveles](#buscar-niveles) (busca en `nivel` y `desc`). No se aplican `limit` ni `offset`.
+
+| Ejemplo                      | Ruta                                       |
+|------------------------------|--------------------------------------------|
+| Total de niveles             | /api/v3/niveles?totalizar=true             |
+| Total que contienen "admin"  | /api/v3/niveles?totalizar=true&q=admin     |
+
+response:
+```json
+{
+  "items": "5"
+}
 ```
