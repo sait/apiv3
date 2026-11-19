@@ -3,8 +3,8 @@
 | Accion                                                                | Ruta                                                                                      |
 |-----------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
 | [Totales](#totales)                                                   | POST   /api/v3/bi_inventario/:pk/totales                                                  |
-| [Stock actual](#stock-actual)                                         | POST   /api/v3/bi_inventario/:pk/stock_actual?limit=..&offset=..                          |
-| [Valor por familia](#valor-por-familia)                               | POST   /api/v3/bi_inventario/:pk/valor_familia?limit=..&offset=..                         |
+| [Stock actual](#stock-actual)                                         | POST   /api/v3/bi_inventario/:pk/stock_actual?limit=..&offset=..&numalm=..                |
+| [Valor por familia](#valor-por-familia)                               | POST   /api/v3/bi_inventario/:pk/valor_familia?limit=..&offset=..&numalm=..               |
 | [Top artículos vendidos](#top-articulos-vendidos)                     | 📅 POST   /api/v3/bi_inventario/:pk/top_articulos?ano=..&mes=..&limit=..&offset=..      |
 | [Valor de inventario por sucursal](#valor-de-inventario-por-sucursal) | 📅 POST   /api/v3/bi_inventario/:pk/valor_sucursal?ano=..&mes=..&limit=..&offset=..     |
 | [Índice de rotación](#indice-de-rotacion)                             | 📅 POST   /api/v3/bi_inventario/:pk/indice_rotacion?ano=..&mes=..                       |
@@ -13,6 +13,7 @@
 | [Total de unidades vendidas](#total-de-unidades-vendidas)             | POST   /api/v3/bi_inventario/:pk/unidades_vendidas_total?fini=..&ffin=..                  |
 | [Alertas de inventario](#alertas-de-inventario)                       | POST   /api/v3/bi_inventario/:pk/alertas?fini=..&ffin=..&tipo=..&limit=..&offset=..       |
 | [Compras del periodo](#compras-del-periodo)                           | POST   /api/v3/bi_inventario/:pk/compras_periodo?fini=..&ffin=..&groupby=..&numalm=..&numprov=.. |
+| [Existencias fuera de límites](#existencias-fuera-de-limites)          | POST   /api/v3/bi_inventario/:pk/reposicion?limit=..&offset=..&estado=..&numalm=..&numart=..&q=..&incluir_sin_limites=.. |
 
 > `:pk` (obligatorio) actualmente no se usa para filtrar la consulta, pero es requerido por la ruta. Ejemplo: `1`.
 
@@ -112,65 +113,131 @@ Response
 
 ### Stock actual
 
-POST /api/v3/bi_inventario/:pk/stock_actual?limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/stock_actual?limit=..&offset=..&numalm=..
 
-Regresa la existencia total por artículo, sumando la existencia de todos los almacenes/sucursales (tabla `multialm`), junto con su nombre/descripción (tabla `arts`), ordenado de mayor a menor existencia.
+Regresa la existencia total por artículo, sumando la existencia de todos los almacenes/sucursales (o solo de `numalm`) de `bi_inventario_existencias` (foto de `multialm` de la última carga), junto con su nombre/descripción (tabla `arts`), ordenado de mayor a menor existencia y, en empates, por `numart` (paginación determinista).
 
 filtros
 | Filtro | Descripcion                                        |
 |--------|----------------------------------------------------|
 | limit  | (opcional) Cantidad de registros a tomar           |
 | offset | (opcional) Tomar registros a partir del registro X |
+| numalm | (opcional) Almacén/sucursal. Ver [Filtro numalm](#filtro-numalm) |
+
+#### Filtro numalm
+
+`numalm` es el código de almacén/sucursal, igual que en las demás rutas:
+
+- Omitido, vacío o solo espacios: todas las sucursales (comportamiento anterior).
+- Es texto, no número: se quitan espacios y se alinea a la derecha a 2 caracteres como en SAIT (`2`, ` 2` y `2 ` consultan `" 2"`; `02` es otro almacén). Más de 2 caracteres: HTTP 400 `numalm debe tener maximo 2 caracteres`.
+- Un código válido sin existencias regresa la respuesta vacía de siempre (`"result": null`), nunca todas las sucursales.
+- Se aplica con `WHERE numalm = ?` sobre `bi_inventario_existencias` **antes** de `SUM`, `GROUP BY`, `ORDER BY`, `LIMIT` y `OFFSET`: la suma y la paginación son solo de esa sucursal. La tabla guarda una fila por artículo y almacén (foto de `multialm`), así que el filtro usa la misma foto que la consulta sin `numalm`.
 
 Campos
 | Campo            | Tipo   | Significado                                                                             |
 |------------------|--------|-----------------------------------------------------------------------------------------|
-| numart           | string | Número de identificación del artículo                                                   |
-| nombre           | string | Descripción / nombre del artículo (`arts.desc`); `"Articulo sin nombre"` si viene vacío |
-| existencia_total | float  | Suma de la existencia del artículo en todos los almacenes                               |
+| numart           | string | Número de identificación del artículo, alineado como en SAIT                            |
+| nombre           | string | Descripción / nombre del artículo (`arts.desc`); `"Articulo sin nombre"` si viene vacío. `""` si el artículo no existe en `arts` |
+| existencia_total | string | Suma de la existencia del artículo en los almacenes consultados (decimal como texto). `""` si todas sus existencias son `NULL` |
 
-Response
+Response real (foto cargada desde la base local)
+
+POST /api/v3/bi_inventario/1/stock_actual?limit=5&offset=0
 ```json
-{
-  "result": [
-    { "numart": "  A102", "nombre": "TORNILLO 1/4 X 2", "existencia_total": "3200.0000" },
-    { "numart": "  B045", "nombre": "TUERCA HEXAGONAL 1/2", "existencia_total": "2850.0000" },
-    {}
-  ]
-}
+{"result":[
+  {"existencia_total":"24246.000","nombre":"MICRO SPRAY 360°, 110LPH","numart":"               SJ360"},
+  {"existencia_total":"15895.000","nombre":"PIJAS HEXAGONAL, PUNTA DE BROCA 14-3\"","numart":"               81211"},
+  {"existencia_total":"10821.780","nombre":"PTR 11/2\" CALIBRE 14","numart":"             C-15012"},
+  {"existencia_total":"6475.000","nombre":"MARIPOSA GRANDE","numart":"        MARIPOSA GRD"},
+  {"existencia_total":"5814.000","nombre":"MINI-VÁLV. INICIAL C/GOMA X CINTA 5/8\" AZUL","numart":"             MV0017B"}
+]}
+```
+
+POST /api/v3/bi_inventario/1/stock_actual?limit=5&offset=0&numalm=2
+```json
+{"result":[
+  {"existencia_total":"1245.000","nombre":"BLOCK NO 4 CURADO","numart":"                0060"},
+  {"existencia_total":"1140.000","nombre":"BISAGRA CUADRADA 2-1/2', LATONADO, CABEZA PLANA, HERMEX","numart":"       7501206671085"},
+  {"existencia_total":"1026.000","nombre":"ENVASE 1 LITRO","numart":"             0000001"},
+  {"existencia_total":"1003.000","nombre":"BOLSA CON 1 KG DE CLAVOS PARA CONCRETO NEGROS 3/4', FIERO","numart":"       7501206693742"},
+  {"existencia_total":"993.894","nombre":"KILO DE CUERDA AMARILLA DE POLIPROPILENO 11MM, CARRETE 20KG","numart":"       7506240608042"}
+]}
+```
+
+POST /api/v3/bi_inventario/1/stock_actual?limit=5&numalm=02 (código válido sin existencias)
+```json
+{"result":null}
+```
+
+```sh
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/stock_actual?limit=10&offset=0&numalm=2"
 ```
 
 ---
 
 ### Valor por familia
 
-POST /api/v3/bi_inventario/:pk/valor_familia?limit=..&offset=..
+POST /api/v3/bi_inventario/:pk/valor_familia?limit=..&offset=..&numalm=..
 
-Regresa la existencia total agrupada por familia de artículo (`arts.familia`), tomando el nombre de familia desde el catálogo `familias`, ordenado de mayor a menor existencia.
+Regresa la existencia total agrupada por familia de artículo (`bi_inventario_existencias.familia`, copiada de `arts.familia` en la carga), tomando el nombre de familia desde el catálogo `familias`, ordenado de mayor a menor existencia y, en empates, por código de familia (paginación determinista). Con `numalm` primero se toman solo las existencias de esa sucursal y después se agrupa por familia.
 
 filtros
 | Filtro | Descripcion                                        |
 |--------|----------------------------------------------------|
 | limit  | (opcional) Cantidad de registros a tomar           |
 | offset | (opcional) Tomar registros a partir del registro X |
+| numalm | (opcional) Almacén/sucursal. Ver [Filtro numalm](#filtro-numalm) |
 
 Campos
 | Campo            | Tipo   | Significado                                                                                                                                      |
 |------------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------|
-| familia          | string | Número de identificación de la familia (`arts.familia`)                                                                                          |
-| nombre           | string | Nombre de la familia (`familias.nomfam`); `"Sin familia"` si `familia` viene vacío, `"Familia sin nombre"` si no hay coincidencia en el catálogo |
-| existencia_total | float  | Suma de la existencia de todos los artículos de esa familia (todos los almacenes)                                                                |
+| familia          | string | Número de identificación de la familia (`arts.familia`). `""` si viene vacía o `NULL`                                                           |
+| nombre           | string | Nombre de la familia (`familias.nomfam`); `"Sin familia"` si `familia` viene vacía, `"Familia sin nombre"` si el nombre del catálogo está vacío. `""` si la familia es `NULL` (artículo que no existe en `arts`) o no existe en el catálogo |
+| existencia_total | string | Suma de la existencia de los artículos de esa familia en los almacenes consultados (decimal como texto)                                         |
 
-Response
+Response real (foto cargada desde la base local)
+
+POST /api/v3/bi_inventario/1/valor_familia?limit=5&offset=0
 ```json
-{
-  "result": [
-    { "familia": " 01", "nombre": "FERRETERIA", "existencia_total": "15420.0000" },
-    { "familia": " 02", "nombre": "PLOMERIA", "existencia_total": "9830.0000" },
-    { "familia": "", "nombre": "Sin familia", "existencia_total": "312.0000" },
-    {}
-  ]
-}
+{"result":[
+  {"existencia_total":"50908.048","familia":"","nombre":"Sin familia"},
+  {"existencia_total":"47017.200","familia":"PLOME","nombre":"PLOMERÍA Y CONSTRUCCIÓN"},
+  {"existencia_total":"33044.083","familia":"ASPER","nombre":"ASPERSORES"},
+  {"existencia_total":"21039.586","familia":" P549","nombre":"Tornillos, tuercas y arandelas"},
+  {"existencia_total":"17805.925","familia":"JARDI","nombre":"EQUIPO DE JARDINERIA"}
+]}
+```
+
+POST /api/v3/bi_inventario/1/valor_familia?limit=5&offset=0&numalm=2
+```json
+{"result":[
+  {"existencia_total":"7662.242","familia":"","nombre":"Sin familia"},
+  {"existencia_total":"2660.416","familia":"PLOME","nombre":"PLOMERÍA Y CONSTRUCCIÓN"},
+  {"existencia_total":"2637.352","familia":" P727","nombre":"Cables conductores"},
+  {"existencia_total":"2077.000","familia":" P013","nombre":"Bisagras"},
+  {"existencia_total":"1731.185","familia":" P513","nombre":"Pijas"}
+]}
+```
+
+```sh
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/valor_familia?limit=10&offset=0&numalm=2"
+```
+
+#### Errores (stock_actual y valor_familia)
+
+| HTTP | Cuándo |
+|------|--------|
+| 400  | `numalm` de más de 2 caracteres o que no sea texto |
+| 500  | Falla la consulta (por ejemplo, no existe `bi_inventario_existencias`). La respuesta solo dice `bi_inventario.stockActual: error al consultar la base de datos` (o `valorPorFamilia`); el detalle se escribe en el log del servidor |
+
+#### Pruebas
+
+`bi/inventario/stock_familia_test.go` (integración con `SAITNUBE_TEST_DSN`, igual que [Compras del periodo](#compras-del-periodo)):
+
+```sh
+SAITNUBE_TEST_DSN='usuario:password@tcp(127.0.0.1:3306)/' go test ./bi/inventario/ -run 'Stock|Numalm' -v
 ```
 
 ---
@@ -514,7 +581,7 @@ La fecha que se usa es `docum.fecha` (fecha de registro del documento, la misma 
 
 - **Total del documento**: `importe + impuesto1 + impuesto2 - descuento`, igual que `GET /compras?totalizar=true`. Incluye impuestos y descuentos del documento; no resta `descuentog`.
 - **Conversión a MXN**: si `divisa = 'P'` el total se toma tal cual; con cualquier otra divisa se multiplica por el tipo de cambio del documento (`tc`), igual que la totalización de compras.
-- **Redondeo**: el total en MXN de cada documento se redondea a centavos (`ROUND(..., 2)` de MySQL: los medios centavos se redondean alejándose de cero) y desde ahí todas las sumas son exactas en decimal. Por eso el resumen es exactamente la suma de los intervalos.
+- **Redondeo**: el total en MXN de cada documento se redondea a centavos (`ROUND(..., 2)` de MySQL).
 - `compras` y `devoluciones` se regresan en positivo (las devoluciones se guardan en positivo en `docum`) y `neto = compras - devoluciones`, por lo que las devoluciones se restan una sola vez. El neto puede ser negativo.
 - `documentos` cuenta las compras y devoluciones vigentes incluidas en los importes.
 
@@ -533,7 +600,6 @@ Los intervalos salen de la tabla `fechas`, con las mismas columnas que `GET /bi/
 
 - Regresa una fila por cada intervalo que toca el rango, en orden cronológico, incluyendo los intervalos sin movimientos (importes y documentos en `0`).
 - `fini`/`ffin` de cada fila son los días que realmente se consideran: el primer y el último intervalo se recortan al rango solicitado. Los intervalos son continuos, sin huecos ni traslapes.
-- La tabla `fechas` debe tener todos los días del rango; si no, la ruta regresa error 400 en lugar de omitir intervalos.
 
 #### Periodo anterior
 
@@ -551,7 +617,7 @@ Usa los mismos filtros (`numalm`, `numprov`), tipos de documento, cancelaciones 
 
 | HTTP | Cuándo                                                                                                    |
 |------|-----------------------------------------------------------------------------------------------------------|
-| 400  | `fini`/`ffin` faltantes o inválidas, `fini > ffin`, `groupby` no válido, rango fuera de la tabla `fechas` |
+| 400  | `fini`/`ffin` faltantes o inválidas, `fini > ffin`, `groupby` no válido                                  |
 | 500  | Falla la consulta en la base de datos                                                                     |
 
 ```json
@@ -627,4 +693,165 @@ POST /api/v3/bi_inventario/1/compras_periodo?fini=20251215&ffin=20260210&groupby
 cd src
 go test ./bi/inventario/ -run 'Importe|RangoAnterior|ComprasPeriodo|FiltroCompras' -v
 SAITNUBE_TEST_DSN='usuario:password@tcp(127.0.0.1:3306)/' go test ./bi/inventario/ -run ComprasPeriodo -v
+```
+
+---
+
+### Existencias fuera de limites
+
+POST /api/v3/bi_inventario/:pk/reposicion?limit=10&offset=0&estado=agotado&numalm=..&numart=..&q=..&incluir_sin_limites=false
+
+Datos de la tarjeta "Existencias fuera de límites": combinaciones **artículo + sucursal** cuya **existencia física** está agotada, bajo el mínimo o arriba del máximo configurados. Es inventario **actual**: no recibe fechas, no usa ventas ni pronósticos y no calcula disponible, cantidades por comprar ni traspasos. No requiere body. `:pk` es parte de la ruta y no filtra.
+
+Para ver un artículo en todas las sucursales, el frontend usa `GET /api/v3/existencias/:numart` (existencia, mínimo y máximo; ver `inventario/multialm/readme.md`).
+
+#### Origen de los campos
+
+Cada fila es un registro de `multialm`, que tiene llave primaria `(numart, numalm)`, por lo que hay una sola fila por combinación. `arts` y `almacen` se unen por su llave primaria, así que no multiplican filas.
+
+| Campo      | Origen                                                                                          |
+|------------|-------------------------------------------------------------------------------------------------|
+| numart     | `multialm.numart` sin los espacios de alineación (`"   0075"` → `"0075"`)                       |
+| nombre     | `arts.desc`; `"Articulo sin nombre"` si está vacío o el artículo no existe en `arts`            |
+| numalm     | `multialm.numalm` sin los espacios de alineación (`" 2"` → `"2"`, `"02"` → `"02"`)              |
+| sucursal   | `almacen.nomalm` sin espacios; si el almacén no existe en `almacen` o el nombre es `NULL`/vacío: `"Almacén {numalm}"` (ej. `"Almacén 4"`, `"Almacén 04"`). Es el mismo valor que `nomalm` en `GET /existencias/:numart` |
+| existencia | `multialm.existencia` (existencia física)                                                       |
+| minimo     | `multialm.minimo`                                                                               |
+| maximo     | `multialm.maximo`                                                                               |
+
+Los valores se regresan como están en la base de datos: un `NULL` se regresa como `null` y **no se convierte en 0**. `GET /existencias/:numart` regresa los mismos valores de `existencia`, `minimo` y `maximo`.
+
+**No se usan `apartados` ni `ordenados`.** No están sincronizados: la sincronización con SAIT (`utils/eventos/syncsd.go`) solo escribe los campos que trae cada evento, y los eventos `MULTIALM` documentados (`doc/evento.md`, `utils/eventos/readme.md`) solo traen `existencia`, `costopro`, `ventanoqty`, `numart` y `numalm`. En la base local ambos son `NULL` en todas las filas aunque hay pedidos y órdenes de compra pendientes, así que `NULL` ahí significa "no sincronizado", no cero.
+
+#### Clasificación
+
+Límites `NULL` o `0` = **no configurados**. No se inventa el límite que falta: con solo mínimo positivo se puede evaluar `bajo_minimo`; con solo máximo positivo, `sobreinventario`.
+
+**Límites inválidos**: mínimo negativo, máximo negativo, o ambos positivos con `maximo < minimo`.
+
+Si `existencia` es `NULL` o los límites son inválidos, la combinación **no se clasifica** (aunque la existencia sea 0), no aparece en `filas` y se cuenta en `datos_incompletos`.
+
+Las demás se clasifican con la existencia física, en este orden (la primera que se cumple):
+
+| estado          | Condición                                                   |
+|-----------------|-------------------------------------------------------------|
+| agotado         | `existencia <= 0` (incluye negativos)                        |
+| bajo_minimo     | `existencia > 0`, mínimo positivo y `existencia < minimo`    |
+| sobreinventario | máximo positivo y `existencia > maximo`                      |
+| (no se lista)   | En rango: exactamente en el mínimo o en el máximo, entre ambos, o sin el límite que aplicaría |
+
+Las comparaciones se hacen en SQL con `DECIMAL`, sin pasar por `float` (`3.749` con mínimo `3.75` es `bajo_minimo`).
+
+#### Filtros
+
+| Filtro | Descripcion                                                                                                            |
+|--------|------------------------------------------------------------------------------------------------------------------------|
+| limit  | (opcional) Entero de 1 a 100. Default 10                                                                                |
+| offset | (opcional) Entero >= 0, cantidad de **registros** a saltar (no número de página). Default 0                              |
+| estado | (opcional) `agotado`, `bajo_minimo` o `sobreinventario`, en minúsculas. Omitido o vacío: los tres                        |
+| numalm | (opcional) Almacén exacto, texto de máximo 2 caracteres. Se alinea a la derecha con espacios como en SAIT: `2` es `" 2"`, `02` es otro almacén |
+| numart | (opcional) Artículo exacto, texto de máximo 20 caracteres, alineado a la derecha: `0075` y `75` son artículos distintos |
+| q      | (opcional) Texto de máximo 100 caracteres. Se quitan espacios al inicio y al final; vacío equivale a no enviarlo         |
+| incluir_sin_limites | (opcional) `true` o `false`. **Default `false`**: solo entran al análisis combinaciones con `minimo > 0` o `maximo > 0`. Con `true` también entran las demás. Cualquier otro valor (incluido vacío) responde 400 |
+
+`q` sigue la convención de `GET /compras`: se separa en palabras y **cada palabra** debe aparecer (coincidencia parcial) en el código o nombre del artículo, o en el código o nombre de la sucursal (el nombre que se muestra, incluido `"Almacén {numalm}"`). No distingue mayúsculas/minúsculas (collation de la base de datos). Los caracteres `%`, `_` y `!` se buscan como texto (`q=100%` no es un comodín) y el valor va parametrizado.
+
+`incluir_sin_limites` solo decide qué combinaciones entran al análisis; no vuelve válidos los límites inválidos ni cambia la clasificación. Con `true`, una combinación sin ningún límite positivo solo puede ser `agotado` (`existencia <= 0`); nunca `bajo_minimo` ni `sobreinventario`. La falta de límites por sí sola **no** cuenta en `datos_incompletos` (sí la existencia `NULL` o un límite negativo). En la base local, con `true` hay 21,683 agotados contra 3 del modo por defecto: por eso el default es `false`.
+
+#### Conteos y paginación
+
+| Campo             | Cálculo                                                                                                   |
+|-------------------|-----------------------------------------------------------------------------------------------------------|
+| resumen.*         | Combinaciones por estado con `q`, `numalm`, `numart` e `incluir_sin_limites`, **sin aplicar `estado`**: los conteos de la tarjeta no cambian al seleccionar uno. `resumen.total = agotados + bajo_minimo + sobreinventario` |
+| total             | Combinaciones con todos los filtros, incluido `estado`, antes de `limit`/`offset`                           |
+| datos_incompletos | Combinaciones con `q`, `numalm`, `numart` e `incluir_sin_limites` que no se pudieron clasificar (existencia `NULL` o límites inválidos). Sin `estado`; no se suman a `total` ni a `resumen.total` |
+| hay_mas           | `offset + filas regresadas < total`                                                                        |
+
+`limit` y `offset` solo afectan `filas`. Todos los conteos son de combinaciones artículo/sucursal, no de artículos distintos.
+
+Orden fijo: `agotado`, `bajo_minimo`, `sobreinventario`; dentro de cada estado por `numart` y `numalm` ascendentes. Se ordena por las claves como están guardadas en SAIT (alineadas a la derecha), por lo que los códigos más cortos van primero (`75` antes de `0075`, `WTH1` antes de `7506240611172`). Como `(numart, numalm)` es único, el orden es determinista y no repite filas entre páginas mientras los datos no cambien.
+
+Clasificación, filtro, orden y `LIMIT/OFFSET` se hacen en SQL: una consulta para los conteos y otra para la página. `arts` y `almacen` solo se unen a las filas de la página, salvo cuando `q` necesita buscar en sus nombres.
+
+Sin resultados, o con `offset >= total`: `filas: []`, `hay_mas: false` y `total` con su valor real. `resumen` puede tener conteos aunque el `estado` seleccionado no tenga filas.
+
+#### Errores
+
+| HTTP | Cuándo                                                                                                    |
+|------|-----------------------------------------------------------------------------------------------------------|
+| 400  | `limit`/`offset` no enteros o fuera de rango, `estado` desconocido, `incluir_sin_limites` distinto de `true`/`false`, `q` de más de 100 caracteres, `numalm` de más de 2 o `numart` de más de 20 caracteres |
+| 500  | Falla la consulta. La respuesta solo dice `bi_inventario.reposicion: error al consultar la base de datos`; el detalle se escribe en el log del servidor |
+
+```json
+{ "error": "bi_inventario.reposicion: incluir_sin_limites debe ser true o false" }
+```
+
+#### Respuesta
+
+HTTP 201 (igual que las demás acciones `POST` de este módulo).
+
+| Campo                  | Tipo           | Significado                                          |
+|------------------------|----------------|------------------------------------------------------|
+| limit / offset         | int            | Paginación aplicada                                  |
+| total                  | int            | Total con todos los filtros, para paginar            |
+| hay_mas                | bool           | Hay más filas después de esta página                  |
+| resumen                | objeto         | Conteos por estado sin el filtro `estado`            |
+| datos_incompletos      | int            | Combinaciones que no se pudieron clasificar          |
+| filas                  | array          | Siempre arreglo, `[]` si no hay filas                 |
+| filas[].numart         | string         | Artículo, conserva ceros a la izquierda              |
+| filas[].nombre         | string         | Nombre del artículo                                  |
+| filas[].numalm         | string         | Almacén/sucursal, conserva ceros a la izquierda      |
+| filas[].sucursal       | string         | Nombre del almacén                                   |
+| filas[].existencia     | number         | Existencia física, nunca `null` en `filas`            |
+| filas[].minimo         | number o null  | Mínimo                                               |
+| filas[].maximo         | number o null  | Máximo                                               |
+| filas[].estado         | string         | `agotado`, `bajo_minimo` o `sobreinventario`          |
+
+Respuesta real con la base local:
+
+POST /api/v3/bi_inventario/1/reposicion?limit=10&offset=0
+```json
+{"result":{"limit":10,"offset":0,"total":23,"hay_mas":true,
+ "resumen":{"total":23,"agotados":3,"bajo_minimo":5,"sobreinventario":15},
+ "datos_incompletos":20,
+ "filas":[
+  {"numart":"700795083447","nombre":"PINTURA BERELINTE AZUL REY 834  LITRO","numalm":"2","sucursal":"Almacen 2","existencia":0,"minimo":1,"maximo":6,"estado":"agotado"},
+  {"numart":"700795160032","nombre":"BARNIZ SUMMA TRANSPARENTE 1600    500 ML","numalm":"2","sucursal":"Almacen 2","existencia":0,"minimo":1,"maximo":3,"estado":"agotado"},
+  {"numart":"700795262354","nombre":"IMPERMEABILIZANTE KOVER 5A CRYL BCO 4 LT","numalm":"2","sucursal":"Almacen 2","existencia":0,"minimo":3,"maximo":6,"estado":"agotado"},
+  {"numart":"WTH1","nombre":"ANTICONGELANTE DILUIDO 30% ROSA GALO","numalm":"1","sucursal":"Almacen 1","existencia":2,"minimo":240,"maximo":500,"estado":"bajo_minimo"},
+  {"numart":"7506240611172","nombre":"MANGUERA P/WC, ACERO INOX, 1/2'X7/8', 35 CM, PLÁSTICO/LATÓN","numalm":"6","sucursal":"Almacén 6","existencia":3,"minimo":40,"maximo":0,"estado":"bajo_minimo"},
+  {"numart":"7506610214897","nombre":"PIOLA DE POLIPROPILENO TRENZADA, MULTICOLOR, 6MM, 1 KG","numalm":"8","sucursal":"LA FINCA","existencia":6,"minimo":189,"maximo":195,"estado":"bajo_minimo"},
+  {"numart":"BIBEL 1950120","nombre":"BIBEL MEDIANO 19X50X120","numalm":"1","sucursal":"Almacen 1","existencia":1,"minimo":4,"maximo":4,"estado":"bajo_minimo"},
+  {"numart":"27506240669764","nombre":"46196 MALLA MOSQUITERA GAL. 0.9 X 11 M","numalm":"6","sucursal":"Almacén 6","existencia":1,"minimo":5,"maximo":0,"estado":"bajo_minimo"},
+  {"numart":"700795006934","nombre":"PINTURA SUMMA NEGRO 0624 500ML","numalm":"2","sucursal":"Almacen 2","existencia":24,"minimo":1,"maximo":3,"estado":"sobreinventario"},
+  {"numart":"700795062336","nombre":"PINTURA SUMMA BLANCO BASE PASTEL 623  500ML","numalm":"2","sucursal":"Almacen 2","existencia":22,"minimo":1,"maximo":6,"estado":"sobreinventario"}
+ ]}}
+```
+
+Las 55 combinaciones locales con algún límite positivo se reparten en 23 fuera de límites, 20 con `existencia` `NULL` (`datos_incompletos`) y 12 en rango.
+
+```sh
+# agotados, primera pagina
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/reposicion?limit=10&offset=0&estado=agotado"
+
+# sobreinventario de la sucursal 02
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/reposicion?estado=sobreinventario&numalm=02"
+
+# incluir combinaciones sin minimo ni maximo positivos
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/reposicion?incluir_sin_limites=true&estado=agotado"
+
+# busqueda por texto, segunda pagina
+curl -X POST -H "X-sait-api-key: $APIKEY" \
+  "https://test.saitnube.com/api/v3/bi_inventario/1/reposicion?q=pintura%20summa&limit=10&offset=10"
+```
+
+#### Pruebas
+
+`bi/inventario/reposicion_test.go` (integración con `SAITNUBE_TEST_DSN`, igual que [Compras del periodo](#compras-del-periodo)):
+
+```sh
+SAITNUBE_TEST_DSN='usuario:password@tcp(127.0.0.1:3306)/' go test ./bi/inventario/ -run 'Reposicion|Cantidad|Like' -v
 ```
