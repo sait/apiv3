@@ -154,7 +154,7 @@ Response
       "impuesto1": 300302.58,
       "impuesto2": 7.33,
       "items": 1203,
-      "moneda": "USD",
+      "moneda": "DLS",
       "total": 4215281.09
     },
     {

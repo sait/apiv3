@@ -29,6 +29,7 @@ Regresa los encabezados de los documentos de compra (sin partidas). Si no se env
 | fecha1    | traer las compras con fecha mayor o igual a fecha1  | busqueda mayor a       | traer compras con fecha de registro mayor a "2025-03-21"             |
 | fecha2    | traer las compras con fecha menor o igual a fecha2  | busqueda menor a       | traer compras con fecha de registro menor a "2025-03-29"             |
 | totalizar | regresar totales en lugar del listado               | totales                | ver [Totales de compras](#totales-de-compras)                        |
+| format    | generar reporte en lugar de JSON (ignora limit y offset) | reporte           | pdf, xlsx                                                            |
 
 Response
 ```json
@@ -51,6 +52,7 @@ Response
     "impuesto2": "0",
     "descuento": "0",
     "total": "9536",
+    "total_mxn": "9536.000000",
     "numprov": "  123",
     "nomprov": "PROVEEDOR EJEMPLO SA DE CV"
   }
@@ -61,6 +63,16 @@ Response
 |---------|---------------------------------------------------------------------|
 | refer   | numero de referencia / factura del proveedor                        |
 | total   | importe + impuesto1 + impuesto2 - descuento - descuentog            |
+| total_mxn | total convertido a MXN: `total * tc` si la divisa no es `P`       |
+
+Con `format=pdf` o `format=xlsx` regresa el reporte con las columnas Fecha, Folio, Referencia, Proveedor, Moneda, Subtotal, Descuento, IVA, IEPS, Total y Total MXN, igual que el reporte de notas de credito. Las compras canceladas (status 1 o 3) se marcan en color y no se suman en la fila de totales. En los filtros aparecen la sucursal y el proveedor con su nombre.
+
+```json
+{
+  "archivo": "UEsDBBQACAAIAAAAAAAAAAAAAAAA...",
+  "nombre": "xaxx010101000-reporte-de-compras-20261124-101500.xlsx"
+}
+```
 
 ---
 ### Totales de compras

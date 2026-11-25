@@ -50,6 +50,9 @@ filtros
 | mostrar | e: Solo mostrar Entradas, s: Solo mostrar Salidas, c: solo mostrar con campo disp > 0              |
 | limit   | cantidad de registros a tomar                                                                      |
 | offset  | tomar registros a partir del registro X                                                            |
+| format  | `pdf` o `xlsx` para regresar el reporte en lugar de JSON (ignora limit y offset)                   |
+
+Reporte (`format=pdf|xlsx`): "Kardex de articulo" con las columnas Fecha, Tipo, Folio, Almacen (solo si no se filtra `numalm`), Cliente/Proveedor, Entrada, Salida, Disp., Costo, Costo mov., Existencia y Valor inv. La fila de totales suma entradas, salidas y disp; costos, existencia y valor no se suman. En los filtros aparecen el articulo y el almacen con su nombre, el periodo, el tipo de costo y `mostrar`.
 
 Response
 ```json
@@ -132,17 +135,29 @@ filtros
 
 | Filtro    | Descripcion                                                                                                        |
 |-----------|--------------------------------------------------------------------------------------------------------------------|
-| fecha1    | (obligatorio) A partir de tal fecha para tomar registros                                                           |
-| fecha2    | (obligatorio) Hasta tal fecha para tomar registros                                                                 |
-| numalm    | (obligatorio) Numero de identificacion del almacen                                                                 |
+| fecha1    | (obligatorio) A partir de tal fecha para tomar registros, `YYYY-MM-DD` o `YYYYMMDD`                                |
+| fecha2    | (obligatorio) Hasta tal fecha para tomar registros, `YYYY-MM-DD` o `YYYYMMDD`                                      |
+| numalm    | (obligatorio) Numero de identificacion del almacen, en `:numalm` (maximo 2 caracteres)                             |
 | q         | Busqueda de palabras dentro de la descripcion del articulo (hasta 4 palabras separadas por espacio)                |
 | familia   | Numero de identificacion de familia del articulo                                                                   |
 | linea     | Numero de identificacion de linea del articulo                                                                     |
 | categoria | Numero de identificacion de categoria del articulo                                                                 |
 | marca     | Numero de identificacion de marca del articulo                                                                     |
-| order     | Campo para ordenar resultado: desc, numart, existencia, linea, categoria. Agregar "-" antes para orden descendente |
+| order     | Campo para ordenar resultado: desc, numart, existencia (final), linea, categoria. Agregar "-" antes para orden descendente. Default numart |
 | limit     | cantidad de registros a tomar                                                                                      |
 | offset    | tomar registros a partir del registro X                                                                            |
+| format    | `pdf` o `xlsx` para regresar el reporte en lugar de JSON (ignora limit y offset)                                   |
+
+Solo aparecen los articulos con movimientos en el almacen entre `fecha1` y `fecha2`. `existencia_inicial` suma los movimientos anteriores a `fecha1` y `existencia_final` los movimientos hasta `fecha2`.
+
+Reporte (`format=pdf|xlsx`): columnas Clave, Descripcion, Unidad, Exist. inicial, Entradas, Salidas y Exist. final. Las cantidades no se suman en la fila de totales porque los articulos tienen unidades distintas. En los filtros aparecen el almacen, familia, linea y categoria con su nombre.
+
+```json
+{
+  "archivo": "UEsDBBQACAAIAAAAAAAAAAAAAAAA...",
+  "nombre": "xaxx010101000-existencias-en-almacen-20261124-101500.xlsx"
+}
+```
 
 Response
 ```json

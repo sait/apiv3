@@ -149,16 +149,27 @@ Response
     "divisa": "P",
     "moneda": "MXN",
     "uuid": "7547e8b1ce9245c29bf0c5e906acf5cf",
-    "importe": "4.17",
+    "importe": "4.500000",
+    "importeME": "4.50",
+    "subtotal": "4.17",
+    "descuento": "0.00",
     "impuesto1": "0.33",
-    "impuesto2": "0",
-    "descuento": "0",
-    "total": "4.5",
+    "impuesto2": "0.00",
+    "total": "4.50",
     "nomcli": "Publico general",
     "numcli": "    0"
   }
 ]
 ```
+
+| Campo     | Descripcion                                                       |
+|-----------|-------------------------------------------------------------------|
+| importe   | Total convertido a MXN: `total * tc` si la divisa no es `P`        |
+| importeME | Total en la moneda del documento (igual a `total`)                |
+| subtotal  | `docum.importe`, antes de descuento e impuestos                    |
+| total     | `subtotal - descuento + impuesto1 + impuesto2`, moneda del documento |
+
+Con `format=pdf` o `format=xlsx` el reporte tiene las columnas Fecha, Folio, Cliente, Moneda, Subtotal, Descuento, IVA, IEPS, Total y Total MXN. Las notas canceladas (status 1 o 3) se marcan en color y no se suman en la fila de totales; Total MXN es la única columna de importes que suma monedas distintas de forma consistente.
 
 ---
 ### Totales de notas de credito

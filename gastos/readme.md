@@ -17,7 +17,7 @@ Campos consultas generales
 | total     | float  | importe total del gasto, redondeado a 4 decimales                        |
 | divisa    | string | tipo de moneda del documento ("P": pesos, cualquier otro valor: moneda extranjera) |
 | uuid      | string | UUID fiscal (CFDI) relacionado al documento, vacio si no tiene CFDI      |
-| rfc       | string | RFC asociado al documento                                                |
+| rfc       | string | RFC del proveedor; en gastos de proveedor `0` (sin catalogo), el RFC capturado en el gasto |
 
 ---
 ### Consultas generales
@@ -56,7 +56,9 @@ Response
     "proveedor": "PROVEEDOR EJEMPLO SA DE CV",
     "numdoc": "    A41512",
     "total": "9800.0000",
+    "total_mxn": "9800.0000",
     "divisa": "P",
+    "moneda": "MXN",
     "uuid": "1a2b3c4d-...-...",
     "rfc": "XAXX010101000"
   },
@@ -68,7 +70,7 @@ Response
 
 GET /api/v3/gastos?filtros...&format=pdf
 
-Usa los mismos filtros, incluidos `limit` y `offset`. Las columnas son fecha, folio, proveedor, RFC, moneda, total y UUID, y en el encabezado aparecen los filtros aplicados. La respuesta trae el archivo en base64 y el nombre sugerido:
+Usa los mismos filtros, excepto `limit` y `offset`: el reporte trae todos los gastos que cumplan los filtros. Las columnas son fecha, folio, proveedor, RFC, moneda, total, total MXN y UUID; la fila de totales suma Total (moneda de cada gasto) y Total MXN (`total * tc` si la divisa no es `P`). En el encabezado aparecen el tipo de gasto, proveedor y sucursal con su nombre ("Todos"/"Todas" si no se filtran), el folio y el periodo. La respuesta trae el archivo en base64 y el nombre sugerido:
 
 ```json
 {

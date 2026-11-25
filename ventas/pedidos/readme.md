@@ -258,6 +258,7 @@ GET /api/v3/pedidos
 | fecha2    | traer todos los documentos menores a fecha2          |
 | precio1   | traer todos los documentos con total mayor a precio1 |
 | precio2   | traer todos los documentos con total menor a precio2 |
+| format    | pdf o xlsx: genera el reporte (ignora limit y offset) |
 
 response:
 ```json
@@ -352,7 +353,7 @@ Response
       "impuesto1": 300302.58,
       "impuesto2": 7.33,
       "items": 1203,
-      "moneda": "USD",
+      "moneda": "DLS",
       "total": 4215281.09
     },
     {

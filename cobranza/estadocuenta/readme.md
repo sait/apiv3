@@ -91,11 +91,13 @@ GET api/v3/cxc/mov?filters...
 | fecha2       | traer movimientos con fecha menor a fecha2                                                                                       |
 | totalizar    | totalizar=true - mostrar totales de items y suma de importes segun cada divisa de movimientos                                    |
 | onlyitems    | onlyitems=true junto con totalizar=true - regresar solo la cantidad de movimientos: `{"items":"25"}`                            |
-| format       | format=xlsx - generar reporte en XLSX, format=pdf - Generar reporte en PDF, format= - dejar vacio para obtener respuesta en json |
+| format       | format=xlsx - generar reporte en XLSX, format=pdf - Generar reporte en PDF, format= - dejar vacio para obtener respuesta en json. El reporte ignora limit y offset |
 | soloconsaldo | solo mostrar movimientos que tienen saldo > 0                                                                                    |
 | conc         | traer solo los movimientos de estado de cuenta cuando conc=?                                                                     |
 | numdoc       | Obtener registro donde numdoc=?                                                                                                  |
 | divisa       | Traer movimientos de estado de cuenta cunado divisa=?                                                                            |
+
+Reporte (`format=pdf|xlsx`): columnas Fecha, Concepto, Documento (`numdoc`), Factura (`refer`), Cargo, Abono, Saldo, Moneda, TC, Saldo acumulado MXN y UUID. En los filtros aparecen el cliente y el concepto con su nombre, el periodo, folio, divisa, "solo movimientos con saldo" y el orden por factura cuando se envian.
 
 response:
 ```json

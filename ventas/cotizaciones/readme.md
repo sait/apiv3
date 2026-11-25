@@ -316,6 +316,7 @@ GET /api/v3/cotizaciones?filters...
 | precio1 | traer todos los documentos con total mayor a precio1 | busqueda mayor a       | traer cotizaciones con total de venta mayor a 50 pesos                    |
 | precio2 | traer todos los documentos con total menor a precio2 | busqueda menor a       | traer cotizaciones con total de venta menor a 250 pesos                   |
 | order   |                                                      | ordenar cotizaciones   | ordenar cotizaciones segun updated,id,numdoc,fecha,numcli,numvend,numuser |
+| format  | generar reporte en lugar de JSON (ignora limit y offset) | reporte            | pdf, xlsx                                                                 |
 
 response:
 ```json
@@ -402,7 +403,7 @@ Response
       "impuesto1": 300302.58,
       "impuesto2": 7.33,
       "items": 1203,
-      "moneda": "USD",
+      "moneda": "DLS",
       "total": 4215281.09
     },
     {

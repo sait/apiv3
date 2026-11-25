@@ -238,9 +238,14 @@ filtros
 | concepto       | (opcional) Filtra por clave de concepto exacta (`cxp.conc = concepto`)                                                                                                                                                    |
 | solo_con_saldo | (opcional) `"true"` filtra solo movimientos con saldo pendiente (`saldo > 0`)                                                                                                                                             |
 | totalizar      | (opcional) `"true"` regresa los totales agregados en vez del listado (ver [Estado de cuenta totalizado](#estado-de-cuenta-totalizado))                                                                                    |
-| order          | (opcional) Cambia el orden del listado. Acepta exactamente uno de: `fecha`, `numdoc`, Cualquier otro valor se ignora y se conserva el orden por defecto (`fechahora, id` ascendente). Solo admite un único campo a la vez |
+| order          | (opcional) `fecha` (default) o `facturas`, con `-` para descendente (`-fecha`, `-facturas`). `facturas` agrupa cada factura (`refer`) con sus abonos: `refer, ca, fecha, id`. El saldo acumulado se calcula con el mismo orden |
 | limit          | (opcional) Cantidad de registros a tomar                                                                                                                                                                                  |
 | offset         | (opcional) Tomar registros a partir del registro X                                                                                                                                                                        |
+| format         | (opcional) `pdf` o `xlsx` para regresar el reporte en lugar de JSON (ignora limit y offset)                                                                                                                               |
+
+`saldoacum` se calcula sobre **todos** los movimientos del proveedor y despues se aplican `fecha1`, `fecha2`, `folio`, `concepto` y `solo_con_saldo`: con `fecha1` el primer renglon ya trae el saldo de los movimientos anteriores, no parte de 0.
+
+Reporte (`format=pdf|xlsx`): "Estado de cuenta proveedor" con las columnas Fecha, Concepto, Documento, Factura, Cargo, Abono, Saldo, Moneda, TC y Saldo acumulado MXN. En los filtros aparecen el proveedor y el concepto con su nombre, el periodo, folio, "solo movimientos con saldo" y el orden por factura cuando se envian.
 
 Campos
 | Campo      | Tipo   | Significado                                                                     |
@@ -249,6 +254,7 @@ Campos
 | keycxp     | string | Llave única del movimiento en `cxp`                                             |
 | keydocum   | string | Llave del documento relacionado (compra, gasto, etc.)                           |
 | keyrefer   | string | Llave de referencia del movimiento                                              |
+| refer      | string | Factura a la que pertenece el movimiento                                        |
 | numdoc     | string | Número de documento interno                                                     |
 | numdocprov | string | Número de documento / folio del proveedor                                       |
 | fecha      | string | Fecha del movimiento                                                            |
@@ -273,6 +279,7 @@ Response
     "keycxp": "  FA0004512",
     "keydocum": "  C0004512",
     "keyrefer": "",
+    "refer": "",
     "numdoc": "4512",
     "numdocprov": "F-998877",
     "fecha": "2024-11-15",
@@ -338,7 +345,7 @@ Response
       "saldos": "8300.00"
     },
     {
-      "moneda": "USD",
+      "moneda": "DLS",
       "items": "8",
       "cargos": "1500.00",
       "abonos": "1350.00",
